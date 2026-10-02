@@ -1,0 +1,91 @@
+{
+  "info": {
+    "name": "Qicau — L2 Parse Quality (PARSE-*)",
+    "description": "Black-box parse-quality tests for POST /api/parse-text, written only from test/Qicau.md §11 (PARSE-01..10, 20-32, 40-45, 50-57). Calls real Gemini on production — data-driven, run with a --delay-request to respect the Gemini free-tier rate limit. Mandatory fields are asserted strictly; where the spec gives an exact expected value it's asserted strictly too; AI-judgment fields without a spec'd exact value are only logged for manual review, since output is non-deterministic. See test-plan.md §3.1/§3.4.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" }
+  ],
+  "item": [
+    {
+      "name": "PARSE — data-driven text input (see api-testing/data/parse-quality-sentences.json)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const sentence = pm.iterationData.get('sentence');",
+              "const specIds = pm.iterationData.get('spec_ids');",
+              "",
+              "pm.test(`[${specIds}] status is 200`, () => pm.response.to.have.status(200));",
+              "",
+              "let parsed = null;",
+              "pm.test(`[${specIds}] result field present and is valid JSON`, () => {",
+              "  const body = pm.response.json();",
+              "  pm.expect(body).to.have.property('result');",
+              "  parsed = JSON.parse(body.result);",
+              "});",
+              "",
+              "pm.test(`[${specIds}] mandatory fields present`, () => {",
+              "  ['kategori', 'platform', 'harga', 'detail', 'payment_method', 'confidence', 'raw_transcript'].forEach((f) => {",
+              "    pm.expect(parsed).to.have.property(f);",
+              "  });",
+              "});",
+              "",
+              "pm.test(`[${specIds}] raw_transcript matches input exactly (PARSE-56)`, () => {",
+              "  pm.expect(parsed.raw_transcript).to.eql(sentence);",
+              "});",
+              "",
+              "const expectKategori = pm.iterationData.get('expect_kategori');",
+              "if (expectKategori !== undefined) {",
+              "  pm.test(`[${specIds}] kategori is '${expectKategori}'`, () => pm.expect(parsed.kategori).to.eql(expectKategori));",
+              "}",
+              "",
+              "const expectPlatform = pm.iterationData.get('expect_platform');",
+              "if (expectPlatform !== undefined) {",
+              "  pm.test(`[${specIds}] platform is '${expectPlatform}'`, () => pm.expect(parsed.platform).to.eql(expectPlatform));",
+              "}",
+              "",
+              "const expectHarga = pm.iterationData.get('expect_harga');",
+              "if (expectHarga !== undefined) {",
+              "  pm.test(`[${specIds}] harga is ${expectHarga}`, () => pm.expect(parsed.harga).to.eql(expectHarga));",
+              "}",
+              "",
+              "const expectPaymentMethod = pm.iterationData.get('expect_payment_method');",
+              "if (expectPaymentMethod !== undefined) {",
+              "  pm.test(`[${specIds}] payment_method is '${expectPaymentMethod}'`, () => pm.expect(parsed.payment_method).to.eql(expectPaymentMethod));",
+              "}",
+              "",
+              "const expectConfidence = pm.iterationData.get('expect_confidence');",
+              "if (expectConfidence !== undefined) {",
+              "  pm.test(`[${specIds}] confidence is exactly '${expectConfidence}'`, () => pm.expect(parsed.confidence).to.eql(expectConfidence));",
+              "}",
+              "",
+              "const expectConfidenceMin = pm.iterationData.get('expect_confidence_min');",
+              "if (expectConfidenceMin !== undefined) {",
+              "  const tier = { low: 0, medium: 1, high: 2 };",
+              "  pm.test(`[${specIds}] confidence is at least '${expectConfidenceMin}'`, () => {",
+              "    pm.expect(tier[parsed.confidence]).to.be.at.least(tier[expectConfidenceMin]);",
+              "  });",
+              "}",
+              "",
+              "console.log(`[${specIds}] \"${sentence}\" ->`, parsed);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"textInput\": \"{{sentence}}\"}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": "{{baseUrl}}/api/parse-text"
+      }
+    }
+  ]
+}

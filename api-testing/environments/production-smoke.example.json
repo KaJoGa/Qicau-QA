@@ -1,0 +1,13 @@
+{
+  "id": "production-smoke-example",
+  "name": "Qicau - production-smoke (example, copy me)",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "https://qicau.kajoga.workers.dev",
+      "type": "default",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment"
+}

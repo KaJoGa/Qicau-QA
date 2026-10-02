@@ -1,0 +1,13 @@
+{
+  "id": "local-dev-example",
+  "name": "Qicau - local-dev (example, copy me)",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "default",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment"
+}
