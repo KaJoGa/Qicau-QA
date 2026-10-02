@@ -1,0 +1,50 @@
+# Personal setup notes — tutorials for things done outside the repo (Jira, accounts, etc.)
+# Never committed: it's personal how-to material, not a QA deliverable.
+/read/
+
+# Personal working files, only meant for the author — not for readers of the portfolio
+/TODO.md
+# App author's private notes on spec-vs-implementation gaps; deliberately kept out of the blind-testing story
+/test/OPEN_ISSUES.md
+
+# Voice recordings of the author — personal data, kept local (record your own to rerun API-06)
+api-testing/data/audio/*.webm
+api-testing/data/audio/webm-fixtures.json
+
+# Generated fake-microphone fixtures — rebuild with: node automation/generate-audio-fixtures.cjs
+automation/src/test/resources/audio/*.wav
+
+# Secrets and local config
+.env
+.env.local
+*.env
+!*.env.example
+**/environments/*.json
+!**/environments/*.example.json
+
+# Java / Maven
+automation/target/
+*.class
+
+# Real-DOM captures from ExplorerTest.java - debugging aid, not a deliverable
+automation/dump/
+
+# Node (if any tooling ends up here, e.g. k6 helpers, emulator scripts)
+node_modules/
+npm-debug.log*
+
+# Newman / Postman run artifacts
+api-testing/**/newman-report*/
+
+# k6 raw output (keep only the summarized result committed under performance/)
+performance/*.raw.json
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+
+# Claude Code local tool settings — machine-specific paths/permissions, not a deliverable
+.claude/
