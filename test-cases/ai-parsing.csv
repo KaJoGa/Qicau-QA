@@ -1,0 +1,38 @@
+case_id,spec_id,title,preconditions,steps,expected_result,priority,type,environment,automated
+TC-PARSE-001,PARSE-01,Slang money known brand and payment app sentence parses correctly,None,"1. Submit ""Beli kopi goceng di Starbucks pakai gopay"" to parse-text/parse-audio","kategori=Jajan, platform=Starbucks, harga=5000, payment_method=GoPay, confidence=high",P1,functional,production,Y
+TC-PARSE-002,PARSE-02,Rupiah abbreviation with no platform mentioned,None,"1. Submit ""Nasi padang 25rb""","kategori=Makan, platform empty, harga=25000, payment_method=QRIS (default), confidence >= medium",P1,functional,production,Y
+TC-PARSE-003,PARSE-03,Bill payment slang term with transfer method,None,"1. Submit ""Bayar listrik cepego transfer""","kategori=Tagihan, harga=100000, payment_method=Transfer, confidence=high",P1,functional,production,Y
+TC-PARSE-004,PARSE-04,Mixed English sentence with platform and amount in words,None,"1. Submit ""Lunch at Warmindo 30 thousand cash""","kategori=Makan, platform=Warmindo, harga=30000, payment_method=Cash, confidence=high",P1,functional,production,Y
+TC-PARSE-005,PARSE-05,Meal at a local eatery with slang money term,None,"1. Submit ""Makan ceban di Depot Jeng Tutie""","kategori=Makan, platform=Depot Jeng Tutie, harga=10000, payment_method=QRIS, confidence=high",P1,functional,production,Y
+TC-PARSE-006,PARSE-06,Greeting with no transaction signal yields low confidence,None,"1. Submit ""Halo apa kabar""","No category assigned, harga=0, confidence=low, raw_transcript exactly equals the input",P1,negative,production,Y
+TC-PARSE-007,PARSE-07,Two items in one sentence are summed into one transaction,None,"1. Submit ""Kopi 20rb sama roti 15rb""","kategori=Jajan, harga=35000 (summed), confidence >= medium, exactly one transaction",P1,functional,production,Y
+TC-PARSE-008,PARSE-08,Ride-hailing expense with payment app,None,"1. Submit ""Naik gojek 18 ribu pakai ovo""","kategori=Transport, platform=Gojek, harga=18000, payment_method=OVO, confidence=high",P1,functional,production,Y
+TC-PARSE-009,PARSE-09,Retail purchase with card payment,None,"1. Submit ""Belanja bulanan di Indomaret 150k kartu""","kategori=Belanja, platform=Indomaret, harga=150000, payment_method=Kartu, confidence=high",P1,functional,production,Y
+TC-PARSE-010,PARSE-10,Bill top-up with digital wallet,None,"1. Submit ""Beli pulsa 50rb dana""","kategori=Tagihan, harga=50000, payment_method=DANA, confidence >= medium",P1,functional,production,Y
+TC-PARSE-011,PARSE-20,Slang term cepe/cepek resolves to 100,None,1. Submit a sentence using cepe/cepek,harga=100,P2,boundary,production,Y
+TC-PARSE-012,PARSE-21,Slang term gocap resolves to 50,None,"1. Submit ""Bayar parkir gocap""",harga=50,P2,boundary,production,Y
+TC-PARSE-013,PARSE-22,Slang term ceceng resolves to 1000,None,1. Submit a sentence using ceceng,harga=1000,P2,boundary,production,Y
+TC-PARSE-014,PARSE-23,Slang term goceng resolves to 5000,None,1. Submit a sentence using goceng,harga=5000,P2,boundary,production,Y
+TC-PARSE-015,PARSE-24,Slang term ceban resolves to 10000,None,1. Submit a sentence using ceban,harga=10000,P2,boundary,production,Y
+TC-PARSE-016,PARSE-25,Slang term goban resolves to 50000,None,1. Submit a sentence using goban,harga=50000,P2,boundary,production,Y
+TC-PARSE-017,PARSE-26,Slang term noban resolves to 90000,None,1. Submit a sentence using noban,harga=90000,P2,boundary,production,Y
+TC-PARSE-018,PARSE-27,Slang term cepego resolves to 100000,None,1. Submit a sentence using cepego,harga=100000,P2,boundary,production,Y
+TC-PARSE-019,PARSE-28,Slang term gopego resolves to 500000,None,1. Submit a sentence using gopego,harga=500000,P2,boundary,production,Y
+TC-PARSE-020,PARSE-29,Slang term nopego resolves to 900000,None,1. Submit a sentence using nopego,harga=900000,P2,boundary,production,Y
+TC-PARSE-021,PARSE-30,Slang term cetiaw/cetiau resolves to 1000000,None,1. Submit a sentence using cetiaw/cetiau,harga=1000000,P2,boundary,production,Y
+TC-PARSE-022,PARSE-31,Numeric word variants for thousands resolve correctly,None,"1. Submit sentences using ""25 ribu"", ""25rb"", ""25k"", ""lima belas ribu""","harga = 25000 / 25000 / 25000 / 15000 respectively",P2,boundary,production,Y
+TC-PARSE-023,PARSE-32,Numeric word variants for millions resolve correctly,None,"1. Submit sentences using ""2 juta"", ""2jt""",harga=2000000,P3,boundary,production,Y
+TC-PARSE-024,PARSE-40,Known brand kept and trigger word dropped,None,"1. Submit ""Makan di Restoran Solaria 50rb""",platform=Solaria (trigger word Restoran dropped),P2,functional,production,Y
+TC-PARSE-025,PARSE-41,Phonetic mishearings corrected to known brands,None,"1. Submit sentences with mishearings: ""Restoran Salaria 30rb"", ""Restoran kaku 80rb"", a sabwey sentence, a minimaret sentence","Platform corrected to Solaria, Gyu-Kaku, Subway, Indomaret respectively",P2,functional,production,Y
+TC-PARSE-026,PARSE-42,Unknown local place kept together with its trigger word,None,"1. Submit ""Ngopi di Cafe Nako goceng""",platform=Cafe Nako,P2,functional,production,Y
+TC-PARSE-027,PARSE-43,Trigger word never stands alone as the platform,None,1. Submit sentences with only a trigger word and no place name,"platform is never a bare trigger word like Restoran/Warung/Minimarket",P2,functional,production,Y
+TC-PARSE-028,PARSE-44,Payment app name never becomes the platform,None,"1. Submit a sentence mentioning a payment app, e.g. ""...pakai gopay""",platform is not the payment app name; it is captured as payment_method instead,P1,functional,production,Y
+TC-PARSE-029,PARSE-45,No place or brand mentioned yields an empty platform string,None,1. Submit a sentence with no place/brand mentioned,"platform = """" (empty string, not null/missing)",P2,functional,production,Y
+TC-PARSE-030,PARSE-50,Category keyword groups map to the correct fixed category,None,"1. Submit sentences covering each category keyword group (makan/nasi/sarapan/warteg; kopi/boba/gorengan/cemilan; ojek/grab/bensin/parkir; Indomaret/Alfamart/mall/belanja; listrik/internet/pulsa/paket data/langganan; obat/hadiah/hiburan)","Each maps to Makan / Jajan / Transport / Belanja / Tagihan / Lainnya respectively",P2,functional,production,Y
+TC-PARSE-031,PARSE-51,Payment method defaults to QRIS when not mentioned,None,1. Submit a sentence with no payment method mentioned,payment_method defaults to QRIS,P2,functional,production,Y
+TC-PARSE-032,PARSE-52,Mixed Indonesian and English sentence parses correctly,None,1. Submit a mixed Indonesian+English sentence,"Parses correctly; kategori stays in Indonesian",P2,functional,production,Y
+TC-PARSE-033,PARSE-53,Filler words are ignored in the structured result,None,"1. Submit a sentence containing filler words (""eh"", ""anu"")",Filler words ignored in the structured result,P3,functional,production,Y
+TC-PARSE-034,PARSE-54,Two of three transaction signals avoid a low-confidence result,None,"1. Submit a sentence with only 2 of 3 signals (e.g. price+item, no platform)","Confidence is not low; fields filled as far as possible",P2,functional,production,Y
+TC-PARSE-035,PARSE-55,No transaction signal yields low confidence and zero price,None,1. Submit a greeting/no-signal sentence,"confidence=low, harga=0",P1,functional,production,Y
+TC-PARSE-036,PARSE-56,raw_transcript always present and exact for text input,None,1. Submit various sentences and check raw_transcript against the exact input,"raw_transcript always present; for text input, exact copy of the input",P1,functional,production,Y
+TC-PARSE-037,PARSE-57,Multiple items in one sentence combine into one transaction,None,1. Submit one sentence containing multiple items in a single breath,"Summed into exactly one transaction; items combined in detail",P2,functional,production,Y

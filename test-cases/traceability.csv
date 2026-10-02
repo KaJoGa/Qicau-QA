@@ -1,0 +1,181 @@
+spec_id,case_id,layer,automated,notes
+API-01,PM-API-01-01,L1,Y,Missing audioBase64 returns 400 - passed on production 2026-09-27
+API-02,PM-API-02-01,L1,Y,Missing textInput returns 400 - passed on production 2026-09-27
+API-02,PM-API-02-02,L1,Y,Empty string textInput returns 400 - passed on production 2026-09-27
+API-10,PM-API-10-01,L1,Y,SPA fallback status/content-type passed; Cache-Control assertion FAILED - see BUG-001
+PWA-11,PM-API-10-01,L1,Y,"Re-confirmed FAILING 2026-09-29 against local dev too (server.ts returns Cache-Control: no-cache, a different wrong value than production's public,max-age=0,must-revalidate) - see BUG-001's addendum. Regression tier (PwaSteps.java)"
+API-03,PM-API-03-01,L1,Y,"PASS - confirmed on local-dev 2026-09-28 with GEMINI_API_KEY unset: 500 + error mentions the missing key, matches spec exactly"
+API-07,PM-API-07-01,L1,Y,PASS - confirmed on local-dev 2026-09-28 with Gemini fetch mock (MOCK_SCENARIO=primary-fail-fallback-success): client gets 200 + result despite primary model failing
+API-08,PM-API-08-01,L1,Y,PASS - confirmed on local-dev 2026-09-28 with Gemini fetch mock (MOCK_SCENARIO=all-fail): 500 with a non-empty friendly error message
+API-04,PM-API-04-01,L1,Y,PASS - 200 with well-formed result on production 2026-09-27 (post BUG-002 fix); matches PARSE-01
+API-05,PM-API-04-01,L1,Y,PASS - enum/type checks on the same response all held
+API-06,PM-API-06-01,L1,Y,PASS - confirmed with 2 real .webm fixtures (author-provided; not committed) on production 2026-09-27; both processed correctly with no mimeType field - see api-testing/data/audio/
+API-09,PM-API-09-01,L1,Y,PASS - confirmed the rejection reason is invalid audio content not payload size (no 413 no size wording); a real large valid-audio fixture would still be worth a follow-up
+whitespace-only textInput,PM-BOUNDARY-01,L1,Y,BEHAVIOR NOTE (not pass/fail) - returns 200 not 400 unlike literal empty string; not a spec violation since API-02 only requires empty string to 400
+SEC-01,RULES-SEC-01,L3,Y,PASS - unauthenticated write and read of transactions both denied - confirmed on emulator 2026-09-28
+SEC-02,RULES-SEC-02,L3,Y,PASS - create transaction with own user_id allowed - confirmed on emulator 2026-09-28
+SEC-03,RULES-SEC-03,L3,Y,PASS - create transaction with another user's user_id denied - confirmed on emulator 2026-09-28
+SEC-04,RULES-SEC-04,L3,Y,PASS - read/update/delete own transaction all allowed - confirmed on emulator 2026-09-28
+SEC-05,RULES-SEC-05,L3,Y,PASS - read/update/delete another user's transaction all denied - confirmed on emulator 2026-09-28
+AUTH-07,RULES-SEC-05,L3,Y,Same rules-unit-testing cases as SEC-05/SEC-09/SEC-10 also cover cross-user isolation
+AUTH-07,TC-AUTH-007,L4,Y,PASS - UI-level companion check confirmed 2026-09-29: fresh user B's Riwayat never shows user A's data (AuthSteps.java)
+SEC-06,RULES-SEC-06,L3,Y,PASS - reassigning a transaction's user_id via update is denied - confirmed on emulator 2026-09-28
+SEC-07,RULES-SEC-07,L3,Y,PASS - create/read/delete own low_confidence_logs all allowed - confirmed on emulator 2026-09-28
+SEC-08,RULES-SEC-08,L3,Y,PASS - updating own low_confidence_logs denied (append-only) - confirmed on emulator 2026-09-28
+SEC-09,RULES-SEC-09,L3,Y,PASS - create-on-behalf-of/read/delete another user's low_confidence_logs all denied - confirmed on emulator 2026-09-28
+SEC-10,RULES-SEC-10,L3,Y,PASS - own profile create/update/read allowed; another user's profile read/write denied - confirmed on emulator 2026-09-28
+SEC-11,RULES-SEC-10,L3,Y,"Same rules-unit-testing cases as SEC-10 (create = first login, update = subsequent login) also cover this"
+SEC-12,RULES-SEC-12,L3,Y,PASS - undefined collection denied even for an authenticated user - confirmed on emulator 2026-09-28
+PARSE-01,PM-PARSE-01,L2,Y,PASS - kategori/platform/harga/payment_method/confidence all correct on production 2026-09-28
+PARSE-23,PM-PARSE-01,L2,Y,PASS - goceng=5000 confirmed correct via the same PARSE-01 request
+PARSE-44,PM-PARSE-01,L2,Y,"PASS - gopay stayed payment_method not platform, via the same PARSE-01 request"
+PARSE-02,PM-PARSE-02,L2,Y,PASS - kategori/harga/payment_method correct on production 2026-09-28
+PARSE-31a,PM-PARSE-02,L2,Y,PASS - "25rb"=25000 confirmed via the same PARSE-02 request
+PARSE-51,PM-PARSE-02,L2,Y,"PASS - payment_method defaults to QRIS when unspecified, via the same PARSE-02 request"
+PARSE-03,PM-PARSE-03,L2,Y,PASS - kategori/harga/payment_method correct on production 2026-09-28
+PARSE-27,PM-PARSE-03,L2,Y,PASS - cepego=100000 confirmed correct via the same PARSE-03 request
+PARSE-04,PM-PARSE-04,L2,Y,PASS - kategori/platform/harga/payment_method correct on production 2026-09-28
+PARSE-52,PM-PARSE-04,L2,Y,PASS - mixed ID/EN sentence parsed correctly via the same PARSE-04 request
+PARSE-05,PM-PARSE-05,L2,Y,PASS - kategori/platform/harga/payment_method correct on production 2026-09-28
+PARSE-24,PM-PARSE-05,L2,Y,PASS - ceban=10000 confirmed correct via the same PARSE-05 request
+PARSE-06,PM-PARSE-06,L2,Y,PASS (harga/confidence correct) but raw_transcript FAILED - see BUG-003
+PARSE-55,PM-PARSE-06,L2,Y,PASS - harga=0 and confidence=low correct for a no-signal greeting
+PARSE-07,PM-PARSE-07,L2,Y,PASS - multi-item sum (35000) and confidence correct on production 2026-09-28
+PARSE-57,PM-PARSE-07,L2,Y,PASS - multi-item single-sentence sum confirmed via the same PARSE-07 request
+PARSE-08,PM-PARSE-08,L2,Y,PASS - kategori/platform/harga/payment_method correct on production 2026-09-28
+PARSE-09,PM-PARSE-09,L2,Y,PASS - kategori/platform/harga/payment_method correct on production 2026-09-28
+PARSE-10,PM-PARSE-10,L2,Y,PASS - kategori/harga/payment_method correct on production 2026-09-28
+PARSE-20,PM-PARSE-20,L2,Y,PASS - cepe=100 confirmed correct on production 2026-09-28
+PARSE-21,PM-PARSE-21,L2,Y,FAILED - gocap parsed as 50000 not 50 - see BUG-004
+PARSE-22,PM-PARSE-22,L2,Y,PASS - ceceng=1000 confirmed correct on production 2026-09-28
+PARSE-25,PM-API-06-01,L2,Y,PASS - goban=50000 already confirmed via API-06's real .webm fixture (Test2.webm)
+PARSE-26,PM-PARSE-26,L2,Y,PASS - noban=90000 confirmed correct on production 2026-09-28
+PARSE-28,PM-PARSE-28,L2,Y,PASS - gopego=500000 confirmed correct on production 2026-09-28
+PARSE-29,PM-PARSE-29,L2,Y,PASS - nopego=900000 confirmed correct on production 2026-09-28
+PARSE-30,PM-PARSE-30,L2,Y,PASS - cetiau=1000000 confirmed correct on production 2026-09-28
+PARSE-31b,PM-PARSE-31b,L2,Y,PASS - "lima belas ribu"=15000 confirmed correct on production 2026-09-28
+PARSE-32,PM-PARSE-32,L2,Y,PASS - "2 juta"=2000000 confirmed correct on production 2026-09-28
+PARSE-40,PM-PARSE-40,L2,Y,"PASS - known brand ""Solaria"" kept, trigger word ""Restoran"" dropped"
+PARSE-41,PM-PARSE-41,L2,Y,"PASS - all 4 phonetic corrections confirmed (Salaria->Solaria, kaku->Gyu-Kaku, sabwey->Subway, minimaret->Indomaret)"
+PARSE-42,PM-PARSE-42,L2,Y,PASS - unknown local place "Cafe Nako" kept with trigger word "Cafe"
+PARSE-43,PM-PARSE-40,L2,Y,PASS - confirmed via PARSE-40/42: platform is never a bare trigger word alone
+PARSE-45,PM-PARSE-45,L2,Y,PASS - platform is empty string (not null/missing) when no place/brand mentioned
+PARSE-50,PM-PARSE-45,L2,Y,PASS - "Lainnya" category mapping (obat) confirmed via the same PARSE-45 request
+PARSE-53,PM-PARSE-53,L2,Y,"PASS - filler words (""eh"", ""anu"") ignored in structured result"
+PARSE-54,PM-PARSE-54,L2,Y,"PASS - 2-of-3 signal (harga+item, no platform) correctly avoided ""low"" confidence"
+PARSE-56,PM-PARSE-ALL,L2,Y,PASS in 27/28 rows; FAILED for the no-signal-greeting case - see BUG-003
+AUTH-01,TC-AUTH-001,L4,Y,"PASS - confirmed 2026-09-28 via automation/src/test/java/.../steps/AuthSteps.java against local dev + emulator"
+AUTH-02,TC-AUTH-002,L4,N,Not automated - the loading-skeleton window (before auth state resolves) is a sub-second race that can't be reliably caught/frozen without a slow/mocked auth response; not worth guessing at a timing hook
+AUTH-03,TC-AUTH-003,L4,Y,PASS - confirmed 2026-09-28 against local dev + emulator (AuthSteps.java)
+AUTH-04,TC-AUTH-004,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (AuthSteps.java)"
+AUTH-05,TC-AUTH-005,L4,N,"Attempted 2026-09-29: forced offline (CDP network conditions) right before the emulator widget's submit to induce a non-cancel sign-in error. Confirmed this does NOT reliably reproduce the ""Gagal login"" alert even waiting 25s - same class of architectural gap as VOICE-06 (the way the failure is forced from outside doesn't match how the real SDK fails). Left wired and documented, not silently dropped - see automation/README.md"
+AUTH-06,TC-AUTH-006,L4,Y,PASS - confirmed 2026-09-28 against local dev + emulator (AuthSteps.java)
+NAV-01,TC-NAV-001,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (NavigationSteps.java)
+NAV-02,TC-NAV-002,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (NavigationSteps.java)"
+NAV-03,TC-NAV-003,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (NavigationSteps.java)"
+NAV-04,TC-NAV-004,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (NavigationSteps.java)
+NAV-05,TC-NAV-005,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (NavigationSteps.java)"
+NAV-06,TC-NAV-006,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (NavigationSteps.java)"
+NAV-07,TC-NAV-007,L4,Y,PASS (best-effort) - confirmed 2026-09-29 against local dev + emulator using CDP Emulation.setEmulatedMedia to force the OS-level color-scheme preference; regression tier (NavigationSteps.java)
+NAV-08,TC-NAV-008,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (NavigationSteps.java)"
+HOME-01,TC-HOME-001,L4,Y,PASS - confirmed 2026-09-28 against local dev + emulator (HomeSteps.java)
+HOME-02,TC-HOME-002,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (HomeSteps.java)
+HOME-03,TC-HOME-003,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (HomeSteps.java)
+HOME-04,TC-HOME-004,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (HomeSteps.java)"
+HOME-05,TC-HOME-005,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (HomeSteps.java)"
+HOME-06,TC-HOME-006,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (HomeSteps.java)
+HOME-07,TC-HOME-007,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (HomeSteps.java). Uses two independent WebDriver sessions signed in as the same fake account via the Auth Emulator's ""reuse account"" picker (server-side, not browser-profile-based) - confirmed by exploration before writing the glue, not guessed"
+VOICE-01,TC-VOICE-001,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (VoiceSteps.java)
+VOICE-02,TC-VOICE-002,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator (VoiceSteps.java, clean.wav fixture)"
+VOICE-03,TC-VOICE-003,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator using the silence.wav fixture (VoiceSteps.java)
+VOICE-04,TC-VOICE-004,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator using the long-over-60s.wav fixture, regression tier (VoiceSteps.java); genuinely waits out the real ~60s cutoff, not shortcut"
+VOICE-05,TC-VOICE-005,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (VoiceSteps.java)"
+VOICE-06,TC-VOICE-006,L4,Y,"L4 KNOWN LIMITATION (not an app failure): --use-fake-ui-for-media-stream auto-approves mic access so the denied case can't be reproduced in automation (VoiceSteps.java). PASS manually 2026-10-02 on production (CH-02): alert 'Membutuhkan akses mikrofon.' shown"
+VOICE-07,TC-VOICE-007,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (VoiceSteps.java)
+VOICE-08,TC-VOICE-008,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator + Gemini fetch-mock (MOCK_SCENARIO=high) (VoiceSteps.java)"
+VOICE-09,TC-VOICE-009,L4,Y,"PASS for the modal (the actual user-facing behavior); the low_confidence_logs write check is best-effort and didn't confirm under the Gemini mock - possible mock-fidelity gap, not filed as an app bug (VoiceSteps.java)"
+VOICE-10,TC-VOICE-010,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator with the Gemini fetch-mock's all-fail scenario, regression tier (VoiceSteps.java)"
+VOICE-11,TC-VOICE-011,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (VoiceSteps.java)"
+SAVE-01,TC-SAVE-001,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (SaveSteps.java)
+SAVE-02,TC-SAVE-002,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (SaveSteps.java)"
+SAVE-03,TC-SAVE-003,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (SaveSteps.java)"
+SAVE-04,TC-SAVE-004,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (SaveSteps.java)
+SAVE-05,TC-SAVE-005,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (SaveSteps.java)
+SAVE-06,TC-SAVE-006,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (SaveSteps.java)"
+SAVE-07,TC-SAVE-007,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (SaveSteps.java)"
+SAVE-08,TC-SAVE-008,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (SaveSteps.java)"
+SAVE-09,TC-SAVE-009,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (SaveSteps.java)"
+SAVE-10,TC-SAVE-010,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (SaveSteps.java)
+SAVE-11,TC-SAVE-011,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (SaveSteps.java)"
+LOWC-01,TC-LOWC-001,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator with the Gemini fetch-mock's low scenario, regression tier (LowConfidenceSteps.java)"
+LOWC-02,TC-LOWC-002,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator with the Gemini fetch-mock's low scenario, regression tier (LowConfidenceSteps.java)"
+LOWC-03,TC-LOWC-003,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator with the Gemini fetch-mock's low scenario, regression tier (LowConfidenceSteps.java)"
+LOWC-04,TC-LOWC-004,L4,Y,"PASS for both modals (voice + text triggers, the actual user-facing behavior); the low_confidence_logs Firestore write check is best-effort and didn't confirm under the Gemini mock - possible mock-fidelity gap, not filed as an app bug (LowConfidenceSteps.java)"
+MAN-01,TC-MAN-001,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (ManualInputSteps.java)
+MAN-02,TC-MAN-002,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (ManualInputSteps.java)"
+MAN-03,TC-MAN-003,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator + Gemini fetch-mock (MOCK_SCENARIO=high) (ManualInputSteps.java)"
+MAN-04,TC-MAN-004,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (ManualInputSteps.java)"
+MAN-05,TC-MAN-005,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator + Gemini fetch-mock (MOCK_SCENARIO=low) (ManualInputSteps.java)"
+MAN-06,TC-MAN-006,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (ManualInputSteps.java)
+MAN-07,TC-MAN-007,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator with the Gemini fetch-mock's all-fail scenario, regression tier (ManualInputSteps.java)"
+MAN-08,TC-MAN-008,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (ManualInputSteps.java)"
+MAN-10,TC-MAN-009,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (ManualInputSteps.java)
+MAN-11,TC-MAN-010,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (ManualInputSteps.java)"
+MAN-12,TC-MAN-011,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (ManualInputSteps.java)"
+MAN-13,TC-MAN-012,L4,Y,"FAILED - rejection works, but shows the browser's generic message not the app's Indonesian text - see BUG-005"
+MAN-14,TC-MAN-013,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (ManualInputSteps.java)
+MAN-15,TC-MAN-014,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (ManualInputSteps.java)
+MAN-16,TC-MAN-015,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (ManualInputSteps.java)"
+MAN-17,TC-MAN-016,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (ManualInputSteps.java)"
+MAN-18,TC-MAN-017,L4,Y,"PASS (best-effort on the log-check half) - confirmed 2026-09-29 against local dev + emulator, regression tier (ManualInputSteps.java)"
+HIST-01,TC-HIST-001,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (HistorySteps.java)
+HIST-02,TC-HIST-002,L4,Y,FAILED - confirmed 2026-09-29 against local dev + emulator: the empty-state message shows correctly but Sync/Reset buttons stay visible instead of hiding - see BUG-007. Regression tier (HistorySteps.java)
+HIST-03,TC-HIST-003,L4,N,"Not automated - needs transactions on different real days (today/yesterday/older), which the direct form can't backdate via the UI; seeding via raw Firestore writes was considered and rejected (uncertain exact timestamp field format without reading source, too risky to guess). PASS manually 2026-10-03 on production with real multi-day data (CH-05)"
+HIST-04,TC-HIST-004,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (HistorySteps.java)
+HIST-05,TC-HIST-005,L4,N,"Not automated - needs transactions spanning 30+ days to meaningfully test time-range filters excluding older data, which the direct form can't backdate via the UI - same limitation as HIST-03. PASS manually 2026-10-03 on production (CH-05)"
+HIST-06,TC-HIST-006,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (HistorySteps.java)"
+HIST-07,TC-HIST-007,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (HistorySteps.java)"
+HIST-08,TC-HIST-008,L4,Y,"PASS - confirmed 2026-09-29 with 31 seeded transactions against local dev + emulator (HistorySteps.java); the page indicator's total was not asserted. Manual check 2026-10-03 on production found the total is not the real total - see BUG-015"
+HIST-09,TC-HIST-009,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (HistorySteps.java)
+HIST-10,TC-HIST-010,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (HistorySteps.java)"
+HIST-11,TC-HIST-011,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (HistorySteps.java)
+HIST-12,TC-HIST-012,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (HistorySteps.java)"
+HIST-13,TC-HIST-013,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (HistorySteps.java). Same two-session mechanism as HOME-07"
+MON-01,TC-MON-001,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (MonthlySteps.java)
+MON-02,TC-MON-002,L4,Y,"PASS - current-month sum confirmed 2026-09-29; previous-months-excluded half is MON-08's job, not independently re-verified here (MonthlySteps.java)"
+MON-03,TC-MON-003,L4,Y,"PASS - toggle/title/button-label confirmed 2026-09-29; exact Monday-cutoff boundary not independently re-derived (can't backdate via UI) (MonthlySteps.java)"
+MON-04,TC-MON-004,L4,Y,"FAILED - confirmed 2026-09-29 against local dev + emulator: the Kategori per-category list always shows its own empty state regardless of data (confirmed with 1 and 2 categories, not a loading race) - see BUG-006. Regression tier (MonthlySteps.java)"
+MON-05,TC-MON-005,L4,N,"Not automated - blocked on the same root cause as MON-04 (BUG-006: the per-category section never renders real data), so the donut chart's per-category colors/tooltip can't be meaningfully exercised either; also inherently fragile to test via canvas/SVG chart internals"
+MON-06,TC-MON-006,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (MonthlySteps.java)"
+MON-07,TC-MON-007,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (MonthlySteps.java)
+MON-08,TC-MON-008,L4,N,"Not automated - needs transactions in the current AND a previous month, which the direct form can't backdate via the UI - same limitation as HIST-03/05. PASS manually 2026-10-03 on production (CH-05)"
+SYNC-01,TC-SYNC-001,L5,N,PASS - executed manually on production 2026-09-30; error toast shown when offline; no request to Google
+SYNC-02,TC-SYNC-002,L5,N,PASS - executed manually 2026-09-30; Drive permission can be skipped at login but is re-requested on next Sync click
+SYNC-03,TC-SYNC-003,L5,N,PASS - executed manually 2026-09-30; closing the auth popup shows no toast; button returns to normal
+SYNC-04,TC-SYNC-004,L5,N,FAIL (BUG-008) - executed manually 2026-09-30; Sync/Reset buttons re-enable after switching tabs and back during an active sync
+SYNC-05,TC-SYNC-005,L5,N,PASS - executed manually 2026-09-30; Qicau_Export_<year> spreadsheet created with Summary + monthly tabs
+SYNC-06,TC-SYNC-006,L5,N,PASS - executed manually 2026-09-30; frozen header and correct row order confirmed
+SYNC-07,TC-SYNC-007,L5,N,PASS - executed manually 2026-09-30; Statistik/Kategori tables match the data rows
+SYNC-08,TC-SYNC-008,L5,N,PASS - executed manually 2026-09-30; Summary tab aggregates correct; no frozen row
+SYNC-09,TC-SYNC-009,L5,N,PASS - executed manually 2026-09-30; success toast count correct; verified up to 300+ transactions
+SYNC-10,TC-SYNC-010,L5,N,PASS - executed manually 2026-09-30; re-sync with no new data shows already-synced toast; no duplicate rows
+SYNC-11,TC-SYNC-011,L5,N,PASS - executed manually 2026-09-30; re-sync only sends the one new transaction
+SYNC-12,TC-SYNC-012,L5,N,PASS - executed manually 2026-09-30; empty-account sync shows no-data toast; no Google request
+SYNC-13,TC-SYNC-013,L5,N,PASS - executed manually 2026-09-30; transactions in two years produced two separate spreadsheets
+SYNC-14,TC-SYNC-014,L5,N,PARTIAL/FAIL (BUG-009) - executed manually 2026-09-30 by disconnecting mid-sync; error toast shown and sync canceled but an empty Sheets file was left behind; export-marking not independently verified
+SYNC-15,TC-SYNC-015,L5,N,PASS - executed manually 2026-09-30; Batal on Reset confirmation makes no changes
+SYNC-16,TC-SYNC-016,L5,N,PASS - executed manually 2026-09-30; Reset re-marks all transactions; full resync toast count matched
+SYNC-17,TC-SYNC-017,L5,N,PASS - executed manually 2026-09-30; Reset while offline shows internet-required error; no changes
+SYNC-18,TC-SYNC-018,L5,N,PASS - executed manually 2026-09-30; deleting the Sheets file and re-syncing recreated it with all transactions
+PWA-01,TC-PWA-001,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (PwaSteps.java)
+PWA-02,TC-PWA-002,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (PwaSteps.java)"
+PWA-03,TC-PWA-003,L4,Y,"PASS - confirmed 2026-09-29; the sync-to-server half is best-effort (reload check, not a direct Firestore query) (PwaSteps.java)"
+PWA-04,TC-PWA-004,L4,Y,"PASS - confirmed 2026-09-29 for the Input Manual path; Sync/Reset are out of L4 scope (L5), Voice path (VOICE-07) not yet wired (PwaSteps.java)"
+PWA-05,TC-PWA-005,L4,N,"Not automated - needs a real new deployment/service-worker version to be published while the test is running; not reproducible against a static local dev instance without faking the update-available signal, which risks guessing at internals. PASS manually 2026-10-03 on production (CH-04): update prompt appears and accepting it loses no offline-pending data"
+PWA-06,TC-PWA-006,L4,N,Not automated - the native browser install-prompt flow (beforeinstallprompt) isn't reliably triggerable from Selenium-launched Chrome (PWA install criteria and headless/automation flags interact unpredictably); the header/settings install buttons' mere presence is already covered by NAV-05. Executed manually 2026-10-03 on production (CH-04): FAIL - no in-app success toast after install (BUG-014)
+PWA-07,TC-PWA-007,L4,N,"Not automated - same native-install-flow limitation as PWA-06 (no reliable way to launch Chrome ""as an installed PWA"" from Selenium). PASS manually 2026-10-03 on production (CH-04): install button hidden in the installed app"
+PWA-08,TC-PWA-008,L4,N,Not automated by design - requires iOS Safari (no device available) and is tagged @manual-only in automation/ so it's excluded from @regression runs
+PWA-09,TC-PWA-009,L4,Y,"PASS - confirmed 2026-09-29 by fetching the served /manifest.webmanifest directly over HTTP (a runtime response, not the app's source), regression tier (PwaSteps.java)"
+PWA-10,TC-PWA-010,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (PwaSteps.java)"
+TOAST-01,TC-TOAST-001,L4,N,"Not automated - ""Sync Reset install success/failure from different tabs including the login page"" spans L5 (out of L4 scope entirely) and the native install-prompt flow (see PWA-06); no reliable trigger reachable from here without guessing. PASS manually 2026-10-03 on production: toasts are green for success and red for error/warning and disappear after about 5 seconds; a toast from an action in one tab also showed in another tab"
+TOAST-02,TC-TOAST-002,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (ToastSteps.java, new)"

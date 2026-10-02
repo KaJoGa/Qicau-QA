@@ -1,0 +1,27 @@
+case_id,spec_id,title,preconditions,steps,expected_result,priority,type,environment,automated
+TC-MAN-001,MAN-01,Manual input modal opens in Teks AI mode when online,"Online, signed in","1. Open ""Input Manual"" modal","""Teks AI"" mode active; textarea empty with placeholder example; ""0/500"" counter",P1,functional,local-emulator,N
+TC-MAN-002,MAN-02,Text input is capped at 500 characters,Teks AI mode open,1. Type more than 500 characters,"Input truncated at 500; counter turns red at 500/500",P2,boundary,local-emulator,N
+TC-MAN-003,MAN-03,Submitting clear expense text saves a transaction,"Teks AI mode open, online","1. Type a clear expense sentence
+2. Submit","Modal closes, ""Memproses..."", then transaction saved + toast (SAVE-01); textarea cleared",P1,functional,local-emulator,N
+TC-MAN-004,MAN-04,Submitting empty or whitespace-only text does nothing,Teks AI mode open,"1. Leave the textarea empty or type only spaces
+2. Submit","No request sent, no transaction created",P2,negative,local-emulator,N
+TC-MAN-005,MAN-05,Low-confidence text result behaves like voice but with source text,Teks AI mode open; input will yield low confidence,1. Submit an ambiguous/no-signal text,"Same as VOICE-09 (not saved, low-confidence modal, logged) but source = text and input_text populated",P1,functional,local-emulator,N
+TC-MAN-006,MAN-06,Submitting AI text while offline is blocked,"Device offline, Teks AI mode open","1. Type a valid expense sentence
+2. Submit while offline","Alert that AI text processing needs internet and suggests ""Formulir Langsung""; no transaction created",P1,negative,local-emulator,N
+TC-MAN-007,MAN-07,Server/AI failure on text submit shows an alert and saves nothing,Teks AI mode open; AI service will fail,1. Submit a valid expense sentence while the AI service is failing,"Alert ""Gagal memproses teks. ...""; no transaction created",P2,negative,local-emulator,N
+TC-MAN-008,MAN-08,Cancel or close on manual input modal discards input,Manual input modal open with text entered,"1. Click ""Batal"" or the close (x) icon",Modal closes; no transaction created,P2,functional,local-emulator,N
+TC-MAN-009,MAN-10,Offline opens directly in Formulir Langsung mode,Device offline,"1. Open ""Input Manual"" modal while offline","Opens directly in ""Formulir Langsung"" mode labeled ""(Offline)""; fully usable",P1,functional,local-emulator,N
+TC-MAN-010,MAN-11,Direct form has correct default values,Formulir Langsung mode open,1. Open the form fresh,"Kategori = Makan, Metode = QRIS, all other fields empty",P2,functional,local-emulator,N
+TC-MAN-011,MAN-12,Price field accepts digits only thousands-formatted and capped,Formulir Langsung mode open,"1. Type ""25000"" into the price field
+2. Attempt to exceed 999999999","Only digits accepted; displays as ""25.000""; capped at 999.999.999",P2,boundary,local-emulator,N
+TC-MAN-012,MAN-13,Saving with empty or zero price is rejected,"Formulir Langsung mode open, price left empty or 0","1. Leave price empty (or 0)
+2. Try to save","Rejected; alert ""Harap masukkan jumlah pengeluaran.""; no transaction created",P1,negative,local-emulator,N
+TC-MAN-013,MAN-14,Saving with only a valid price uses defaults for the rest,Formulir Langsung mode open,"1. Enter only a valid price
+2. Save","Saved with kategori Makan, metode QRIS, empty platform, detail = category name; success toast",P1,functional,local-emulator,N
+TC-MAN-014,MAN-15,Saving with all fields filled saves exactly as entered,Formulir Langsung mode open,"1. Fill price, platform, category, method, and note
+2. Save",Saved exactly as entered; detail = the note entered,P1,functional,local-emulator,N
+TC-MAN-015,MAN-16,Empty note with platform filled uses platform as detail,"Formulir Langsung mode open, platform filled, note empty","1. Fill platform, leave note empty
+2. Save",Detail = platform name,P2,functional,local-emulator,N
+TC-MAN-016,MAN-17,Form resets after save for next use,Just saved via Formulir Langsung,"1. Save a transaction via the direct form
+2. Reopen the form","Modal closed; price/platform/note cleared for the next entry",P2,functional,local-emulator,N
+TC-MAN-017,MAN-18,Direct-form transactions are always high confidence and never logged low-confidence,Formulir Langsung mode open,1. Save a transaction via the direct form,"Treated as high confidence; never produces a low-confidence log",P2,functional,local-emulator,N

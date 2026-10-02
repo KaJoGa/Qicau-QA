@@ -1,0 +1,13 @@
+case_id,spec_id,title,preconditions,steps,expected_result,priority,type,environment,automated
+TC-MON-001,MON-01,Bulanan tab shows title total card donut chart and category list,Signed in,1. Open Bulanan tab,"Title ""Ringkasan Bulan Ini""; ""Total Pengeluaran"" card; donut chart; per-category list",P1,functional,local-emulator,N
+TC-MON-002,MON-02,Monthly total equals sum since day 1 00:00,Transactions across current and previous months,1. Compare displayed total to the sum of transactions since the 1st of the current month 00:00,Totals match,P1,functional,local-emulator,N
+TC-MON-003,MON-03,Weekly view starts from Monday and includes the current Sunday,On Bulanan tab,"1. Click ""Mingguan""
+2. Check totals against transactions since Monday 00:00 of the current week","Title ""Ringkasan Minggu Ini""; button now reads ""Bulanan""; total = since Monday 00:00 this week (Sunday still counted as part of the same week)",P1,functional,local-emulator,N
+TC-MON-004,MON-04,Per-category rows sorted descending with proportion bar,Transactions across multiple categories,1. View the per-category list,"Only categories with transactions shown; sorted largest amount first; each row shows icon, name, amount, and a bar = amount divided by total",P2,functional,local-emulator,N
+TC-MON-005,MON-05,Donut chart shows fixed per-category colors and tooltip hidden with no data,Transactions across multiple categories; also test with none,"1. View the donut chart with data
+2. Hover a slice
+3. Remove all transactions and view again","One slice per category, consistent color per category, tooltip shows the Rupiah amount; chart hidden when there is no data",P3,functional,local-emulator,N
+TC-MON-006,MON-06,Empty state text for monthly and weekly views,No transactions in the current period,"1. View Bulanan with no transactions this month
+2. Switch to Mingguan with none this week","Total ""Rp 0""; text ""Belum ada riwayat transaksi."" (weekly: ""Belum ada riwayat transaksi minggu ini."")",P2,functional,local-emulator,N
+TC-MON-007,MON-07,Summary updates live when data changes,Bulanan tab open,1. Add edit or delete a transaction in the current period,Summary updates automatically without reload,P1,functional,local-emulator,N
+TC-MON-008,MON-08,Transactions from prior months are excluded,Transactions exist in the current and a previous month,1. View the current month's total and category breakdown,Previous month's transactions are not counted,P2,functional,local-emulator,N

@@ -1,0 +1,13 @@
+case_id,spec_id,title,preconditions,steps,expected_result,priority,type,environment,automated
+TC-SEC-001,SEC-01,Unauthenticated access to any collection is denied,No authenticated session,1. Attempt any read/write to Firestore without authentication,Denied,P1,security,local-emulator,Y
+TC-SEC-002,SEC-02,Creating a transaction with own user_id is allowed,Authenticated as user A,1. Create a transaction with user_id = own uid,Allowed,P1,security,local-emulator,Y
+TC-SEC-003,SEC-03,Creating a transaction with another user's user_id is denied,Authenticated as user A,1. Create a transaction with user_id = user B's uid,Denied,P1,security,local-emulator,Y
+TC-SEC-004,SEC-04,Reading updating and deleting own transaction is allowed,Authenticated as the transaction's owner,1. Read/update/delete a transaction owned by self,Allowed,P1,security,local-emulator,Y
+TC-SEC-005,SEC-05,Reading updating and deleting another user's transaction is denied,Authenticated as a non-owner,1. Read/update/delete a transaction owned by another user,Denied,P1,security,local-emulator,Y
+TC-SEC-006,SEC-06,Reassigning a transaction's user_id to another user is denied,Authenticated as the transaction's owner,1. Attempt to change a transaction's user_id to another user via update,Denied,P1,security,local-emulator,Y
+TC-SEC-007,SEC-07,Own low_confidence_logs create read and delete are allowed,Authenticated as the log's owner,1. Create/read/delete a low_confidence_logs document owned by self,Allowed,P2,security,local-emulator,Y
+TC-SEC-008,SEC-08,Updating an own low_confidence_logs document is denied,Authenticated as the log's owner,1. Attempt to update (not create/delete) an own low_confidence_logs document,Denied (append-only),P2,security,local-emulator,Y
+TC-SEC-009,SEC-09,Another user's low_confidence_logs are fully denied,Authenticated as a non-owner,1. Attempt to create-on-behalf-of/read/delete another user's low_confidence_logs,Denied,P2,security,local-emulator,Y
+TC-SEC-010,SEC-10,Only the owning uid may read or write their user profile,"Authenticated as user A, profile for user B exists",1. Read/write own users/{uid} profile 2. Attempt to read/write another user's profile,Own profile allowed; another user's profile denied,P1,security,local-emulator,Y
+TC-SEC-011,SEC-11,User profile is created on first login and updated on subsequent logins,Signing in for the first time then again,1. Sign in for the first time 2. Sign in again on a subsequent login,"Profile (email, name, photo, last_login) is created then updated",P2,security,local-emulator,Y
+TC-SEC-012,SEC-12,Undefined collections are denied even for authenticated users,Authenticated as any user,1. Attempt to read/write a document in an undefined collection,Denied,P2,security,local-emulator,Y
