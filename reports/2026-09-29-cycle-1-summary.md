@@ -15,9 +15,9 @@ Every spec ID in `test/Qicau.md` has at least one test case — the traceability
 | L1 — API contract | 13 | 13 (100%) | Postman/Newman, `api-testing/` |
 | L2 — Parse quality | 38 | 38 (100%) | Postman/Newman against production Gemini (non-deterministic by nature, repeated runs) |
 | L3 — Firestore rules | 13 | 13 (100%) | `@firebase/rules-unit-testing` (Node/JS, the one deliberate non-Java corner — `test-plan.md` §6.3) |
-| L4 — UI | 98 | 94 (96%) | 87 automated with Selenium/Cucumber (`automation/`); 7 more run manually on production (`HIST-03`, `HIST-05`, `MON-08`, `PWA-05`, `PWA-06`, `PWA-07`, `TOAST-01`); 4 not executed (§4) |
+| L4 — UI | 98 | 95 (97%) | 87 automated with Selenium/Cucumber (`automation/`); 8 more run manually on production (`HIST-03`, `HIST-05`, `MON-08`, `PWA-05`, `PWA-06`, `PWA-07`, `PWA-08` on an iPhone, `TOAST-01`); 3 not executed (§4) |
 | L5 — Sheets sync | 18 | 18 (100%) | Manual on production, by design (`test-plan.md` §3.3) |
-| **Total** | **180** | **176 (98%)** | |
+| **Total** | **180** | **177 (98%)** | |
 
 Besides the case-by-case runs, five exploratory sessions were done (§2.3). Manual test cases exist
 for every spec ID that is not automated (`test-cases/`, greenlit 2026-09-28).
@@ -41,7 +41,7 @@ fetch-mock where needed). Breakdown, run commands and the bug-fix log are in `au
 | **Total** | **99** | **83** | **4** | **12** |
 
 Each of the 12 not-automatable scenarios is documented with a specific reason
-(`automation/README.md`). Seven of them have since been run manually (§1), and `VOICE-06` was also
+(`automation/README.md`). Eight of them have since been run manually (§1), and `VOICE-06` was also
 confirmed manually (the "Membutuhkan akses mikrofon." alert appears).
 
 ### 2.3 L5 — Sheets sync (manual, production, 2026-09-30)
@@ -69,16 +69,16 @@ header button) and `BUG-012` (raw Gemini error shown instead of a friendly messa
 
 ## 3. Defect statistics
 
-All 18 bugs (`BUG-001` to `BUG-018`) are filed in Jira as `QAP-17` to `QAP-34`; the local record is
+All 19 bugs (`BUG-001` to `BUG-019`) are filed in Jira as `QAP-17` to `QAP-35`; the local record is
 `bug-reports/INDEX.md`.
 
 | Severity (proposed) | Open | Fixed |
 |---|---|---|
 | Critical | 0 | 1 (`BUG-002`) |
 | Medium | 5 (`BUG-001`, `BUG-003`, `BUG-006`, `BUG-008`, `BUG-018`) | 0 |
-| Low | 11 (`BUG-004`, `BUG-005`, `BUG-007`, `BUG-010` to `BUG-017`) | 0 |
+| Low | 12 (`BUG-004`, `BUG-005`, `BUG-007`, `BUG-010` to `BUG-017`, `BUG-019`) | 0 |
 | Trivial | 1 (`BUG-009`) | 0 |
-| **Total** | **17 open** | **1 fixed** |
+| **Total** | **18 open** | **1 fixed** |
 
 By where they were found:
 
@@ -88,7 +88,7 @@ By where they were found:
 | L2 parse quality | `BUG-003`, `BUG-004` |
 | L4 UI automation | `BUG-005`, `BUG-006`, `BUG-007` |
 | L5 Sheets sync | `BUG-008`, `BUG-009` |
-| Manual use and exploratory sessions | `BUG-010` to `BUG-018` |
+| Manual use and exploratory sessions | `BUG-010` to `BUG-019` (`BUG-019` from the iPhone check of `PWA-08`) |
 
 `BUG-001` was also re-confirmed at L4: local dev has the same defect as production, with a
 different wrong `Cache-Control` value (`no-cache` vs `public, max-age=0, must-revalidate`).
@@ -99,11 +99,11 @@ a second sprint is planned for fixing and retesting them.
 
 ## 4. Open risks and gaps carried forward
 
-- **Four spec IDs not executed**: `AUTH-02` (the loading skeleton is a sub-second window), `AUTH-05`
-  (a non-cancel sign-in error cannot be forced reliably), `MON-05` (blocked by `BUG-006`) and
-  `PWA-08` (needs iOS or a browser without a native install prompt). Each has a documented reason
-  in `test-cases/traceability.csv`.
-- **iOS** — no device available; coverage gap by design.
+- **Three spec IDs not executed**: `AUTH-02` (the loading skeleton is a sub-second window), `AUTH-05`
+  (a non-cancel sign-in error cannot be forced reliably) and `MON-05` (blocked by `BUG-006`). Each
+  has a documented reason in `test-cases/traceability.csv`.
+- **iOS** — no iOS test device available; `PWA-08` was checked once on a borrowed iPhone, in Chrome only
+  (not Safari), so iOS coverage is a single manual check, not a full pass.
 - **Real microphone** — fake audio files verify the pipeline only. CH-02 covered real-device
   behaviour partly (Android and desktop); microphone and codec quality remains a permanent gap.
 - **Not run inside the timeboxes**: RTL text and a long voice clip (CH-01), access revoked from the
@@ -124,7 +124,7 @@ a second sprint is planned for fixing and retesting them.
 
 | Criterion | Status |
 |---|---|
-| 100% of P1 cases executed; ≥95% overall | Overall ✅ 176/180 (98%). Not formally scored against the P1 priority column. |
+| 100% of P1 cases executed; ≥95% overall | Overall ✅ 177/180 (98%). Not formally scored against the P1 priority column. |
 | P1 pass rate 100%; overall ≥90% | Overall ✅ above 90%. Every non-passing result is an explained bug (§3) or a documented gap (§4). |
 | No open Critical/High defects | ✅ Met. |
 | All Medium defects have a triage decision | ⏳ Not yet — 5 open Medium bugs, to be triaged on the board. |

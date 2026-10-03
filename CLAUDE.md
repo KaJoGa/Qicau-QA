@@ -73,18 +73,18 @@ skipped silently). L5 (Sheets sync, `test-cases/sheets-sync.csv`, run guide
 exploratory sessions (`test-cases/exploratory/`) were run manually on production on 2026-10-02/03.
 Blackbox test cases exist for every spec ID (`test-cases/`, greenlit 2026-09-28).
 
-**First test cycle complete: 176 of 180 spec IDs executed (98%).** The summary report is
+**First test cycle complete: 177 of 180 spec IDs executed (98%).** The summary report is
 `reports/2026-09-29-cycle-1-summary.md`.
 
-**18 bugs filed** (`bug-reports/`), all in Jira (`BUG-001`..`BUG-018` → `QAP-17`..`QAP-34`) with
+**19 bugs filed** (`bug-reports/`), all in Jira (`BUG-001`..`BUG-019` → `QAP-17`..`QAP-35`) with
 priorities set (`BUG-002` is fixed and closed). Real app bugs found: `BUG-001`/`BUG-002` (L1),
 `BUG-003`/`BUG-004` (L2), `BUG-005`/`BUG-006`/`BUG-007` (L4), `BUG-008`/`BUG-009` (L5, manual),
-`BUG-010`..`BUG-018` (manual use and exploratory sessions — offline-banner overlap,
+`BUG-010`..`BUG-019` (manual use and exploratory sessions — offline-banner overlap,
 install-guide-modal overflow, raw Gemini error surfaced to the user, silent Sync when the OAuth
 popup is blocked, missing install-success toast, wrong page-indicator total, unlimited Platform
 length in the direct form, AI input accepting a price above the maximum, formula injection in the
-Sheets export). `BUG-001` was re-confirmed at L4 on local dev too.
+Sheets export, iOS install guide wording). `BUG-001` was re-confirmed at L4 on local dev too.
 
 Next (Jira Sprint 2): triage of the open Medium bugs, fixes and retests, and testing new features.
-Not done in cycle 1: formal P1 scoring, iOS, and four spec IDs that cannot be executed (see the
-report).
+Not done in cycle 1: formal P1 scoring, full iOS coverage (one manual check on a borrowed iPhone
+only), and three spec IDs that cannot be executed (see the report).

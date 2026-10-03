@@ -11,8 +11,8 @@ source code.
 
 ## Result of the first test cycle (2026-09-27 to 2026-10-03)
 
-180 spec IDs, all with at least one test case; **176 executed (98%)**. **18 bugs** found and filed
-in Jira (1 critical, fixed the same day; 17 open — 5 medium, 11 low, 1 trivial). Full report:
+180 spec IDs, all with at least one test case; **177 executed (98%)**. **19 bugs** found
+(1 critical, fixed the same day; 18 open — 5 medium, 12 low, 1 trivial), all filed in Jira. Full report:
 [`reports/2026-09-29-cycle-1-summary.md`](reports/2026-09-29-cycle-1-summary.md).
 
 | Layer | What | Tooling | Result |
@@ -42,9 +42,10 @@ in Jira (1 critical, fixed the same day; 17 open — 5 medium, 11 low, 1 trivial
 | [`CLAUDE.md`](CLAUDE.md) | Project context, conventions and working rules for the AI assistant used on this repo |
 
 ## Not covered (on purpose)
-iOS (no device), real-microphone quality, and four UI scenarios that cannot be executed
-(`AUTH-02`, `AUTH-05`, `MON-05`, `PWA-08`); all are listed with reasons in the cycle report.
+Full iOS coverage (only one manual check on a borrowed iPhone), real-microphone quality, and three
+UI scenarios that cannot be executed (`AUTH-02`, `AUTH-05`, `MON-05`); all are listed with reasons
+in the cycle report.
 
 ## Tracking
 
-- **Jira project:** [Qicau QA (QAP)](https://kalev.atlassian.net/jira/software/projects/QAP/boards/2/backlog) — backlog, sprints, and defect tracking (`QAP-17` to `QAP-34` are the bugs).
+- **Jira project:** [Qicau QA (QAP)](https://kalev.atlassian.net/jira/software/projects/QAP/boards/2/backlog) — backlog, sprints, and defect tracking (`QAP-17` to `QAP-35` are the bugs). The project is private (Jira Free plan), so the links ask for a login; every bug is therefore also written out in full in [`bug-reports/`](bug-reports/), and the project can be shown live on request. Sprint 1 (28 Sep – 5 Oct 2026) covered this test cycle; Sprint 2 is planned for bug fixes, retests and new features.
