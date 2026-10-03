@@ -16,7 +16,7 @@ results.
   `VOICE`, `SAVE`, `LOWC`, `MAN`, `HIST`, `MON`, `PWA`, `TOAST` ran through the Selenium/Cucumber
   suite in `automation/` (a few were run manually instead — noted per row); `SYNC` was run
   manually, see `sheets-sync-run-guide.md`.
-- 176 of 180 spec IDs have an executed result; the 4 that don't are explained in the cycle report
+- 177 of 180 spec IDs have an executed result; the 3 that don't are explained in the cycle report
   (`reports/2026-09-29-cycle-1-summary.md`).
 
 ## Files
