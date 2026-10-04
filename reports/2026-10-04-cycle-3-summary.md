@@ -44,7 +44,7 @@ L4 not passing in the final run: `HIST-08` (`BUG-024`), `HIST-11`, `HIST-17`, `M
 | `BUG-023` | Withdrawn: first HIST-08 seed (all one category) was not an `n+` case | - | Retest with mixed data showed `n+` works |
 | `BUG-024` | With a category filter, next after `1 / 1+` shows an empty page although 35 older rows exist | Medium | Reproduced on local dev; confirm on production |
 
-Totals: 24 bug stubs to date (`BUG-001..024`). Open: `BUG-008`, `011`, `013`, `018`, `019`, `020`, `021`, `022`, `024` (`BUG-023` withdrawn).
+Totals: 24 bug stubs to date (`BUG-001..024`). Open: `BUG-008`, `011`, `013`, `018`, `019`, `020`, `021`, `024` (`BUG-023` withdrawn; `BUG-022` fixed on local dev, production retest pending).
 
 ## 4. Test harness findings (not app bugs)
 - With the emulator, the app writes under its own Firebase project id (`big-elysium-496003-j7`), not
