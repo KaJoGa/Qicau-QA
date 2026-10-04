@@ -40,7 +40,7 @@ L4 not passing in the final run: `HIST-08` (`BUG-024`), `HIST-11`, `HIST-17`, `M
 |---|---|---|---|
 | `BUG-020` | Ringkasan keeps `Rp 0` category rows and no empty state after delete/edit/undo | Medium | Reproduced twice on local dev |
 | `BUG-021` | Offline create/edit/delete: Ringkasan can end up different from Riwayat (35.000 vs 45.000) | Medium | **Intermittent**: failed once, passed in the final run and most re-runs; verify by hand |
-| `BUG-022` | Offline delete leaves the confirmation dialog stuck with a spinner | Low | One observation; spec does not define it |
+| `BUG-022` | Offline delete left the confirmation dialog stuck with a spinner | Low | The author then specified `HIST-20`; retest PASS on local dev (dialog closes in ~100 ms) |
 | `BUG-023` | Withdrawn: first HIST-08 seed (all one category) was not an `n+` case | - | Retest with mixed data showed `n+` works |
 | `BUG-024` | With a category filter, next after `1 / 1+` shows an empty page although 35 older rows exist | Medium | Reproduced on local dev; confirm on production |
 
@@ -65,7 +65,6 @@ Guide: `test-cases/sprint3-manual-run-guide.md`.
 ## 6. Risks and open questions
 - **Ringkasan correctness** is the main open risk: `BUG-020` is confirmed and `BUG-021` is unresolved.
   Every number on that tab depends on the daily summary staying in step with transactions.
-- **Spec question for the author:** what offline
-  delete should do (`BUG-022`).
+- **Spec question for the author:** (none open).
 - **Production is not covered by the L4 results.** The UI suite runs on local dev; production
   confirmation of `BUG-005/006/010/015/016` is pending.

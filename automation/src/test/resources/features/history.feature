@@ -145,3 +145,12 @@ Feature: History / Riwayat (HIST)
     And Click "Simpan Perubahan"
     Then Error toast "Gagal menyimpan perubahan: ..."
     And list unchanged
+
+  @HIST-20 @regression
+  Scenario: Confirming delete while offline closes the dialog immediately and syncs after reconnect
+    Given Signed in with two transactions, Riwayat open
+    When Go offline and delete one transaction through the confirmation dialog
+    Then The confirmation dialog closes right away and the row disappears from the list
+    When Go back online and wait for the offline delete to sync
+    Then The transaction stays deleted after a reload
+    And Ringkasan total equals the sum of the remaining transactions in Riwayat

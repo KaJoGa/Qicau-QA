@@ -284,3 +284,6 @@ Real Google OAuth/Sheets flows (out of scope for this project entirely — that'
 iOS (`PWA-08`, no device, tagged `@manual-only` so it's excluded from `@regression` runs
 automatically). Real-microphone *behaviour* isn't excluded — `DriverFactory` wires Chrome's
 fake-device-for-media-stream flag so `VOICE-*` can use fixture `.wav` files instead.
+
+## HIST-20 (offline delete), 2026-10-04
+PASS locally (`@HIST-20`): the confirmation dialog closes within ~100 ms offline, the row disappears at once, the delete persists after reconnect, and the Ringkasan total equals the Riwayat sum. The "server rejects -> error toast" clause is not automatable (offline writes are queued, a rejection cannot be forced from the UI). The scenario was added by hand to `history.feature` with step definitions in `HistoryOfflineDeleteSteps.java`; re-running `generate-features.cjs` rewrites that feature from `test-cases/history.csv` and would drop its hand-written steps, so re-add them after regenerating.

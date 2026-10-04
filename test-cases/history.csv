@@ -31,3 +31,8 @@ TC-HIST-018,HIST-18,Closing the edit modal discards changes,Edit modal open with
 2. Click the close (X)",Changes discarded; transaction unchanged in the list,P3,functional,local-emulator,N
 TC-HIST-019,HIST-19,Save failure shows an error toast and leaves the list unchanged,Edit modal open; connection/server failure induced (e.g. block the Firestore request in DevTools or stop the emulator),"1. Change a field
 2. Click ""Simpan Perubahan""","Error toast ""Gagal menyimpan perubahan: ...""; list unchanged",P2,negative,local-emulator,N
+TC-HIST-020,HIST-20;MON-12,Confirming delete while offline closes the dialog at once and syncs deletion and summary after reconnect,"Online, Riwayat tab with at least two transactions, then offline","1. Go offline
+2. Delete a transaction and confirm ""Hapus""
+3. Observe the dialog and the list
+4. Go online and wait for sync
+5. Compare Ringkasan with the transactions in Riwayat","Dialog closes immediately and the row disappears (no hanging spinner); after reconnect the deletion and the Ringkasan correction are synced together (Ringkasan total equals the Riwayat sum). If the server rejects, an error toast appears and the row returns to the list (not forceable locally)",P2,functional,local-emulator,Y
