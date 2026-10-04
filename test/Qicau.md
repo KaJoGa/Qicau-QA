@@ -158,6 +158,7 @@ Modal "Input Manual" punya 2 mode: **Teks AI** dan **Formulir Langsung**.
 | HIST-17 | **Simpan Perubahan** | Modal tertutup; perubahan langsung tampil di daftar Riwayat, dan ikut ter-update di Home/Ringkasan bila transaksi tsb termasuk rentang yang sedang ditampilkan di sana. |
 | HIST-18 | Tutup modal edit (✕) | Perubahan dibuang; transaksi tetap seperti semula. |
 | HIST-19 | Simpan perubahan gagal (mis. koneksi/server error) | Toast error "Gagal menyimpan perubahan: …"; daftar tidak berubah. |
+| HIST-20 | Konfirmasi **Hapus** saat **offline** | Dialog langsung menutup dan baris hilang dari daftar (tanpa spinner yang menggantung). Setelah online kembali, penghapusan dan koreksi Ringkasan tersinkron bersama. Jika server menolak, toast error muncul dan baris kembali ke daftar. |
 
 ## 8. Ringkasan / Mingguan  `MON`
 
