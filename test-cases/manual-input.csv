@@ -1,6 +1,6 @@
 case_id,spec_id,title,preconditions,steps,expected_result,priority,type,environment,automated
 TC-MAN-001,MAN-01,Manual input modal opens in Teks AI mode when online,"Online, signed in","1. Open ""Input Manual"" modal","""Teks AI"" mode active; textarea empty with placeholder example; ""0/500"" counter",P1,functional,local-emulator,N
-TC-MAN-002,MAN-02,Text input is capped at 500 characters,Teks AI mode open,1. Type more than 500 characters,"Input truncated at 500; counter turns red at 500/500",P2,boundary,local-emulator,N
+TC-MAN-002,MAN-02,Text input is capped at 500 characters,Teks AI mode open,1. Type more than 500 characters,Input truncated at 500; counter turns red at 500/500,P2,boundary,local-emulator,N
 TC-MAN-003,MAN-03,Submitting clear expense text saves a transaction,"Teks AI mode open, online","1. Type a clear expense sentence
 2. Submit","Modal closes, ""Memproses..."", then transaction saved + toast (SAVE-01); textarea cleared",P1,functional,local-emulator,N
 TC-MAN-004,MAN-04,Submitting empty or whitespace-only text does nothing,Teks AI mode open,"1. Leave the textarea empty or type only spaces
@@ -15,7 +15,7 @@ TC-MAN-010,MAN-11,Direct form has correct default values,Formulir Langsung mode 
 TC-MAN-011,MAN-12,Price field accepts digits only thousands-formatted and capped,Formulir Langsung mode open,"1. Type ""25000"" into the price field
 2. Attempt to exceed 999999999","Only digits accepted; displays as ""25.000""; capped at 999.999.999",P2,boundary,local-emulator,N
 TC-MAN-012,MAN-13,Saving with empty or zero price is rejected,"Formulir Langsung mode open, price left empty or 0","1. Leave price empty (or 0)
-2. Try to save","Rejected; alert ""Harap masukkan jumlah pengeluaran.""; no transaction created",P1,negative,local-emulator,N
+2. Try to save","Rejected without any browser-native validation message; alert ""Harap masukkan jumlah pengeluaran.""; no transaction saved",P1,negative,local-emulator,N
 TC-MAN-013,MAN-14,Saving with only a valid price uses defaults for the rest,Formulir Langsung mode open,"1. Enter only a valid price
 2. Save","Saved with kategori Makan, metode QRIS, empty platform, detail = category name; success toast",P1,functional,local-emulator,N
 TC-MAN-014,MAN-15,Saving with all fields filled saves exactly as entered,Formulir Langsung mode open,"1. Fill price, platform, category, method, and note
@@ -23,5 +23,8 @@ TC-MAN-014,MAN-15,Saving with all fields filled saves exactly as entered,Formuli
 TC-MAN-015,MAN-16,Empty note with platform filled uses platform as detail,"Formulir Langsung mode open, platform filled, note empty","1. Fill platform, leave note empty
 2. Save",Detail = platform name,P2,functional,local-emulator,N
 TC-MAN-016,MAN-17,Form resets after save for next use,Just saved via Formulir Langsung,"1. Save a transaction via the direct form
-2. Reopen the form","Modal closed; price/platform/note cleared for the next entry",P2,functional,local-emulator,N
-TC-MAN-017,MAN-18,Direct-form transactions are always high confidence and never logged low-confidence,Formulir Langsung mode open,1. Save a transaction via the direct form,"Treated as high confidence; never produces a low-confidence log",P2,functional,local-emulator,N
+2. Reopen the form",Modal closed; price/platform/note cleared for the next entry,P2,functional,local-emulator,N
+TC-MAN-017,MAN-18,Direct-form transactions are always high confidence and never logged low-confidence,Formulir Langsung mode open,1. Save a transaction via the direct form,Treated as high confidence; never produces a low-confidence log,P2,functional,local-emulator,N
+TC-MAN-018,MAN-19,Platform capped at 50 and Catatan at 200 characters with n/50 and n/200 counters in the direct form,Formulir Langsung mode open,"1. Type or paste 60 characters into Platform
+2. Type or paste 250 characters into Catatan
+3. Check the counters above both fields","Platform stops at 50 and Catatan at 200 (cannot type or paste more); counters ""n/50"" and ""n/200"" shown above the fields and turn red when full, like the AI-text input and edit modal",P2,boundary,local-emulator,N

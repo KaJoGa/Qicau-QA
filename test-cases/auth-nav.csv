@@ -2,28 +2,28 @@ case_id,spec_id,title,preconditions,steps,expected_result,priority,type,environm
 TC-AUTH-001,AUTH-01,Welcome screen shown when signed out,No active session,1. Open the app with no prior session,"Welcome screen shown: logo, title ""Qicau: Say it, Save it."", 3 feature bullets, ""Lanjutkan dengan Google"" button; no tab navigation visible",P1,functional,production,N
 TC-AUTH-002,AUTH-02,Loading skeleton shown while auth state resolves,App just launched,1. Observe the app in the moment before login state resolves,"Skeleton/placeholder shown, not the login page nor the main app",P2,functional,production,N
 TC-AUTH-003,AUTH-03,Successful Google sign-in lands on Catat tab,Signed out,"1. Click ""Lanjutkan dengan Google""
-2. Complete sign-in","Lands on Catat tab; header and bottom nav (Catat/Riwayat/Bulanan) shown",P1,functional,local-emulator,N
+2. Complete sign-in",Lands on Catat tab; header and bottom nav (Catat/Riwayat/Ringkasan) shown,P1,functional,local-emulator,N
 TC-AUTH-004,AUTH-04,Closing the login popup leaves user on login page without error,"Signed out, login popup opened","1. Open the Google sign-in popup
-2. Close it without completing sign-in","No error/alert shown; user remains on the login page",P2,negative,local-emulator,N
-TC-AUTH-005,AUTH-05,Login failure (other than user-cancelled) shows an alert,"Signed out; sign-in configured to fail with a non-cancel error","1. Attempt Google sign-in
+2. Close it without completing sign-in",No error/alert shown; user remains on the login page,P2,negative,local-emulator,N
+TC-AUTH-005,AUTH-05,Login failure (other than user-cancelled) shows an alert,Signed out; sign-in configured to fail with a non-cancel error,"1. Attempt Google sign-in
 2. Force an error other than popup-closed","Alert ""Gagal login: ..."" shown",P2,negative,local-emulator,N
 TC-AUTH-006,AUTH-06,Sign out via Settings ends the session,Signed in,"1. Open Settings
 2. Click ""Keluar""","Session ends, returns to login page, settings modal closes",P1,functional,local-emulator,N
 TC-AUTH-007,AUTH-07,User A never sees or modifies User B's data,"Two signed-in users A and B, each with own transactions","1. As A, attempt to read/list B's transactions/history
-2. As A, attempt to modify/delete a transaction belonging to B","A cannot see or change B's data at any point (UI or underlying request)",P1,security,local-emulator,Y
+2. As A, attempt to modify/delete a transaction belonging to B",A cannot see or change B's data at any point (UI or underlying request),P1,security,local-emulator,Y
 TC-NAV-001,NAV-01,Root path after login opens Catat tab,Signed in,"1. Navigate to ""/""",Catat tab is active,P1,functional,local-emulator,N
 TC-NAV-002,NAV-02,tab query param opens the matching tab,Signed in,"1. Navigate to ""/?tab=history""
 2. Navigate to ""/?tab=monthly""
-3. Navigate to ""/?tab=home""",The corresponding tab (Riwayat / Bulanan / Catat) is active in each case,P2,functional,local-emulator,N
+3. Navigate to ""/?tab=home""",The corresponding tab (Riwayat / Ringkasan / Catat) is active in each case,P2,functional,local-emulator,N
 TC-NAV-003,NAV-03,Unknown tab query value falls back to Catat without error,Signed in,"1. Navigate to ""/?tab=doesnotexist""","Catat tab active, no error shown",P3,negative,local-emulator,N
 TC-NAV-004,NAV-04,Clicking a tab switches content and highlights it,Signed in,"1. Click Riwayat tab
-2. Click Bulanan tab
-3. Click Catat tab","Content changes accordingly each time; active tab is visually marked",P1,functional,local-emulator,N
-TC-NAV-005,NAV-05,Settings modal shows theme install sign-out and close,Signed in,"1. Click the settings icon","""Pengaturan"" modal shows Theme options (Sistem/Terang/Gelap), an install-app button, ""Keluar"", ""Tutup""",P2,functional,local-emulator,N
+2. Click Ringkasan tab
+3. Click Catat tab",Content changes accordingly each time; active tab is visually marked,P1,functional,local-emulator,N
+TC-NAV-005,NAV-05,Settings modal shows theme install sign-out and close,Signed in,1. Click the settings icon,"""Pengaturan"" modal shows Theme options (Sistem/Terang/Gelap), an install-app button, ""Keluar"", ""Tutup""",P2,functional,local-emulator,N
 TC-NAV-006,NAV-06,Selecting Dark/Light theme applies immediately and persists,Settings modal open,"1. Select ""Gelap""
 2. Reload the app
 3. Select ""Terang""
-4. Reload the app","Theme changes immediately each time and is still applied after reload",P2,functional,local-emulator,N
+4. Reload the app",Theme changes immediately each time and is still applied after reload,P2,functional,local-emulator,N
 TC-NAV-007,NAV-07,System theme follows OS preference and updates live,"Settings modal open, theme set to ""Sistem""","1. Select ""Sistem""
-2. Change the OS-level dark/light preference","App theme follows the OS preference and updates when the OS setting changes",P3,functional,local-emulator,N
+2. Change the OS-level dark/light preference",App theme follows the OS preference and updates when the OS setting changes,P3,functional,local-emulator,N
 TC-NAV-008,NAV-08,Wide desktop screen keeps content in a centered column,"Signed in, wide desktop viewport",1. Open the app on a wide desktop browser window,"Content is constrained to a centered column, not full width",P3,functional,local-emulator,N

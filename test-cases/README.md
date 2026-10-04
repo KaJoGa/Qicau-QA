@@ -19,6 +19,14 @@ results.
 - 177 of 180 spec IDs have an executed result; the 3 that don't are explained in the cycle report
   (`reports/2026-09-29-cycle-1-summary.md`).
 
+## Spec update Parts 2 and 3 (2026-10-03 / 2026-10-04)
+`test/Qicau.md` changed (see `test/UPDATE_NOTES_PART2.md`). Manual cases were updated/added from the
+spec: Bulanan -> Ringkasan renames, `HIST-02/05/09`, `SYNC-15/16`, `PWA-05` reworded; new cases
+`HIST-14..19` (edit from Riwayat), `MON-09..12`, `MAN-19`, `SYNC-19..28`, `PWA-12`; `SEC-12` split into `SEC-12..14` and the old
+"undefined collections" case is now `SEC-15`. In `traceability.csv` affected rows are marked
+`RETEST NEEDED` (old result kept) and new rows `NOT RUN`. Part 3 removed Rebuild Ringkasan (cases dropped) and added API-11..13 (not yet in the Postman collection). Automation (`automation/`,
+`security-rules/`) has **not** been updated yet.
+
 ## Files
 
 | File | Feature area | Spec IDs |

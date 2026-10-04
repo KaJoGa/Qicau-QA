@@ -1,19 +1,33 @@
 case_id,spec_id,title,preconditions,steps,expected_result,priority,type,environment,automated
 TC-HIST-001,HIST-01,Riwayat tab opens with default filters and loads a list,Signed in,1. Open Riwayat tab,"Title ""Riwayat Transaksi""; default filters ""7 Hari Terakhir"" + ""Semua Kategori""; loading skeleton then list",P1,functional,local-emulator,N
-TC-HIST-002,HIST-02,Empty state for the active filter hides Sync/Reset,No transactions match the active filter,1. Apply a filter with no matching transactions,"""Belum ada riwayat transaksi."" shown; Sync/Reset buttons hidden while list is empty",P2,functional,local-emulator,N
+TC-HIST-002,HIST-02,Empty state for the active filter keeps Sync ke Sheets and Reset Ekspor visible,No transactions match the active filter,1. Apply a filter with no matching transactions,"""Belum ada riwayat transaksi."" shown; Sync ke Sheets and Reset Ekspor buttons REMAIN visible (not dependent on list content)",P2,functional,local-emulator,N
 TC-HIST-003,HIST-03,Transactions grouped by day with correct labels,Transactions exist across multiple days,1. View the list with transactions today yesterday and older,"Grouped by day, newest first; labels ""Hari Ini"", ""Kemarin"", else ""D NamaBulan YYYY"" (e.g. ""5 Mei 2026"")",P1,functional,local-emulator,N
 TC-HIST-004,HIST-04,Each row shows icon platform/category category-method note amount and delete button,At least one transaction with a note,1. View a transaction row in the list,"Category icon, platform (or category if empty), ""Kategori . Metode"", note if present, amount prefixed ""-"", delete button",P1,functional,local-emulator,N
 TC-HIST-005,HIST-05,Time filter restricts the list to the selected range,Transactions spanning more than 30 days,"1. Select ""Semua Waktu""
 2. Select ""7 Hari Terakhir""
 3. Select ""30 Hari Terakhir""
-4. Select ""Bulan Ini""","Only transactions within the selected range shown each time; ""Bulan Ini"" = since day 1 00:00",P1,functional,local-emulator,N
+4. Select ""3 Bulan Terakhir""","Only transactions within the selected range shown each time; ""3 Bulan Terakhir"" = 90 days back (not 3 calendar months)",P1,functional,local-emulator,N
 TC-HIST-006,HIST-06,Category filter restricts the list to the selected category,Transactions across multiple categories,1. Select a specific category filter,"Only transactions in that category shown; ""Semua Kategori"" shows all",P2,functional,local-emulator,N
 TC-HIST-007,HIST-07,Changing a filter resets to page 1,On page 2+ of results,1. While on page 2 change the time or category filter,Returns to page 1,P2,functional,local-emulator,N
 TC-HIST-008,HIST-08,Pagination shows 30 per page with correct button states,More than 30 transactions match the filter,"1. View page 1 (previous button should be disabled)
 2. Click next to load older data
-3. Continue until the last page (next button should be disabled)","30 transactions per page; previous disabled on page 1; next disabled when no more data; next loads older data with no duplicate/missing rows; page indicator shown",P1,boundary,local-emulator,N
-TC-HIST-009,HIST-09,Clicking a row opens the transaction detail modal,At least one transaction in the list,1. Click a transaction row,"""Detail Pengeluaran"" modal shows platform, full amount, category, method, full-format timestamp, note if present, ""Hapus Transaksi"" button",P1,functional,local-emulator,N
+3. Continue until the last page (next button should be disabled)","30 transactions per page; previous disabled on page 1; next disabled when no more data; next loads older data with no duplicate/missing rows; indicator shows the REAL total pages and stays fixed (e.g. 1/5, 2/5 ... 5/5, not growing) with ""Semua Kategori""; with a specific category filter the total shows as a lower bound ""n+"" until the last page is reached",P1,boundary,local-emulator,N
+TC-HIST-009,HIST-09,Clicking a row opens the transaction detail modal,At least one transaction in the list,1. Click a transaction row,"""Detail Pengeluaran"" modal shows platform, full amount, category, method, full-format timestamp, note if present, and the ""Edit Transaksi"" + ""Hapus Transaksi"" buttons side by side",P1,functional,local-emulator,N
 TC-HIST-010,HIST-10,Delete icon or button opens a confirmation dialog,At least one transaction in the list,"1. Click the delete icon on a row, or ""Hapus Transaksi"" in the detail modal","Confirmation dialog ""Hapus Transaksi?"" (irreversible) with ""Batal"" & ""Hapus""",P2,functional,local-emulator,N
-TC-HIST-011,HIST-11,Confirming delete removes the transaction everywhere,Delete confirmation dialog open,"1. Click ""Hapus""","Transaction disappears from the list, from Home total, and from Bulanan; detail modal (if open) also closes",P1,functional,local-emulator,N
+TC-HIST-011,HIST-11,Confirming delete removes the transaction everywhere,Delete confirmation dialog open,"1. Click ""Hapus""","Transaction disappears from the list, from Home total, and from Ringkasan; detail modal (if open) also closes",P1,functional,local-emulator,N
 TC-HIST-012,HIST-12,Cancelling delete confirmation changes nothing,Delete confirmation dialog open,"1. Click ""Batal""",Nothing is deleted,P2,functional,local-emulator,N
 TC-HIST-013,HIST-13,New transaction from another tab/device appears on page 1,"Riwayat open on page 1, second session available",1. Add a transaction from another tab/device while viewing page 1,New transaction appears automatically on page 1,P2,functional,local-emulator,N
+TC-HIST-014,HIST-14,Detail modal shows Edit Transaksi and Hapus Transaksi side by side,At least one transaction in the list,1. Click a transaction row,"Both ""Edit Transaksi"" and ""Hapus Transaksi"" buttons shown side by side",P2,functional,local-emulator,N
+TC-HIST-015,HIST-15;SAVE-06;SAVE-07;SAVE-08;SAVE-09,Edit Transaksi opens a pre-filled edit modal with the same validation as SAVE,Detail modal open for a transaction,"1. Click ""Edit Transaksi""
+2. Check the fields
+3. Try the SAVE-07 combo-box, SAVE-08 price limit and negative value, and SAVE-09 200-char note rules",Detail modal closes; edit modal opens pre-filled with that transaction; validation rules behave exactly as SAVE-06..09,P1,functional,local-emulator,N
+TC-HIST-016,HIST-16,Transaction date/time cannot be changed from the edit modal,Edit modal open for an older transaction,"1. Inspect the edit modal fields
+2. Save a change
+3. Check the day group in Riwayat",No date/time field exists; transaction stays under its original day,P2,negative,local-emulator,N
+TC-HIST-017,HIST-17;MON-07,"Saving an edit updates Riwayat, Home and Ringkasan",Edit modal open for a transaction inside the current month,"1. Change the price and category
+2. Click ""Simpan Perubahan""
+3. Check Riwayat, Home and Ringkasan (monthly + weekly if in range)","Modal closes; change shows immediately in Riwayat; final numbers in Home/Ringkasan reflect the edit (old category amount reduced, new one increased)",P1,functional,local-emulator,N
+TC-HIST-018,HIST-18,Closing the edit modal discards changes,Edit modal open with changes made,"1. Change fields
+2. Click the close (X)",Changes discarded; transaction unchanged in the list,P3,functional,local-emulator,N
+TC-HIST-019,HIST-19,Save failure shows an error toast and leaves the list unchanged,Edit modal open; connection/server failure induced (e.g. block the Firestore request in DevTools or stop the emulator),"1. Change a field
+2. Click ""Simpan Perubahan""","Error toast ""Gagal menyimpan perubahan: ...""; list unchanged",P2,negative,local-emulator,N

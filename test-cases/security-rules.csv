@@ -10,4 +10,12 @@ TC-SEC-008,SEC-08,Updating an own low_confidence_logs document is denied,Authent
 TC-SEC-009,SEC-09,Another user's low_confidence_logs are fully denied,Authenticated as a non-owner,1. Attempt to create-on-behalf-of/read/delete another user's low_confidence_logs,Denied,P2,security,local-emulator,Y
 TC-SEC-010,SEC-10,Only the owning uid may read or write their user profile,"Authenticated as user A, profile for user B exists",1. Read/write own users/{uid} profile 2. Attempt to read/write another user's profile,Own profile allowed; another user's profile denied,P1,security,local-emulator,Y
 TC-SEC-011,SEC-11,User profile is created on first login and updated on subsequent logins,Signing in for the first time then again,1. Sign in for the first time 2. Sign in again on a subsequent login,"Profile (email, name, photo, last_login) is created then updated",P2,security,local-emulator,Y
-TC-SEC-012,SEC-12,Undefined collections are denied even for authenticated users,Authenticated as any user,1. Attempt to read/write a document in an undefined collection,Denied,P2,security,local-emulator,Y
+TC-SEC-012,SEC-15,Undefined collections are denied even for authenticated users,Authenticated as any user,1. Attempt to read/write a document in an undefined collection,Denied,P2,security,local-emulator,Y
+TC-SEC-013,SEC-12,"Own daily summary can be created, read (get and date-range query with user_id filter) and updated",Authenticated as user A (rules emulator),"1. Create own daily summary doc
+2. Get it
+3. List with user_id == A plus a documentId() date range (as the Ringkasan tab does)
+4. Update it",All allowed. Note: a list query WITHOUT the user_id filter is rejected as a whole,P1,security,local-emulator,Y
+TC-SEC-014,SEC-13,"Daily summary cannot be deleted, even by its owner",Authenticated as the summary owner,1. Delete own daily summary doc,Denied,P1,security,local-emulator,Y
+TC-SEC-015,SEC-14,"Another user's daily summary cannot be created, read or updated",Authenticated as user B; a summary owned by user A exists,"1. As B: create a summary with user_id = A
+2. Read A's summary
+3. Update A's summary",All denied,P1,security,local-emulator,Y

@@ -26,7 +26,7 @@ Seluruh UI berbahasa Indonesia. Mata uang IDR (Rupiah, tanpa desimal).
 |---|---|---|
 | AUTH-01 | Buka app tanpa login | Tampil halaman sambutan: logo, judul "Qicau: Say it, Save it.", 3 poin fitur, tombol **"Lanjutkan dengan Google"**. Tidak ada navigasi tab. |
 | AUTH-02 | Sedang memuat status login | Tampil skeleton/placeholder, bukan halaman login maupun halaman utama. |
-| AUTH-03 | Login Google berhasil | Masuk ke tab **Catat**; header + navigasi bawah (Catat / Riwayat / Bulanan) tampil. |
+| AUTH-03 | Login Google berhasil | Masuk ke tab **Catat**; header + navigasi bawah (Catat / Riwayat / Ringkasan) tampil. |
 | AUTH-04 | Popup login ditutup pengguna | Tidak ada error/alert; tetap di halaman login. |
 | AUTH-05 | Login gagal (error lain) | Muncul alert "Gagal login: …". |
 | AUTH-06 | Pengaturan → **Keluar** | Sesi berakhir, kembali ke halaman login, modal pengaturan tertutup. |
@@ -39,7 +39,7 @@ Seluruh UI berbahasa Indonesia. Mata uang IDR (Rupiah, tanpa desimal).
 | NAV-01 | Buka `/` setelah login | Tab aktif = Catat. |
 | NAV-02 | Buka `/?tab=history` / `/?tab=monthly` / `/?tab=home` | Tab yang bersangkutan aktif. |
 | NAV-03 | `?tab=` bernilai tidak dikenal | Tab Catat aktif, tanpa error. |
-| NAV-04 | Klik tab Catat/Riwayat/Bulanan | Konten berganti; tab aktif ditandai. |
+| NAV-04 | Klik tab Catat/Riwayat/Ringkasan | Konten berganti; tab aktif ditandai. |
 | NAV-05 | Ikon ⚙ Pengaturan | Modal "Pengaturan": pilihan Tema (Sistem/Terang/Gelap), tombol pasang aplikasi, **Keluar**, **Tutup**. |
 | NAV-06 | Pilih tema Gelap / Terang | Tampilan berubah seketika; pilihan tetap setelah reload. |
 | NAV-07 | Pilih tema Sistem | Mengikuti preferensi gelap/terang OS, dan ikut berubah saat OS berubah. |
@@ -86,7 +86,7 @@ Seluruh UI berbahasa Indonesia. Mata uang IDR (Rupiah, tanpa desimal).
 | SAVE-07 | Edit: Kategori / Metode bayar | Kotak pilih-sambil-ketik; hanya nilai dari daftar tetap yang bisa dipilih (ketik sebagian, mis. "pay" → `Paylater`, lalu Enter/klik luar). Teks tak cocok apa pun → kembali ke nilai sebelumnya. |
 | SAVE-08 | Edit: Harga | Angka wajib diisi; input ≥ 10 digit atau > 999.999.999 dibatasi menjadi 999.999.999; nilai negatif tidak diterima. |
 | SAVE-09 | Edit: Catatan | Opsional, maks 200 karakter (`n/200`). |
-| SAVE-10 | **Simpan Perubahan** | Modal tertutup; perubahan tampil di Home/Riwayat/Bulanan. |
+| SAVE-10 | **Simpan Perubahan** | Modal tertutup; perubahan tampil di Home/Riwayat/Ringkasan. |
 | SAVE-11 | Tutup modal edit (✕) | Perubahan dibuang. |
 
 ### 5b. Modal Low-Confidence  `LOWC`
@@ -122,36 +122,48 @@ Modal "Input Manual" punya 2 mode: **Teks AI** dan **Formulir Langsung**.
 | MAN-10 | Buka saat offline | Langsung di mode "Formulir Langsung" (dengan label "(Offline)"); tersedia dan berfungsi. |
 | MAN-11 | Nilai awal | Kategori = `Makan`, Metode = `QRIS`, lainnya kosong. |
 | MAN-12 | Ketik harga | Hanya digit diterima; tampil berformat ribuan (`25000` → `25.000`); dibatasi maks 999.999.999. |
-| MAN-13 | Simpan dengan harga kosong / 0 | Ditolak; alert "Harap masukkan jumlah pengeluaran."; tidak ada transaksi. |
+| MAN-13 | Simpan dengan harga kosong / 0 | Ditolak (tanpa pesan bawaan browser); alert "Harap masukkan jumlah pengeluaran."; tidak ada transaksi. |
 | MAN-14 | Simpan dengan harga valid saja | Tersimpan: kategori `Makan`, metode `QRIS`, platform kosong, detail = nama kategori; toast sukses. |
 | MAN-15 | Simpan dengan semua kolom terisi | Tersimpan persis sesuai isian; detail = catatan yang diisi. |
 | MAN-16 | Catatan kosong, platform terisi | Detail = nama platform. |
 | MAN-17 | Setelah simpan | Modal tutup; harga/platform/catatan dikosongkan untuk pemakaian berikutnya. |
 | MAN-18 | Transaksi hasil formulir | Dianggap `high` confidence; tidak pernah menghasilkan log low-confidence. |
+| MAN-19 | Panjang kolom Platform / Catatan | Platform dibatasi 50 karakter dan Catatan 200 karakter (tidak bisa mengetik/menempel lebih panjang), dengan penghitung `n/50` dan `n/200` di atas kolom (merah saat penuh), sama seperti input Teks AI dan modal edit. |
 
 ## 7. Riwayat  `HIST`
 
 | ID | Aksi / Kondisi | Ekspektasi |
 |---|---|---|
 | HIST-01 | Buka tab Riwayat | Judul "Riwayat Transaksi"; filter default **7 Hari Terakhir** + **Semua Kategori**; loading skeleton lalu daftar. |
-| HIST-02 | Tanpa transaksi (pada filter aktif) | Tampil "Belum ada riwayat transaksi."; tombol Sync/Reset tidak tampil selama daftar kosong. |
+| HIST-02 | Tanpa transaksi (pada filter aktif) | Tampil "Belum ada riwayat transaksi."; tombol Sync ke Sheets dan Reset Ekspor **tetap tampil** (tidak bergantung pada isi daftar). |
 | HIST-03 | Pengelompokan | Dikelompokkan per hari, terbaru di atas. Label: "Hari Ini", "Kemarin", selain itu `D NamaBulan YYYY` (mis. "5 Mei 2026"). |
 | HIST-04 | Isi baris | Ikon kategori, platform (atau kategori), `Kategori • Metode`, catatan (jika ada), jumlah `-…`, tombol hapus. |
-| HIST-05 | Filter waktu | Opsi: Semua Waktu / 7 Hari Terakhir / 30 Hari Terakhir / Bulan Ini. Hanya transaksi dalam rentang yang tampil. "Bulan Ini" = sejak tanggal 1 pukul 00:00. |
+| HIST-05 | Filter waktu | Opsi: Semua Waktu / 7 Hari Terakhir / 30 Hari Terakhir / 3 Bulan Terakhir. Hanya transaksi dalam rentang yang tampil. "3 Bulan Terakhir" = 90 hari ke belakang (bukan 3 bulan kalender); untuk bulan berjalan spesifik lihat tab Ringkasan (§8). |
 | HIST-06 | Filter kategori | Opsi "Semua Kategori" + 6 kategori; hanya kategori itu yang tampil. |
 | HIST-07 | Ganti filter | Kembali ke halaman 1. |
-| HIST-08 | Paginasi | **30 transaksi per halaman**; tombol ◀ ▶ dan indikator `halaman / total`. ◀ nonaktif di halaman 1; ▶ nonaktif bila tidak ada data lagi. Klik ▶ memuat halaman berikutnya (data lebih lama) tanpa duplikat/kehilangan baris. |
+| HIST-08 | Paginasi | **30 transaksi per halaman**; tombol ◀ ▶ dan indikator `halaman / total` dengan **total halaman yang sebenarnya** (tetap, mis. 1/5, 2/5 … 5/5 — tidak bertambah saat berpindah halaman) untuk filter kategori "Semua Kategori". Dengan filter kategori tertentu, total ditampilkan sebagai batas bawah (`n+`) sampai halaman terakhir tercapai, karena filter kategori berjalan di sisi klien. ◀ nonaktif di halaman 1; ▶ nonaktif bila tidak ada data lagi. Klik ▶ memuat halaman berikutnya (data lebih lama) tanpa duplikat/kehilangan baris. |
 | HIST-09 | Klik baris | Modal "Detail Pengeluaran": platform, jumlah penuh, kategori, metode, waktu (format lengkap id-ID), catatan (jika ada), tombol **Hapus Transaksi**. |
 | HIST-10 | Klik ikon hapus / Hapus Transaksi | Dialog konfirmasi "Hapus Transaksi?" (tak dapat dibatalkan) dengan **Batal** & **Hapus**. |
-| HIST-11 | Konfirmasi **Hapus** | Transaksi hilang dari daftar (dan dari total Home & Bulanan); modal detail (jika terbuka) ikut tertutup. |
+| HIST-11 | Konfirmasi **Hapus** | Transaksi hilang dari daftar (dan dari total Home & Ringkasan); modal detail (jika terbuka) ikut tertutup. |
 | HIST-12 | **Batal** pada konfirmasi | Tidak ada yang terhapus. |
 | HIST-13 | Transaksi baru dari tab/perangkat lain | Muncul otomatis di halaman pertama. |
 
-## 8. Bulanan / Mingguan  `MON`
+### 7a. Edit dari Riwayat
 
 | ID | Aksi / Kondisi | Ekspektasi |
 |---|---|---|
-| MON-01 | Buka tab Bulanan | Judul "Ringkasan Bulan Ini"; kartu "Total Pengeluaran"; diagram donat; daftar per kategori. |
+| HIST-14 | Modal "Detail Pengeluaran" | Ada dua tombol berdampingan: **Edit Transaksi** dan **Hapus Transaksi**. |
+| HIST-15 | Klik **Edit Transaksi** | Modal detail tertutup; modal edit terbuka, terisi data transaksi tsb (field & aturan validasi sama seperti SAVE-06 s.d. SAVE-09). |
+| HIST-16 | Tanggal/waktu transaksi | **Tidak** bisa diubah lewat modal edit ini — tidak ada field untuk itu, transaksi tetap tercatat di hari aslinya. |
+| HIST-17 | **Simpan Perubahan** | Modal tertutup; perubahan langsung tampil di daftar Riwayat, dan ikut ter-update di Home/Ringkasan bila transaksi tsb termasuk rentang yang sedang ditampilkan di sana. |
+| HIST-18 | Tutup modal edit (✕) | Perubahan dibuang; transaksi tetap seperti semula. |
+| HIST-19 | Simpan perubahan gagal (mis. koneksi/server error) | Toast error "Gagal menyimpan perubahan: …"; daftar tidak berubah. |
+
+## 8. Ringkasan / Mingguan  `MON`
+
+| ID | Aksi / Kondisi | Ekspektasi |
+|---|---|---|
+| MON-01 | Buka tab Ringkasan | Judul "Ringkasan Bulan Ini" + nama bulan & tahun berjalan di sampingnya (mis. "September 2026"); kartu "Total Pengeluaran"; diagram donat; daftar per kategori. |
 | MON-02 | Total bulanan | = jumlah semua transaksi sejak tanggal 1 bulan berjalan pukul 00:00. |
 | MON-03 | Klik **Mingguan** | Judul "Ringkasan Minggu Ini"; tombol berubah jadi "Bulanan"; total = sejak **Senin** 00:00 minggu berjalan (Minggu masih termasuk minggu yang sama). |
 | MON-04 | Per kategori | Hanya kategori yang punya transaksi; urut dari nominal terbesar; tiap baris: ikon, nama, nominal, bar proporsi = nominal ÷ total. |
@@ -159,10 +171,16 @@ Modal "Input Manual" punya 2 mode: **Teks AI** dan **Formulir Langsung**.
 | MON-06 | Tanpa data | Total `Rp 0`; teks "Belum ada riwayat transaksi." (mingguan: "Belum ada riwayat transaksi minggu ini."). |
 | MON-07 | Data berubah (tambah/edit/hapus) | Ringkasan ter-update otomatis. |
 | MON-08 | Transaksi bulan lalu | Tidak ikut dihitung. |
+| MON-09 | Buka tab Ringkasan (semua browser) | Tidak ada error `permission-denied` di console; total & kategori sesuai data asli, bukan `Rp 0` yang keliru padahal ada transaksi. |
+| MON-10 | Tambah / edit / hapus / undo transaksi | Rincian kategori, donat, dan total ikut berubah seketika, selalu konsisten satu sama lain (bukan hanya total). Tidak ada tombol atau langkah manual untuk "membangun ulang" ringkasan. |
+| MON-11 | Hari yang ringkasannya tidak konsisten (rincian kategori ≠ total, mis. data lama dari versi sebelumnya) | Saat tab Ringkasan dibuka, hari tsb diperbaiki **otomatis di latar belakang** dari transaksinya (hanya hari itu); tampilan lalu menjadi benar tanpa tindakan pengguna dan tanpa reload. Tidak ada toast/dialog. Tidak berjalan saat offline. |
+| MON-12 | Buat / edit / hapus transaksi saat **offline**, lalu online kembali | Transaksi dan ringkasan harian tersimpan **bersama** (satu kesatuan): angka akhir di Ringkasan tetap sama dengan jumlah transaksi di Riwayat — tidak ada selisih akibat salah satu gagal tersimpan. |
 
 ## 9. Ekspor ke Google Sheets  `SYNC`
 
-Tombol **Sync ke Sheets** dan **Reset Ekspor** ada di tab Riwayat (hanya bila ada transaksi).
+Tombol **Sync ke Sheets** dan **Reset Ekspor** ada di tab Riwayat, selalu tampil (tidak hilang walau daftar/filter sedang kosong). Keduanya
+meminta konfirmasi lewat dialog kustom (bukan popup bawaan browser) sebelum benar-benar berjalan — lihat
+SYNC-19 s.d. SYNC-23.
 
 | ID | Aksi / Kondisi | Ekspektasi |
 |---|---|---|
@@ -181,9 +199,19 @@ Tombol **Sync ke Sheets** dan **Reset Ekspor** ada di tab Riwayat (hanya bila ad
 | SYNC-13 | Transaksi lintas tahun | Satu spreadsheet per tahun. |
 | SYNC-14 | API Google error | Toast error "Gagal sinkronisasi: …"; token tersimpan dibuang (sync berikutnya minta login lagi); transaksi **tidak** ditandai terekspor. |
 | SYNC-15 | **Reset Ekspor** (online) | Konfirmasi dulu; **Batal** → tidak ada perubahan. |
-| SYNC-16 | Konfirmasi Reset | Semua transaksi ditandai belum-terekspor; toast "Berhasil mereset status N transaksi!…"; sync berikutnya mengirim ulang semuanya. |
+| SYNC-16 | Konfirmasi Reset | File Google Sheets (`Qicau_Export_{tahun}`, semua tahun) dipindahkan ke **Trash Drive**; semua transaksi ditandai belum-terekspor; toast "Berhasil mereset status N transaksi! File Sheets lama dipindahkan ke Trash Drive. …"; sync berikutnya membuat file baru dari awal dan mengirim ulang semuanya. |
 | SYNC-17 | Reset saat offline | Toast error butuh internet; tidak ada perubahan. |
 | SYNC-18 | File Sheets tahun itu sudah dihapus pengguna | Sync membuat file baru dan mengirim **semua** transaksi tahun itu (meski sebelumnya ditandai terekspor). |
+| SYNC-19 | Dialog konfirmasi **Reset Ekspor** | Tombol konfirmasi ("Ya, Reset") nonaktif ±1 detik sejak dialog muncul (mencegah klik tidak sengaja), lalu aktif normal. |
+| SYNC-20 | Klik Sync, online, **belum pernah** sinkron sebelumnya di perangkat/browser ini | Dialog "Izinkan Akses Google Sheets & Drive" muncul, menjelaskan bahwa popup izin Google akan tampil sesaat lagi; **Batal** → tidak ada proses, popup Google tidak muncul. |
+| SYNC-21 | Konfirmasi dialog SYNC-20 | Lanjut ke alur SYNC-02 (popup Google bila token belum ada/kedaluwarsa, dst). |
+| SYNC-22 | Klik Sync, online, **sudah pernah** sinkron sebelumnya di perangkat/browser ini | Dialog ringkas "Sinkronisasi ke Sheets" ("Sinkronkan transaksi terbaru ke Google Sheets sekarang?") muncul, tanpa penjelasan izin Google; **Batal** → tidak ada proses. |
+| SYNC-23 | Status "pernah sinkron" | Tersimpan per perangkat/browser (bukan per akun Google) — sekali sinkron **berhasil** di suatu browser, dialog edukasi (SYNC-20) tidak muncul lagi di browser itu, meski token kedaluwarsa dan Google minta login ulang. |
+| SYNC-24 | Konfirmasi Reset, token Google belum ada/kedaluwarsa | Muncul popup login Google dulu (sama seperti alur Sync) sebelum file dipindahkan ke Trash; popup ditutup pengguna → tidak ada perubahan sama sekali (transaksi tetap berstatus terekspor, file tidak ter-trash). |
+| SYNC-25 | Reset gagal (mis. API Drive/Sheets error) | Toast error "Gagal reset sinkronisasi: …"; token tersimpan dibuang; status transaksi **tidak** berubah. |
+| SYNC-26 | Platform/Catatan yang diawali `=`, `+`, `-`, atau `@` (juga tab) | Tampil sebagai teks biasa di Sheets (tidak dievaluasi sebagai rumus, tidak jadi hyperlink); karakter pengaman tidak terlihat di sel. Teks biasa lain tetap sama persis. |
+| SYNC-27 | Popup login Google diblokir browser (Sync atau Reset) | Toast error "Jendela login Google diblokir browser. Izinkan popup untuk situs ini, lalu coba lagi."; tombol kembali normal; tidak ada perubahan data. |
+| SYNC-28 | Sync/Reset dijalankan di dua tab browser sekaligus (akun sama) | Tab kedua **tidak** memulai proses; muncul toast "Sync atau reset sedang berjalan di tab lain. Tunggu hingga selesai." Tidak ada error mentah dari Google, tidak ada baris ganda. |
 
 ## 10. Layanan AI (API Server)  `API`
 
@@ -196,7 +224,7 @@ Dua endpoint JSON. Kunci AI tidak pernah dikirim ke klien.
 > dan Worker Cloudflare yang di-deploy (`npm run deploy`). API-01 s.d. API-08 berlaku sama di keduanya.
 > API-09 (batas payload) dan API-10 (cache header) ditulis berdasarkan server Express lokal dan **belum**
 > diverifikasi ulang di Worker Cloudflare, yang menangani ukuran body & cache secara berbeda — lihat
-> `OPEN_ISSUES.md` (the app author's private notes, not published).
+> `OPEN_ISSUES.md`.
 
 | ID | Input | Ekspektasi |
 |---|---|---|
@@ -207,9 +235,12 @@ Dua endpoint JSON. Kunci AI tidak pernah dikirim ke klien.
 | API-05 | Isi `result` | `kategori` ∈ 6 kategori; `payment_method` ∈ 9 metode; `confidence` ∈ {high, medium, low}; `harga` angka bulat ≥ 0. |
 | API-06 | `parse-audio` tanpa `mimeType` | Tetap diproses (dianggap webm). |
 | API-07 | Model AI utama tidak tersedia / kuota habis / error server | Otomatis dicoba model cadangan berikutnya; klien tetap mendapat hasil jika ada model yang berhasil. |
-| API-08 | Semua model gagal | HTTP 500, `{ error }` berisi pesan ramah (mis. akses ditolak / model tak ditemukan / input diblokir kebijakan). |
+| API-08 | Semua model gagal | HTTP 500, `{ error }` berisi pesan ramah berbahasa Indonesia — teks error mentah dari Google (mis. "400 user location is not supported…") **tidak** pernah diteruskan ke klien (mis. akses ditolak / model tak ditemukan / input diblokir kebijakan). |
 | API-09 | Payload besar (audio hingga puluhan MB) | Diterima tanpa ditolak karena ukuran (batas 50 MB). |
-| API-10 | Route non-API di produksi | Menyajikan halaman app (SPA) dengan `Cache-Control: no-store` untuk HTML. |
+| API-10 | Route non-API di produksi | Menyajikan halaman app (SPA) dengan `Cache-Control: no-store` untuk HTML (di produksi Cloudflare diatur lewat file `_headers`; di server Express produksi lewat handler SPA). |
+| API-11 | Hasil AI berisi nominal > 999.999.999 | HTTP 500, `{ error }` ramah ("Jumlah yang terdeteksi melebihi batas Rp 999.999.999…"); tidak ada hasil yang dikembalikan. Klien menampilkan alert "Gagal memproses …" dan **tidak** menyimpan transaksi (berlaku untuk teks maupun suara). |
+| API-12 | Normalisasi hasil AI | Kategori/metode di luar daftar tetap → `Lainnya` / `QRIS`; platform dipotong 50 karakter, detail 200; `harga` dibulatkan, negatif/non-angka → 0; JSON tidak valid → HTTP 500 dengan pesan ramah. |
+| API-13 | `parse-text`: `raw_transcript` | Selalu persis sama dengan teks input (tidak ada teks instruksi tambahan yang ikut terbawa), termasuk untuk input tanpa transaksi (confidence `low`). |
 
 ## 11. Aturan Parsing AI  `PARSE`
 
@@ -275,7 +306,7 @@ Berlaku sama untuk suara (setelah transkripsi) dan teks. Kolom "Ekspektasi" = ni
 
 ## 12. Keamanan Data (Aturan Basis Data)  `SEC`
 
-Dua koleksi utama + profil pengguna. "Pemilik" = pengguna yang login dengan `user_id` sama.
+Tiga koleksi utama + profil pengguna. "Pemilik" = pengguna yang login dengan `user_id` sama.
 
 | ID | Aksi | Ekspektasi |
 |---|---|---|
@@ -290,23 +321,27 @@ Dua koleksi utama + profil pengguna. "Pemilik" = pengguna yang login dengan `use
 | SEC-09 | Log low-confidence milik orang lain | Ditolak (baca/hapus/buat atas nama orang lain). |
 | SEC-10 | Profil pengguna `users/{uid}` | Hanya pemilik `uid` yang boleh baca/tulis. |
 | SEC-11 | Login pertama / berikutnya | Profil (email, nama, foto, `last_login`) disimpan/diperbarui. |
-| SEC-12 | Koleksi lain yang tidak didefinisikan | Ditolak. |
+| SEC-12 | Ringkasan harian: buat / baca (per dokumen maupun query rentang tanggal tab Ringkasan) / ubah milik sendiri | Diizinkan. Query tab Ringkasan wajib menyertakan filter `user_id` (bukan cuma rentang `documentId()`), karena Firestore menolak seluruh query **list** kalau rule-nya tidak bisa dibuktikan dari filter query itu sendiri — baru dievaluasi per dokumen untuk **get** satuan. |
+| SEC-13 | Ringkasan harian: **hapus** | Ditolak (tidak ada aturan hapus sama sekali). |
+| SEC-14 | Ringkasan harian milik orang lain (buat/baca/ubah) | Ditolak. |
+| SEC-15 | Koleksi lain yang tidak didefinisikan | Ditolak. |
 
 ## 13. Offline & PWA  `PWA`
 
 | ID | Aksi / Kondisi | Ekspektasi |
 |---|---|---|
-| PWA-01 | Koneksi putus | Banner "Mode Offline: Data tersimpan lokal & siap sync." muncul di atas. |
+| PWA-01 | Koneksi putus | Banner "Mode Offline: Data tersimpan lokal & siap sync." muncul di bawah header **dan mendorong konten ke bawah** (tidak menutupi tombol Reset Ekspor / Sync ke Sheets maupun judul halaman), pada lebar desktop maupun mobile. |
 | PWA-02 | Koneksi kembali | Banner hijau "Kembali Online…" tampil ±4 detik, lalu hilang. |
 | PWA-03 | Catat via Formulir Langsung saat offline | Transaksi tampil langsung di app; otomatis tersinkron ke server saat online kembali. |
 | PWA-04 | Fitur yang butuh internet saat offline (suara, Teks AI, Sync, Reset) | Ditolak dengan pesan jelas, tanpa crash (lihat VOICE-07, MAN-06, SYNC-01, SYNC-17). |
-| PWA-05 | Kunjungan ulang setelah rilis baru | Muncul prompt pembaruan; menerimanya memuat versi baru. |
-| PWA-06 | Belum terpasang & browser mendukung | Tombol "pasang" tersedia (header & pengaturan); berhasil → toast "Aplikasi berhasil dipasang…" dan tombol hilang. |
+| PWA-05 | Kunjungan ulang setelah rilis baru | Banner "Pembaruan Tersedia" slide-down dari **paling atas layar** (di atas semua elemen lain); tombol **Perbarui** memuat versi baru. Tidak ada tombol tutup/silang — banner tetap ada sampai diperbarui. |
+| PWA-06 | Belum terpasang & browser mendukung | Tombol "pasang" tersedia (header & pengaturan). Klik → dialog instal dari browser; setelah terpasang tombol hilang. Konfirmasi instal berasal dari **notifikasi browser** — toast di dalam aplikasi **tidak dijamin** dan tidak dianggap cacat (BUG-014 ditutup sebagai diterima). Upaya terbaik: status terpasang diingat, jadi tombol tidak muncul lagi setelah refresh di tab browser biasa; bila aplikasi di-uninstall, tombol kembali setelah browser menawarkan instal lagi. |
 | PWA-07 | Sudah berjalan sebagai app terpasang | Tombol pasang tidak tampil. |
-| PWA-08 | iOS / browser tanpa prompt bawaan | Tombol pasang menampilkan panduan manual (mis. Bagikan → Tambah ke Layar Utama). |
+| PWA-08 | iOS / browser tanpa prompt bawaan | Tombol pasang menampilkan panduan manual (mis. Bagikan → Tambah ke Layar Utama). Dialog tampil utuh dan terpusat di layar, baik dibuka dari tombol **header** maupun dari **Pengaturan**. Di iOS: Safari menyebut tombol Bagikan "pada bilah navigasi Safari"; Chrome/Firefox/Edge iOS memakai kalimat netral ("di bilah alamat atau menu browser Anda"). |
 | PWA-09 | Manifest | Nama "Qicau - Pencatat Pengeluaran Suara", ikon 192/512 + maskable, mode standalone, potret, tema `#0a0a0a`, 3 pintasan (Catat, Riwayat, Ringkasan). |
-| PWA-10 | Pintasan "Riwayat" / "Ringkasan" | Membuka tab Riwayat / Bulanan (`?tab=history` / `?tab=monthly`). |
-| PWA-11 | Halaman HTML | Tidak di-cache oleh server (`no-store`) agar rilis baru langsung terpakai. |
+| PWA-10 | Pintasan "Riwayat" / "Ringkasan" | Membuka tab Riwayat / Ringkasan (`?tab=history` / `?tab=monthly`). |
+| PWA-11 | Halaman HTML | Tidak di-cache oleh server (`no-store`) agar rilis baru langsung terpakai. Berlaku untuk semua route (termasuk route SPA yang tidak ada); file build ber-hash (`/assets/*`) tetap boleh di-cache panjang (`immutable`). Catatan: server dev lokal (Vite) mengirim `no-cache`, bukan `no-store` — uji terhadap build produksi (lokal mode production atau Worker). |
+| PWA-12 | Banner "Pembaruan Tersedia" muncul, lalu pindah ke tab/app lain sebentar dan kembali (atau minimize lalu buka lagi) | Update terpasang otomatis (halaman reload sendiri) tanpa perlu klik **Perbarui** (kecuali sedang ada Sync/Reset berjalan: halaman **tidak** di-reload otomatis; banner tetap ada) — dipicu begitu tab kembali terlihat. |
 
 ## 14. Notifikasi Global  `TOAST`
 
