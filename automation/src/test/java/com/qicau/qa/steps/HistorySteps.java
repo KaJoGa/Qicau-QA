@@ -168,27 +168,30 @@ public class HistorySteps {
   }
 
   // ---- HIST-08: pagination shows 30 per page with correct button states ----
-  // Updated 2026-10-04 for the Part 3 spec: the indicator shows the REAL, fixed total
-  // ("1 / 3", "2 / 3", "3 / 3" for 61 rows) with "Semua Kategori", and a lower bound "n+" while a
-  // specific category filter is active. All 61 transactions are created "now" (the direct form
-  // can't backdate), so they sit in the same "Hari Ini" bucket under the default 7-day filter -
-  // fine for pagination mechanics. The CSV-generated step order interleaves navigation and
-  // assertions, so state is captured as each page is actually visited.
-  private static final int HIST08_TOTAL = 61;
+  // Retest 2026-10-04 with a valid "n+" precondition: 100 transactions in MIXED categories on 100 different
+  // days (today via the UI, 99 back-dated via the Firestore emulator seeder). Makan = 40 rows: 5 among the
+  // newest 30 (days 0,6,12,18,24) and 35 on odd days 31..99, so the Makan rows are NOT all in the newest
+  // 30 and older Makan data is not loaded by the first pages. Time filter "Semua Waktu".
+  private static final int HIST08_TOTAL = 100;
   private final java.util.List<Integer> pageRowCounts = new java.util.ArrayList<>();
   private final java.util.List<String> pageIndicatorsSeen = new java.util.ArrayList<>();
   private final java.util.List<String> allRowAmounts = new java.util.ArrayList<>();
   private boolean prevDisabledOnPage1;
   private boolean nextDisabledOnLastPage;
 
+  private static boolean hist08IsMakan(int daysAgo) {
+    return daysAgo < 30 ? daysAgo % 6 == 0 : daysAgo % 2 == 1;
+  }
+
   @Given("^More than 30 transactions match the filter$")
   public void moreThan30TransactionsMatchFilter() {
-    driver().get(Config.baseUrl());
-    SignInHelper.signIn(driver());
-    ManualInputModal modal = new ManualInputModal(driver());
-    for (int i = 1; i <= HIST08_TOTAL; i++) {
-      modal.quickSaveWithPriceOnly(String.valueOf(1000 + i));
+    String[] others = {"Transport", "Belanja", "Hiburan"};
+    SeededDataSteps.signInAndCreateToday(driver(), 1000); // day 0 = Makan, via the UI
+    for (int day = 1; day < HIST08_TOTAL; day++) {
+      String cat = hist08IsMakan(day) ? "Makan" : others[day % others.length];
+      SeededDataSteps.seedDaysAgo(day, cat, 1000 + day, "Seed " + day + "d");
     }
+    SeededDataSteps.reload(driver());
     pageRowCounts.clear();
     pageIndicatorsSeen.clear();
     allRowAmounts.clear();
@@ -199,6 +202,23 @@ public class HistorySteps {
     pageRowCounts.add(history.transactionRowCount());
     pageIndicatorsSeen.add(history.pageIndicator());
     allRowAmounts.addAll(history.rowAmounts());
+    evidence("semua-p" + pageRowCounts.size());
+  }
+
+  /** Writes the page text + indicator list of the current view to automation/dump/hist08 (evidence). */
+  private void evidence(String name) {
+    try {
+      java.nio.file.Path dir = java.nio.file.Paths.get("dump", "hist08");
+      java.nio.file.Files.createDirectories(dir);
+      HistoryPage h = new HistoryPage(driver());
+      String txt = "indicators=" + h.pageIndicators() + "\nrows=" + h.transactionRowCount() + "\n\n" + h.listText();
+      java.nio.file.Files.writeString(dir.resolve(name + ".txt"), txt);
+      byte[] png = ((org.openqa.selenium.TakesScreenshot) driver()).getScreenshotAs(org.openqa.selenium.OutputType.BYTES);
+      java.nio.file.Files.write(dir.resolve(name + ".png"), png);
+      System.out.println("HIST08-EVIDENCE " + name + " indicators=" + h.pageIndicators() + " rows=" + h.transactionRowCount());
+    } catch (Exception e) {
+      System.out.println("HIST08 evidence failed: " + e);
+    }
   }
 
   /** Waits until the list is showing page n (indicator "n / ..." and a first row different from {@code previousFirstRow}). */
@@ -215,6 +235,7 @@ public class HistorySteps {
   public void viewPage1PreviousDisabled() {
     HistoryPage history = new HistoryPage(driver());
     history.openViaNav();
+    history.selectTimeFilter("Semua Waktu");
     waitForPage(1, null);
     new WebDriverWait(driver(), Duration.ofSeconds(10)).until((d) -> history.transactionRowCount() == 30);
     prevDisabledOnPage1 = history.isPrevPageDisabled();
@@ -267,41 +288,78 @@ public class HistorySteps {
 
   @And("^next loads older data with no duplicate/missing rows$")
   public void nextLoadsOlderDataNoDuplicateMissingRows() {
-    Assertions.assertEquals(java.util.List.of(30, 30, 1), pageRowCounts, "Expected pages of 30/30/1 rows for 61 transactions");
-    Assertions.assertEquals(HIST08_TOTAL, allRowAmounts.size(), "Expected 61 rows across all pages");
+    Assertions.assertEquals(java.util.List.of(30, 30, 30, 10), pageRowCounts, "Expected pages of 30/30/30/10 rows for 100 transactions");
+    Assertions.assertEquals(HIST08_TOTAL, allRowAmounts.size(), "Expected 100 rows across all pages");
     Assertions.assertEquals(HIST08_TOTAL, new java.util.HashSet<>(allRowAmounts).size(), "Expected no duplicate rows across pages");
   }
 
   @And("^indicator shows the REAL total pages and stays fixed \\(e\\.g\\. 1/5, 2/5 \\.\\.\\. 5/5, not growing\\) with \"Semua Kategori\"$")
   public void indicatorShowsRealFixedTotal() {
-    Assertions.assertEquals(java.util.List.of("1 / 3", "2 / 3", "3 / 3"), pageIndicatorsSeen,
-        "Expected the indicator to show the real, fixed total (61 rows / 30 = 3 pages) on every page");
+    Assertions.assertEquals(java.util.List.of("1 / 4", "2 / 4", "3 / 4", "4 / 4"), pageIndicatorsSeen,
+        "Expected the indicator to show the real, fixed total (100 rows / 30 = 4 pages) on every page");
   }
 
-  @And("^with a specific category filter the total shows as a lower bound \"n\\+\" until the last page is reached$")
-  public void categoryFilterShowsLowerBoundTotal() {
+  /** Applies Makan and walks every reachable page; returns indicator texts, fills rows. */
+  private java.util.List<String> walkMakan(String tag, java.util.List<Integer> rows) {
     HistoryPage history = new HistoryPage(driver());
-    history.selectCategory("Makan"); // every seeded row is Makan (default category)
-    new WebDriverWait(driver(), Duration.ofSeconds(10)).until((d) -> history.isPrevPageDisabled() && history.transactionRowCount() == 30);
+    history.selectCategory("Makan");
+    new WebDriverWait(driver(), Duration.ofSeconds(10)).until((d) -> history.isPrevPageDisabled() && history.transactionRowCount() > 0);
     java.util.List<String> seen = new java.util.ArrayList<>();
-    seen.add(history.pageIndicator());
+    seen.add(history.pageIndicator().replaceAll("\\s+", " "));
+    rows.add(history.transactionRowCount());
+    evidence(tag + "-p1");
     int page = 1;
     while (!history.isNextPageDisabled() && page < 10) {
       String firstBefore = history.rowAmounts().get(0);
       history.clickNextPage();
       page++;
-      waitForPage(page, firstBefore);
-      seen.add(history.pageIndicator());
+      boolean settled = true;
+      try {
+        waitForPage(page, firstBefore);
+      } catch (org.openqa.selenium.TimeoutException e) {
+        System.out.println("HIST08-" + tag + " page " + page + " did not settle: indicators=" + history.pageIndicators() + " rows=" + history.transactionRowCount());
+        settled = false;
+      }
+      for (int t = 0; t < 3; t++) {
+        System.out.println("HIST08-" + tag + " p" + page + " t+" + t + "s indicators=" + history.pageIndicators() + " rows=" + history.transactionRowCount() + " next=" + (history.isNextPageDisabled() ? "disabled" : "enabled"));
+        try { Thread.sleep(1000); } catch (InterruptedException e) { }
+      }
+      seen.add(history.pageIndicator().replaceAll("\\s+", " "));
+      rows.add(history.transactionRowCount());
+      evidence(tag + "-p" + page);
+      if (!settled) {
+        break;
+      }
     }
-    Assertions.assertTrue(seen.size() >= 2, "Expected more than one page with the category filter, got " + seen);
+    System.out.println("HIST08-" + tag + " indicators=" + seen + " rows=" + rows);
+    return seen;
+  }
+
+  @And("^with a specific category filter the total shows as a lower bound \"n\\+\" until the last page is reached$")
+  public void categoryFilterShowsLowerBoundTotal() {
+    // (A) Same session: every page of "Semua Kategori" was already visited, so all 100 rows are loaded and an
+    // exact total is the correct reading here (control, not the n+ precondition).
+    java.util.List<Integer> rowsA = new java.util.ArrayList<>();
+    java.util.List<String> seenA = walkMakan("makan-all-loaded", rowsA);
+    Assertions.assertEquals(java.util.List.of("1 / 2", "2 / 2"), seenA, "Control (all data loaded): expected the exact total 1 / 2, 2 / 2, rows=" + rowsA);
+
+    // (B) Fresh load: filter Makan WITHOUT first paging through Semua Kategori, so older rows are not loaded yet.
+    SeededDataSteps.reload(driver());
+    HistoryPage history = new HistoryPage(driver());
+    history.openViaNav();
+    history.selectTimeFilter("Semua Waktu");
+    waitForPage(1, null);
+    java.util.List<Integer> rows = new java.util.ArrayList<>();
+    java.util.List<String> seen = walkMakan("makan-fresh", rows);
+    Assertions.assertTrue(seen.size() >= 2, "Expected more than one page with the Makan filter (40 rows), got " + seen + " rows=" + rows);
+    Assertions.assertTrue(rows.stream().allMatch((r) -> r > 0), "Expected every reachable page after clicking next to show rows (older Makan data exists), got indicators=" + seen + " rows=" + rows);
     for (int i = 0; i < seen.size() - 1; i++) {
-      Assertions.assertTrue(seen.get(i).endsWith("+"), "Expected a lower-bound 'n+' total before the last page, got: " + seen);
+      Assertions.assertTrue(seen.get(i).endsWith("+"), "Expected a lower-bound 'n+' total before the last page while older data is not loaded, got: " + seen + " rows=" + rows);
     }
     String last = seen.get(seen.size() - 1);
     Assertions.assertFalse(last.endsWith("+"), "Expected the total to become exact on the last page, got: " + seen);
-    Assertions.assertEquals(seen.size() + " / " + seen.size(), last.replaceAll("\s+", " "), "Expected the last page to read n / n, got: " + seen);
+    Assertions.assertEquals(seen.size() + " / " + seen.size(), last, "Expected the last page to read n / n, got: " + seen);
   }
-
   // ---- HIST-02: empty state for the active filter hides Sync/Reset ----
 
   @Given("^No transactions match the active filter$")

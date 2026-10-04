@@ -23,7 +23,7 @@ are **not** part of the numbers below.
 | L4 UI | Final full run (mock-free group): 114 scenarios in the suite, 16 excluded by tag, 98 run: **92 pass, 6 do not**. Mock groups (high/low/all-fail): 7 of 7 pass, re-run after the harness fix. Seeded-data cases `HIST-03`, `HIST-05`, `MON-08`, `MON-11` pass (back-dated data written to the emulator). |
 | L5 Sheets | **Not run** (manual, see §5). |
 
-L4 not passing in the final run: `HIST-08` (`BUG-023`), `HIST-11`, `HIST-17`, `MON-10` (all `BUG-020`),
+L4 not passing in the final run: `HIST-08` (`BUG-024`), `HIST-11`, `HIST-17`, `MON-10` (all `BUG-020`),
 `PWA-11` (local Vite dev sends `no-cache`; spec says test a production build, production passes) and
 `VOICE-06` (known, unchanged). Not automated, with reasons, are in `automation/README.md`.
 
@@ -41,9 +41,10 @@ L4 not passing in the final run: `HIST-08` (`BUG-023`), `HIST-11`, `HIST-17`, `M
 | `BUG-020` | Ringkasan keeps `Rp 0` category rows and no empty state after delete/edit/undo | Medium | Reproduced twice on local dev |
 | `BUG-021` | Offline create/edit/delete: Ringkasan can end up different from Riwayat (35.000 vs 45.000) | Medium | **Intermittent**: failed once, passed in the final run and most re-runs; verify by hand |
 | `BUG-022` | Offline delete leaves the confirmation dialog stuck with a spinner | Low | One observation; spec does not define it |
-| `BUG-023` | Category-filtered page indicator is exact, spec says `n+` | Low | Reproduced; may be an outdated spec |
+| `BUG-023` | Withdrawn: first HIST-08 seed (all one category) was not an `n+` case | - | Retest with mixed data showed `n+` works |
+| `BUG-024` | With a category filter, next after `1 / 1+` shows an empty page although 35 older rows exist | Medium | Reproduced on local dev; confirm on production |
 
-Totals: 23 bugs filed to date (`BUG-001..023`). Open: `BUG-008`, `011`, `013`, `018`, `019`, `020..023`.
+Totals: 24 bug stubs to date (`BUG-001..024`). Open: `BUG-008`, `011`, `013`, `018`, `019`, `020`, `021`, `022`, `024` (`BUG-023` withdrawn).
 
 ## 4. Test harness findings (not app bugs)
 - With the emulator, the app writes under its own Firebase project id (`big-elysium-496003-j7`), not
@@ -64,7 +65,7 @@ Guide: `test-cases/sprint3-manual-run-guide.md`.
 ## 6. Risks and open questions
 - **Ringkasan correctness** is the main open risk: `BUG-020` is confirmed and `BUG-021` is unresolved.
   Every number on that tab depends on the daily summary staying in step with transactions.
-- **Spec question for the author:** `HIST-08` with a category filter (`n+` or exact?) and what offline
+- **Spec question for the author:** what offline
   delete should do (`BUG-022`).
 - **Production is not covered by the L4 results.** The UI suite runs on local dev; production
   confirmation of `BUG-005/006/010/015/016` is pending.

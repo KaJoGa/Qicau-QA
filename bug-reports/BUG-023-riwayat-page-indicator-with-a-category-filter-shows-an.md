@@ -7,7 +7,7 @@
 | **Severity** | Low (proposed — may be an outdated spec rather than an app defect) |
 | **Found in** | local dev + Firebase emulator (`http://localhost:3000/`) |
 | **Found during** | Sprint 3 L4 UI automation run, 2026-10-04 |
-| **Status** | Open - to be re-confirmed manually (and on production) before filing |
+| **Status** | **Withdrawn - invalid test data (2026-10-04).** With mixed data the `n+` lower bound does appear (`1 / 1+`), as the spec says. My first seed (61 rows, all Makan) had everything loaded, where an exact total is correct. The real problem found in the retest is `BUG-024`. |
 
 ## Summary
 With a specific category filter the spec says the total is a lower bound (`n+`) until the last page. The app shows an exact total.

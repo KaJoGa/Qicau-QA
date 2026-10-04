@@ -8,7 +8,7 @@ exactly the L4 spec IDs: `AUTH NAV HOME VOICE SAVE LOWC MAN HIST MON PWA TOAST`.
 
 `generate-features.cjs` was re-run (now also emits `sync-dialogs.feature`); 114 scenarios in total. Step
 definitions/page objects were updated for: `Ringkasan` rename, HIST-02 (inverted: Sync ke Sheets / Reset
-Ekspor stay visible), HIST-05 (`3 Bulan Terakhir`), HIST-08 (real fixed total `1 / 3, 2 / 3, 3 / 3` for 61
+Ekspor stay visible), HIST-05 (`3 Bulan Terakhir`), HIST-08 (real fixed total `1 / 4 .. 4 / 4` for 100 mixed-category
 rows, `n+` with a category filter), HIST-09/14 (Edit + Hapus side by side), HIST-15..19 (edit from Riwayat),
 MAN-13 (no native validation), MAN-19 (limits + counters), MON-01 (month/year in title), MON-09..12, PWA-01
 (bounding-box check), PWA-11, SYNC-15/19/20 (in-app dialogs only).
@@ -20,7 +20,7 @@ Result of the full run against local dev + emulator (`@smoke or @regression`, mo
 |---|---|---|
 | HIST-02, 09, 14, 15, 16, 18, 19 | PASS | HIST-19 failure induced by a second session deleting the transaction while the edit modal is open (offline writes are queued by Firestore, they never fail) |
 | HIST-05 | PARTIAL (pending) | option labels + "today is in every range" verified; the 90-day boundary needs back-dated data (UI cannot create it) |
-| HIST-08 | FAIL | indicator with `Makan` filter reads `1 / 3, 2 / 3, 3 / 3` (exact) instead of the lower bound `n+` the spec describes |
+| HIST-08 | FAIL | retest with mixed data (100 rows, 40 Makan): Semua Kategori fixed `1/4..4/4`; Makan filter shows `1 / 1+` (n+ correct) but next gives an empty page though 35 older rows exist (`BUG-024`). The first run (61 rows all Makan, exact total) was a wrong precondition, `BUG-023` withdrawn |
 | HIST-11 | FAIL | after deleting the only transaction, Ringkasan shows `Rp 0` plus a stale `Makan Rp 0` row and no "Belum ada riwayat transaksi." empty state |
 | HIST-17 (+MON-07 edit path) | FAIL | Riwayat/Home/total update correctly, but Ringkasan keeps the old category as a `Rp 0` row (`[Transport 35.000, Makan 0]`) |
 | MON-10 | FAIL | totals, sums and donut agree after add/edit/undo/delete, but a `Rp 0` category row stays listed after edit/delete (MON-04 says only categories with transactions); no rebuild control exists (PASS part) |
