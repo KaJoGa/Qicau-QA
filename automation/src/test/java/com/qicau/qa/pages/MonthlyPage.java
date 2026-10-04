@@ -23,7 +23,7 @@ public class MonthlyPage {
   // Never confirmed populated with real data (see BUG-006 - the per-category list itself always
   // renders its own empty state regardless of data) - kept as the best-available guess for
   // MON-04's row structure, consistent with every other locator here being confirmed-or-labelled.
-  private static final By CATEGORY_ROW = By.xpath("//h3[contains(text(),'Kategori')]/following-sibling::*//div[.//text()[contains(., 'Rp')]]");
+  private static final By CATEGORY_ROW = By.xpath("//h3[normalize-space(text())='Kategori']/following-sibling::div//span[starts-with(normalize-space(.), 'Rp')]");
 
   private final WebDriver driver;
   private final WebDriverWait wait;
@@ -78,5 +78,66 @@ public class MonthlyPage {
 
   public int categoryRowCount() {
     return driver.findElements(CATEGORY_ROW).size();
+  }
+  // ---- Sprint 3 additions ----
+
+  // Confirmed 2026-10-04 via dump: the category list is a sibling block after <h3>Kategori</h3>;
+  // each row is name span + "Rp 12.000" amount span (BUG-006 no longer reproduces).
+  private static final By CATEGORY_AMOUNT_SPANS =
+      By.xpath("//h3[normalize-space(text())='Kategori']/following-sibling::div//span[starts-with(normalize-space(.), 'Rp')]");
+  private static final By CATEGORY_NAME_SPANS =
+      By.xpath("//h3[normalize-space(text())='Kategori']/following-sibling::div//div[span[starts-with(normalize-space(.), 'Rp')]]/div[1]/span[2]");
+  private static final By MONTH_YEAR_LABEL =
+      By.xpath("//h2[.//span[normalize-space(text())='Ringkasan Bulan Ini']]/span[2]");
+
+  public String monthYearLabel() {
+    var els = driver.findElements(MONTH_YEAR_LABEL);
+    return els.isEmpty() ? "" : els.get(0).getText().trim();
+  }
+
+  public static long parseRupiah(String text) {
+    String digits = text.replaceAll("[^0-9]", "");
+    return digits.isEmpty() ? 0 : Long.parseLong(digits);
+  }
+
+  public long totalValue() {
+    return parseRupiah(totalText());
+  }
+
+  /** Amounts of every per-category row, in on-screen order. */
+  public java.util.List<Long> categoryAmounts() {
+    java.util.List<Long> out = new java.util.ArrayList<>();
+    for (var el : driver.findElements(CATEGORY_AMOUNT_SPANS)) {
+      out.add(parseRupiah(el.getText()));
+    }
+    return out;
+  }
+
+  public java.util.List<String> categoryNames() {
+    java.util.List<String> out = new java.util.ArrayList<>();
+    for (var el : driver.findElements(CATEGORY_NAME_SPANS)) {
+      out.add(el.getText().trim());
+    }
+    return out;
+  }
+
+  public long categoryAmountsSum() {
+    return categoryAmounts().stream().mapToLong(Long::longValue).sum();
+  }
+
+  /** True when the donut chart (recharts svg) is rendered. */
+  public boolean hasDonut() {
+    return !driver.findElements(By.cssSelector(".recharts-wrapper, .recharts-pie")).isEmpty()
+        || !driver.findElements(By.cssSelector("svg path.recharts-sector")).isEmpty();
+  }
+
+  public int donutSectorCount() {
+    return driver.findElements(By.cssSelector(".recharts-sector")).size();
+  }
+
+  /** Any button whose text suggests a manual rebuild/repair control (removed by the Part 3 spec change). */
+  public boolean hasRebuildControl() {
+    return !driver.findElements(By.xpath(
+        "//button[contains(translate(normalize-space(.), 'BUILDPAIRKSEJT', 'buildpairksejt'), 'rebuild') or contains(translate(normalize-space(.), 'BUILDPAIRKSEJT', 'buildpairksejt'), 'bangun ulang') or contains(translate(normalize-space(.), 'BUILDPAIRKSEJT', 'buildpairksejt'), 'perbaiki') or contains(translate(normalize-space(.), 'BUILDPAIRKSEJT', 'buildpairksejt'), 'repair')]")).isEmpty();
   }
 }

@@ -19,7 +19,7 @@ Feature: Authentication & Session (AUTH)
     When Click "Lanjutkan dengan Google"
     And Complete sign-in
     Then Lands on Catat tab
-    And header and bottom nav (Catat/Riwayat/Bulanan) shown
+    And header and bottom nav (Catat/Riwayat/Ringkasan) shown
 
   @AUTH-04 @regression
   Scenario: Closing the login popup leaves user on login page without error

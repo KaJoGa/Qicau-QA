@@ -106,3 +106,16 @@ writeFeature(path.join(OUT, 'history.feature'), 'History / Riwayat (HIST)', [his
 writeFeature(path.join(OUT, 'monthly.feature'), 'Monthly / Weekly Summary (MON)', [monthly], MANUAL_ONLY);
 writeFeature(path.join(OUT, 'pwa.feature'), 'Offline & PWA (PWA)', [byPrefix(pwaOffline, 'PWA')], MANUAL_ONLY);
 writeFeature(path.join(OUT, 'toast.feature'), 'Global Notifications (TOAST)', [byPrefix(pwaOffline, 'TOAST')], MANUAL_ONLY);
+
+// Sprint 3: only the in-app custom-dialog slices of SYNC (L5 otherwise stays manual on production).
+// These dialogs appear BEFORE any Google OAuth call, so they can be driven on local dev + emulator:
+// SYNC-15 (Reset dialog + Batal), SYNC-19 (Ya, Reset disabled ~1s), SYNC-20 (first-time Sync dialog + Batal).
+// SYNC-22 is not generated: it needs the per-browser "has synced" flag, whose storage key is an app internal.
+const syncAll = readCases(path.join(TC, 'sheets-sync.csv'));
+const SYNC_DIALOG_IDS = new Set(['SYNC-15', 'SYNC-19', 'SYNC-20']);
+writeFeature(
+  path.join(OUT, 'sync-dialogs.feature'),
+  'Sync / Reset confirmation dialogs - in-app part only (SYNC)',
+  [syncAll.filter((c) => SYNC_DIALOG_IDS.has(c.spec_id.split(';')[0].trim()))],
+  MANUAL_ONLY
+);

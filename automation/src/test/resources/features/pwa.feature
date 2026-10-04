@@ -4,7 +4,7 @@ Feature: Offline & PWA (PWA)
   Scenario: Offline banner appears when connection drops
     Given App open and online
     When Disconnect network while app is open
-    Then Banner "Mode Offline: Data tersimpan lokal & siap sync." appears at top
+    Then Banner "Mode Offline: Data tersimpan lokal & siap sync." appears below the header and pushes content down, not covering Reset Ekspor / Sync ke Sheets buttons or the page title, on both desktop and mobile widths
 
   @PWA-02 @regression
   Scenario: Reconnect shows a temporary green banner
@@ -29,18 +29,23 @@ Feature: Offline & PWA (PWA)
     And no crash
 
   @PWA-05 @regression
-  Scenario: Update prompt appears after a new release
+  Scenario: Update banner slides down from the very top and cannot be dismissed
     Given A new version has been deployed
     When Revisit the app after a new version has been deployed
-    Then Update prompt appears
-    And accepting it loads the new version
+    And Look at the banner position and for any close control
+    And Click "Perbarui"
+    Then "Pembaruan Tersedia" banner slides down from the very top of the screen, above all other elements
+    And no close/X button
+    And stays until updated
+    And "Perbarui" loads the new version
 
   @PWA-06 @regression
-  Scenario: Install button appears when not installed and install succeeds
+  Scenario: Install button appears when not installed; install goes through the browser dialog
     Given Open in a supporting browser, not yet installed
     When Click the install button
-    Then Install button available (header & settings)
-    And after successful install, toast "Aplikasi berhasil dipasang..." and button disappears
+    Then Install button available in header and Settings
+    And click opens the browser install dialog
+    And after install the button disappears. In-app success toast is NOT required (confirmation comes from the browser notification). Best effort: installed state is remembered so the button does not reappear after refresh in a normal tab
 
   @PWA-07 @regression
   Scenario: Install button is hidden when already running as an installed app
@@ -52,7 +57,9 @@ Feature: Offline & PWA (PWA)
   Scenario: iOS and unsupported browsers show manual install guidance
     Given Browser without native install prompt support (e.g. iOS Safari)
     When Open the app in that browser
-    Then Install button shows manual instructions (e.g. Share -> Add to Home Screen)
+    Then Install button shows manual guidance (e.g. Share -> Add to Home Screen)
+    And dialog is fully visible and centered when opened from both the header button and Settings. iOS Safari: "pada bilah navigasi Safari"
+    And iOS Chrome/Firefox/Edge: neutral wording ("di bilah alamat atau menu browser Anda")
 
   @PWA-09 @regression
   Scenario: Manifest values match spec
@@ -70,10 +77,19 @@ Feature: Offline & PWA (PWA)
     Given App installed
     When Launch the app via the "Riwayat" shortcut
     And Launch the app via the "Ringkasan" shortcut
-    Then Opens Riwayat tab (?tab=history) / Bulanan tab (?tab=monthly) respectively
+    Then Opens Riwayat tab (?tab=history) / Ringkasan tab (?tab=monthly) respectively
 
   @PWA-11 @regression
   Scenario: HTML response is not cached by the server
     Given the app is in its default state
     When Inspect response headers for the HTML page
-    Then Cache-Control: no-store on the HTML response
+    Then Cache-Control: no-store on the HTML response for every route including unknown SPA routes
+    And hashed /assets/* files are long-cached (immutable). Test against a production build or the Worker - the local Vite dev server sends no-cache instead
+
+  @PWA-12 @regression
+  Scenario: Pending update installs automatically on return unless a Sync/Reset is running
+    Given Update banner is showing
+    When With the update banner showing, switch to another tab/app briefly and return
+    And Repeat while a Sync or Reset is in progress
+    Then Page reloads by itself with the new version, no click needed
+    And if a Sync/Reset is running the page does NOT reload and the banner stays

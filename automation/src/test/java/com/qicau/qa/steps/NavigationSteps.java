@@ -43,7 +43,7 @@ public class NavigationSteps {
     new BottomNav(driver()).clickRiwayat();
   }
 
-  @And("^Click Bulanan tab$")
+  @And("^Click Ringkasan tab$")
   public void clickBulananTab() {
     new BottomNav(driver()).clickRingkasan();
   }
@@ -83,7 +83,7 @@ public class NavigationSteps {
     driver().get(Config.baseUrl() + "/?tab=home");
   }
 
-  @Then("^The corresponding tab \\(Riwayat / Bulanan / Catat\\) is active in each case$")
+  @Then("^The corresponding tab \\(Riwayat / Ringkasan / Catat\\) is active in each case$")
   public void theCorrespondingTabIsActiveInEachCase() {
     // The three When/And steps above already navigated through history -> monthly -> home in
     // order - only the last one (home) is what's currently on screen to check directly; the

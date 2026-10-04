@@ -85,9 +85,9 @@ Feature: Manual Input (MAN)
     Given Formulir Langsung mode open, price left empty or 0
     When Leave price empty (or 0)
     And Try to save
-    Then Rejected
+    Then Rejected without any browser-native validation message
     And alert "Harap masukkan jumlah pengeluaran."
-    And no transaction created
+    And no transaction saved
 
   @MAN-14 @smoke
   Scenario: Saving with only a valid price uses defaults for the rest
@@ -126,3 +126,12 @@ Feature: Manual Input (MAN)
     When Save a transaction via the direct form
     Then Treated as high confidence
     And never produces a low-confidence log
+
+  @MAN-19 @regression
+  Scenario: Platform capped at 50 and Catatan at 200 characters with n/50 and n/200 counters in the direct form
+    Given Formulir Langsung mode open
+    When Type or paste 60 characters into Platform
+    And Type or paste 250 characters into Catatan
+    And Check the counters above both fields
+    Then Platform stops at 50 and Catatan at 200 (cannot type or paste more)
+    And counters "n/50" and "n/200" shown above the fields and turn red when full, like the AI-text input and edit modal

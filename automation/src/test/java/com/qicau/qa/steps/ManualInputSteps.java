@@ -172,19 +172,83 @@ public class ManualInputSteps {
     // default state already has an empty price field - nothing to do
   }
 
+  private boolean formWasNoValidate;
+
   @And("^Try to save$")
   public void tryToSave() {
+    // Capture BEFORE the click: an open native alert() blocks any further JS execution.
+    formWasNoValidate = new ManualInputModal(driver()).directFormIsNoValidate();
     new ManualInputModal(driver()).saveDirectForm();
   }
 
-  @Then("^Rejected$")
-  public void rejected() {
-    // Confirmed by the alert step + no-transaction step that follow in the same scenario.
+  @Then("^Rejected without any browser-native validation message$")
+  public void rejectedWithoutNativeValidationMessage() {
+    // A browser-native validation bubble blocks the form's submit event, so the app's own
+    // handler (which raises its own alert) would never run. Seeing the app's alert therefore
+    // proves no native bubble intercepted the submit; the form's novalidate attribute is the
+    // DOM-level confirmation. (Selenium cannot read the bubble itself: a behavioural proxy.)
+    org.openqa.selenium.Alert alert = new WebDriverWait(driver(), Duration.ofSeconds(10))
+        .until(org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent());
+    String text = alert.getText();
+    Assertions.assertFalse(text.toLowerCase().contains("please fill"),
+        "Expected the app's own message, not a browser-native one, got: " + text);
+    Assertions.assertTrue(formWasNoValidate,
+        "Expected the direct form to opt out of browser-native validation (novalidate) - BUG-005 regression otherwise");
+  }
+
+  // ---- MAN-19: Platform max 50 / Catatan max 200 with n/50, n/200 counters in the direct form ----
+
+  @When("^Type or paste 60 characters into Platform$")
+  public void typeOrPaste60CharsIntoPlatform() {
+    ManualInputModal modal = new ManualInputModal(driver());
+    modal.setPlatform("P".repeat(60));
+  }
+
+  @And("^Type or paste 250 characters into Catatan$")
+  public void typeOrPaste250CharsIntoCatatan() {
+    new ManualInputModal(driver()).setNote("C".repeat(250));
+  }
+
+  @And("^Check the counters above both fields$")
+  public void checkTheCountersAboveBothFields() {
+    // read in the Then steps
+  }
+
+  @Then("^Platform stops at 50 and Catatan at 200 \\(cannot type or paste more\\)$")
+  public void platformStopsAt50CatatanAt200() {
+    ManualInputModal modal = new ManualInputModal(driver());
+    Assertions.assertEquals(50, modal.platformValue().length(), "Expected Platform capped at 50 characters");
+    Assertions.assertEquals(200, modal.noteValue().length(), "Expected Catatan capped at 200 characters");
+    // paste path: a programmatic paste-style insert beyond the limit must be clipped too
+    org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver();
+    Object lenAfterPaste = js.executeScript(
+        "var el = arguments[0]; el.focus(); el.select(); document.execCommand('insertText', false, 'X'.repeat(300)); return el.value.length;",
+        modal.platformInputElement());
+    Assertions.assertEquals(50L, ((Number) lenAfterPaste).longValue(), "Expected a pasted 300-char string to be clipped to 50 in Platform");
+  }
+
+  @And("^counters \"n/50\" and \"n/200\" shown above the fields and turn red when full, like the AI-text input and edit modal$")
+  public void countersShownAboveAndRedWhenFull() {
+    ManualInputModal modal = new ManualInputModal(driver());
+    var c50 = modal.counterFor("Platform");
+    var c200 = modal.counterFor("Catatan");
+    Assertions.assertEquals("50/50", c50.getText().trim(), "Expected the Platform counter to read 50/50 when full");
+    Assertions.assertEquals("200/200", c200.getText().trim(), "Expected the Catatan counter to read 200/200 when full");
+    Assertions.assertTrue(String.valueOf(c50.getAttribute("class")).contains("red"), "Expected the full Platform counter to be red");
+    Assertions.assertTrue(String.valueOf(c200.getAttribute("class")).contains("red"), "Expected the full Catatan counter to be red");
+    Assertions.assertTrue(c50.getRect().getY() < modal.platformInputElement().getRect().getY(), "Expected the Platform counter above its field");
+    Assertions.assertTrue(c200.getRect().getY() < modal.noteInputElement().getRect().getY(), "Expected the Catatan counter above its field");
   }
 
   @And("^alert \"Harap masukkan jumlah pengeluaran\\.\"$")
   public void alertHarapMasukkanJumlah() {
     assertAlertOrToastContains("Harap masukkan jumlah pengeluaran");
+    // 'empty or 0': a literal 0 must be rejected the same way
+    ManualInputModal modal = new ManualInputModal(driver());
+    modal.setPrice("0");
+    modal.saveDirectForm();
+    assertAlertOrToastContains("Harap masukkan jumlah pengeluaran");
+    Assertions.assertTrue(modal.isFormulirLangsungModeActive(), "Expected the form to stay open after rejecting price 0");
   }
 
   // ---- MAN-14 / MAN-15: saving via the direct form ----

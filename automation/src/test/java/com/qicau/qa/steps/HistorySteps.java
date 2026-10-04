@@ -99,7 +99,7 @@ public class HistorySteps {
     history.clickFirstRow();
   }
 
-  @Then("^\"Detail Pengeluaran\" modal shows platform, full amount, category, method, full-format timestamp, note if present, \"Hapus Transaksi\" button$")
+  @Then("^\"Detail Pengeluaran\" modal shows platform, full amount, category, method, full-format timestamp, note if present, and the \"Edit Transaksi\" \\+ \"Hapus Transaksi\" buttons side by side$")
   public void detailPengeluaranModalShows() {
     boolean open = new WebDriverWait(driver(), Duration.ofSeconds(5))
         .until((d) -> !d.findElements(By.xpath("//*[contains(text(), 'Detail Pengeluaran')]")).isEmpty());
@@ -107,6 +107,22 @@ public class HistorySteps {
     Assertions.assertFalse(
         driver().findElements(By.xpath("//button[contains(normalize-space(.), 'Hapus Transaksi')]")).isEmpty(),
         "Expected a Hapus Transaksi button in the detail modal");
+    Assertions.assertTrue(new HistoryPage(driver()).detailButtonsSideBySide(),
+        "Expected Edit Transaksi and Hapus Transaksi side by side in the detail modal");
+    String modalText = driver().findElement(By.xpath("//h3[contains(text(), 'Detail Pengeluaran')]/ancestor::div[contains(@class,'fixed')][1]")).getText();
+    for (String label : new String[] {"Kategori", "Metode Pembayaran", "Waktu"}) {
+      Assertions.assertTrue(modalText.toLowerCase().contains(label.toLowerCase()), "Expected the detail modal to show: " + label);
+    }
+    Assertions.assertTrue(modalText.contains("Rp"), "Expected the full amount (Rp ...) in the detail modal");
+  }
+
+  // ---- HIST-14: detail modal shows Edit Transaksi + Hapus Transaksi side by side ----
+
+  @Then("^Both \"Edit Transaksi\" and \"Hapus Transaksi\" buttons shown side by side$")
+  public void bothButtonsShownSideBySide() {
+    HistoryPage history = new HistoryPage(driver());
+    history.waitForDetailModal();
+    Assertions.assertTrue(history.detailButtonsSideBySide(), "Expected Edit Transaksi and Hapus Transaksi side by side");
   }
 
   // ---- HIST-11: confirming delete removes the transaction everywhere ----
@@ -128,7 +144,7 @@ public class HistorySteps {
     new HistoryPage(driver()).confirmDelete();
   }
 
-  @Then("^Transaction disappears from the list, from Home total, and from Bulanan$")
+  @Then("^Transaction disappears from the list, from Home total, and from Ringkasan$")
   public void transactionDisappearsEverywhere() {
     HistoryPage history = new HistoryPage(driver());
     boolean goneFromList = new WebDriverWait(driver(), Duration.ofSeconds(5))
@@ -141,7 +157,7 @@ public class HistorySteps {
     Assertions.assertTrue(zeroOnHome, "Expected Home total to be Rp 0 after the delete");
 
     new MonthlyPage(driver()).openViaNav();
-    Assertions.assertTrue(new MonthlyPage(driver()).isEmptyStateShown(), "Expected Bulanan to show the empty state too");
+    Assertions.assertTrue(new MonthlyPage(driver()).isEmptyStateShown(), "Expected Ringkasan to show the empty state too (Ringkasan text: " + driver().findElement(By.tagName("main")).getText().replace('\n', '|') + ")");
   }
 
   @And("^detail modal \\(if open\\) also closes$")
@@ -152,73 +168,91 @@ public class HistorySteps {
   }
 
   // ---- HIST-08: pagination shows 30 per page with correct button states ----
-  // All 31+ transactions are created "now" (the direct form can't backdate), so they all land in
-  // the same "Hari Ini" bucket under the default "7 Hari Terakhir" filter - fine for pagination
-  // mechanics, which don't depend on which dates the rows happen to have.
-
-  // The CSV-generated step order for this scenario bunches all the assertions (30-per-page,
-  // previous-disabled-on-page-1, etc.) *after* the navigation steps that already moved off page
-  // 1 - so what's asserted has to be captured as each page is actually visited, not re-observed
-  // afterwards from whatever page we've since moved to.
-  private int page1RowCount;
+  // Updated 2026-10-04 for the Part 3 spec: the indicator shows the REAL, fixed total
+  // ("1 / 3", "2 / 3", "3 / 3" for 61 rows) with "Semua Kategori", and a lower bound "n+" while a
+  // specific category filter is active. All 61 transactions are created "now" (the direct form
+  // can't backdate), so they sit in the same "Hari Ini" bucket under the default 7-day filter -
+  // fine for pagination mechanics. The CSV-generated step order interleaves navigation and
+  // assertions, so state is captured as each page is actually visited.
+  private static final int HIST08_TOTAL = 61;
+  private final java.util.List<Integer> pageRowCounts = new java.util.ArrayList<>();
+  private final java.util.List<String> pageIndicatorsSeen = new java.util.ArrayList<>();
+  private final java.util.List<String> allRowAmounts = new java.util.ArrayList<>();
   private boolean prevDisabledOnPage1;
-  private int page2RowCount;
-  private boolean nextDisabledOnPage2;
-  private boolean pageIndicatorSeen;
+  private boolean nextDisabledOnLastPage;
 
   @Given("^More than 30 transactions match the filter$")
   public void moreThan30TransactionsMatchFilter() {
     driver().get(Config.baseUrl());
     SignInHelper.signIn(driver());
     ManualInputModal modal = new ManualInputModal(driver());
-    for (int i = 1; i <= 31; i++) {
+    for (int i = 1; i <= HIST08_TOTAL; i++) {
       modal.quickSaveWithPriceOnly(String.valueOf(1000 + i));
     }
+    pageRowCounts.clear();
+    pageIndicatorsSeen.clear();
+    allRowAmounts.clear();
+  }
+
+  private void recordCurrentPage() {
+    HistoryPage history = new HistoryPage(driver());
+    pageRowCounts.add(history.transactionRowCount());
+    pageIndicatorsSeen.add(history.pageIndicator());
+    allRowAmounts.addAll(history.rowAmounts());
+  }
+
+  /** Waits until the list is showing page n (indicator "n / ..." and a first row different from {@code previousFirstRow}). */
+  private void waitForPage(int n, String previousFirstRow) {
+    HistoryPage history = new HistoryPage(driver());
+    new WebDriverWait(driver(), Duration.ofSeconds(10)).until((d) -> {
+      var amounts = history.rowAmounts();
+      return history.pageIndicator().startsWith(n + " /") && !amounts.isEmpty()
+          && (previousFirstRow == null || !amounts.get(0).equals(previousFirstRow));
+    });
   }
 
   @When("^View page 1 \\(previous button should be disabled\\)$")
   public void viewPage1PreviousDisabled() {
     HistoryPage history = new HistoryPage(driver());
     history.openViaNav();
-    page1RowCount = history.transactionRowCount();
+    waitForPage(1, null);
+    new WebDriverWait(driver(), Duration.ofSeconds(10)).until((d) -> history.transactionRowCount() == 30);
     prevDisabledOnPage1 = history.isPrevPageDisabled();
-    pageIndicatorSeen = !driver().findElements(By.xpath("//*[contains(text(), '/')]")).isEmpty();
+    recordCurrentPage();
   }
 
   @And("^Click next to load older data$")
   public void clickNextToLoadOlderData() {
-    new HistoryPage(driver()).clickNextPage();
+    HistoryPage history = new HistoryPage(driver());
+    String firstBefore = history.rowAmounts().get(0);
+    history.clickNextPage();
+    waitForPage(2, firstBefore);
+    recordCurrentPage();
   }
 
   @And("^Continue until the last page \\(next button should be disabled\\)$")
   public void continueUntilLastPage() {
-    // 31 items / 30 per page = exactly 2 pages - the single click above already reached the
-    // last page, deterministically, given this known data size. Capture its state here.
-    // Confirmed 2026-09-29: right after the next-page click, the OLD page's 30 rows can still be
-    // on screen for a moment before React swaps in the new page's data - a plain "count > 0"
-    // wait can catch that stale intermediate state (still 30) instead of the real page 2 count,
-    // since 30 already satisfies ">0". Waiting for the count to actually change away from page
-    // 1's known count avoids capturing that transitional render.
     HistoryPage history = new HistoryPage(driver());
-    page2RowCount = new WebDriverWait(driver(), Duration.ofSeconds(5))
-        .until((d) -> {
-          int c = history.transactionRowCount();
-          return (c > 0 && c != page1RowCount) ? c : null;
-        });
-    // The row count settling doesn't guarantee the next-button's own disabled attribute has
-    // re-rendered in the same tick - give it a short separate window rather than reading it the
-    // instant the rows appear.
+    int page = 2;
+    while (!history.isNextPageDisabled() && page < 10) {
+      String firstBefore = history.rowAmounts().get(0);
+      history.clickNextPage();
+      page++;
+      waitForPage(page, firstBefore);
+      recordCurrentPage();
+    }
     try {
-      nextDisabledOnPage2 = new WebDriverWait(driver(), Duration.ofSeconds(3))
+      nextDisabledOnLastPage = new WebDriverWait(driver(), Duration.ofSeconds(3))
           .until((d) -> history.isNextPageDisabled() ? Boolean.TRUE : null);
     } catch (org.openqa.selenium.TimeoutException e) {
-      nextDisabledOnPage2 = false;
+      nextDisabledOnLastPage = false;
     }
   }
 
   @Then("^30 transactions per page$")
   public void thirtyTransactionsPerPage() {
-    Assertions.assertEquals(30, page1RowCount, "Expected exactly 30 rows on page 1");
+    Assertions.assertEquals(30, pageRowCounts.get(0), "Expected exactly 30 rows on page 1");
+    Assertions.assertEquals(30, pageRowCounts.get(1), "Expected exactly 30 rows on page 2");
   }
 
   @And("^previous disabled on page 1$")
@@ -228,18 +262,44 @@ public class HistorySteps {
 
   @And("^next disabled when no more data$")
   public void nextDisabledWhenNoMoreData() {
-    Assertions.assertTrue(nextDisabledOnPage2, "Expected the next-page button disabled on the last page");
+    Assertions.assertTrue(nextDisabledOnLastPage, "Expected the next-page button disabled on the last page");
   }
 
   @And("^next loads older data with no duplicate/missing rows$")
   public void nextLoadsOlderDataNoDuplicateMissingRows() {
-    // 31 saved, 30 per page -> page 2 should have exactly 1 remaining row.
-    Assertions.assertEquals(1, page2RowCount, "Expected exactly 1 row left on the final page (31 total, 30 on page 1)");
+    Assertions.assertEquals(java.util.List.of(30, 30, 1), pageRowCounts, "Expected pages of 30/30/1 rows for 61 transactions");
+    Assertions.assertEquals(HIST08_TOTAL, allRowAmounts.size(), "Expected 61 rows across all pages");
+    Assertions.assertEquals(HIST08_TOTAL, new java.util.HashSet<>(allRowAmounts).size(), "Expected no duplicate rows across pages");
   }
 
-  @And("^page indicator shown$")
-  public void pageIndicatorShown() {
-    Assertions.assertTrue(pageIndicatorSeen, "Expected a page indicator (e.g. '1 / 2') to be shown");
+  @And("^indicator shows the REAL total pages and stays fixed \\(e\\.g\\. 1/5, 2/5 \\.\\.\\. 5/5, not growing\\) with \"Semua Kategori\"$")
+  public void indicatorShowsRealFixedTotal() {
+    Assertions.assertEquals(java.util.List.of("1 / 3", "2 / 3", "3 / 3"), pageIndicatorsSeen,
+        "Expected the indicator to show the real, fixed total (61 rows / 30 = 3 pages) on every page");
+  }
+
+  @And("^with a specific category filter the total shows as a lower bound \"n\\+\" until the last page is reached$")
+  public void categoryFilterShowsLowerBoundTotal() {
+    HistoryPage history = new HistoryPage(driver());
+    history.selectCategory("Makan"); // every seeded row is Makan (default category)
+    new WebDriverWait(driver(), Duration.ofSeconds(10)).until((d) -> history.isPrevPageDisabled() && history.transactionRowCount() == 30);
+    java.util.List<String> seen = new java.util.ArrayList<>();
+    seen.add(history.pageIndicator());
+    int page = 1;
+    while (!history.isNextPageDisabled() && page < 10) {
+      String firstBefore = history.rowAmounts().get(0);
+      history.clickNextPage();
+      page++;
+      waitForPage(page, firstBefore);
+      seen.add(history.pageIndicator());
+    }
+    Assertions.assertTrue(seen.size() >= 2, "Expected more than one page with the category filter, got " + seen);
+    for (int i = 0; i < seen.size() - 1; i++) {
+      Assertions.assertTrue(seen.get(i).endsWith("+"), "Expected a lower-bound 'n+' total before the last page, got: " + seen);
+    }
+    String last = seen.get(seen.size() - 1);
+    Assertions.assertFalse(last.endsWith("+"), "Expected the total to become exact on the last page, got: " + seen);
+    Assertions.assertEquals(seen.size() + " / " + seen.size(), last.replaceAll("\s+", " "), "Expected the last page to read n / n, got: " + seen);
   }
 
   // ---- HIST-02: empty state for the active filter hides Sync/Reset ----
@@ -264,10 +324,13 @@ public class HistorySteps {
     Assertions.assertTrue(empty, "Expected the empty-state message once the category filter matches nothing");
   }
 
-  @And("^Sync/Reset buttons hidden while list is empty$")
-  public void syncResetButtonsHiddenWhileListEmpty() {
-    Assertions.assertTrue(new HistoryPage(driver()).areSyncResetButtonsHidden(),
-        "Expected Sync/Reset to be hidden once the active filter matches no transactions");
+  @And("^Sync ke Sheets and Reset Ekspor buttons REMAIN visible \\(not dependent on list content\\)$")
+  public void syncResetButtonsRemainVisible() {
+    // Spec changed 2026-10-03 (HIST-02; BUG-007 closed): the buttons no longer depend on the list.
+    HistoryPage history = new HistoryPage(driver());
+    Assertions.assertTrue(history.isEmptyStateShown(), "Precondition: the empty state is showing");
+    Assertions.assertTrue(history.isSyncButtonDisplayed(), "Expected 'Sync ke Sheets' to stay visible with an empty list");
+    Assertions.assertTrue(history.isResetButtonDisplayed(), "Expected 'Reset Ekspor' to stay visible with an empty list");
   }
 
   // ---- HIST-06: category filter restricts the list to the selected category ----

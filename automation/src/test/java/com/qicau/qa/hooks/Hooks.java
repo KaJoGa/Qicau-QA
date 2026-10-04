@@ -29,6 +29,7 @@ public class Hooks {
     clearFirestoreEmulator();
     WebDriver driver = DriverFactory.create(fakeAudioFileFor(scenario));
     DriverContext.set(driver);
+    DriverContext.setTags(scenario.getSourceTagNames());
     driver.get(Config.baseUrl());
   }
 

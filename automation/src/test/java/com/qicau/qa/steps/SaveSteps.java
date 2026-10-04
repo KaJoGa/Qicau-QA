@@ -91,7 +91,13 @@ public class SaveSteps {
 
   @When("^Click \"Edit Transaksi\"$")
   public void clickEditTransaksi() {
-    new SaveToast(driver()).clickEditTransaksi();
+    // Shared by SAVE-05 (button on the save toast) and HIST-15 (button inside the Riwayat detail modal).
+    HistoryPage history = new HistoryPage(driver());
+    if (history.isDetailModalOpen()) {
+      history.clickEditInDetailModal();
+    } else {
+      new SaveToast(driver()).clickEditTransaksi();
+    }
   }
 
   @And("^edit modal opens pre-filled with that transaction's data$")
@@ -106,6 +112,11 @@ public class SaveSteps {
 
   @Given("^Edit modal open with changes made$")
   public void editModalOpenWithChangesMade() {
+    if (com.qicau.qa.support.DriverContext.hasTag("@HIST-18")) {
+      // HIST-18: same step text, but the edit modal is reached from Riwayat's detail modal.
+      HistoryEditSteps.openEditModalFromRiwayat(driver());
+      return;
+    }
     signInAndSaveOneTransaction();
     new SaveToast(driver()).clickEditTransaksi();
     EditTransactionModal modal = new EditTransactionModal(driver());
@@ -134,7 +145,7 @@ public class SaveSteps {
     Assertions.assertTrue(closed, "Expected the modal (edit or low-confidence) to close");
   }
 
-  @And("^the change is reflected on Home, Riwayat, and Bulanan$")
+  @And("^the change is reflected on Home, Riwayat, and Ringkasan$")
   public void changeReflectedEverywhere() {
     boolean onHome = !driver().findElements(org.openqa.selenium.By.xpath("//*[contains(text(), 'Warmindo Edited')]")).isEmpty();
     Assertions.assertTrue(onHome, "Expected the edited platform name to appear on Home's recent list");

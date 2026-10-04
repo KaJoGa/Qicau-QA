@@ -4,7 +4,63 @@ Java/Selenium/Cucumber project for L4 UI end-to-end tests (`test-plan.md` §3.1,
 exactly the L4 spec IDs: `AUTH NAV HOME VOICE SAVE LOWC MAN HIST MON PWA TOAST`. `SYNC` (L5),
 `PARSE` (L2), and `SEC` (L3) live elsewhere and are intentionally not duplicated here.
 
-## Status (2026-09-29) — both tiers run for real: 40/44 @smoke, 43/55 @regression
+## Sprint 3 update (2026-10-04) - suite re-aligned with the updated spec (`test/Qicau.md` Part 2 + Part 3)
+
+`generate-features.cjs` was re-run (now also emits `sync-dialogs.feature`); 114 scenarios in total. Step
+definitions/page objects were updated for: `Ringkasan` rename, HIST-02 (inverted: Sync ke Sheets / Reset
+Ekspor stay visible), HIST-05 (`3 Bulan Terakhir`), HIST-08 (real fixed total `1 / 3, 2 / 3, 3 / 3` for 61
+rows, `n+` with a category filter), HIST-09/14 (Edit + Hapus side by side), HIST-15..19 (edit from Riwayat),
+MAN-13 (no native validation), MAN-19 (limits + counters), MON-01 (month/year in title), MON-09..12, PWA-01
+(bounding-box check), PWA-11, SYNC-15/19/20 (in-app dialogs only).
+
+Result of the full run against local dev + emulator (`@smoke or @regression`, mock-free group, 95 scenarios):
+**87 pass, 8 not passing** (first run). Final full re-run after the harness fix and the seeded cases (98 scenarios run, 16 excluded by tag): **92 pass, 6 not passing** (HIST-08, HIST-11, HIST-17, MON-10, PWA-11 on dev, VOICE-06); mock groups (high/low/all-fail): 7 of 7 pass (earlier run).
+
+| Spec ID | Result | Note |
+|---|---|---|
+| HIST-02, 09, 14, 15, 16, 18, 19 | PASS | HIST-19 failure induced by a second session deleting the transaction while the edit modal is open (offline writes are queued by Firestore, they never fail) |
+| HIST-05 | PARTIAL (pending) | option labels + "today is in every range" verified; the 90-day boundary needs back-dated data (UI cannot create it) |
+| HIST-08 | FAIL | indicator with `Makan` filter reads `1 / 3, 2 / 3, 3 / 3` (exact) instead of the lower bound `n+` the spec describes |
+| HIST-11 | FAIL | after deleting the only transaction, Ringkasan shows `Rp 0` plus a stale `Makan Rp 0` row and no "Belum ada riwayat transaksi." empty state |
+| HIST-17 (+MON-07 edit path) | FAIL | Riwayat/Home/total update correctly, but Ringkasan keeps the old category as a `Rp 0` row (`[Transport 35.000, Makan 0]`) |
+| MON-10 | FAIL | totals, sums and donut agree after add/edit/undo/delete, but a `Rp 0` category row stays listed after edit/delete (MON-04 says only categories with transactions); no rebuild control exists (PASS part) |
+| MON-12 | FAIL | after offline create/edit/delete and reconnect the first session shows Riwayat sum 35.000 but Ringkasan total 45.000 (difference 10.000); a second session sees an empty Riwayat while Ringkasan says 45.000. Also: offline delete leaves the "Hapus Transaksi?" dialog open with a spinner (blocks the app) until back online |
+| MAN-13, MAN-19, MON-01, MON-04, MON-09, MON-02/03/06/07, SYNC-15/19/20, PWA-01, PWA-09/10, NAV-04, AUTH-03 | PASS | MON-04/BUG-006 and MAN-13/BUG-005 no longer reproduce |
+| PWA-11 | FAIL (expected on local dev) | `Cache-Control: no-cache` on `/` and unknown routes; spec says the local dev server does this - test a production build / the Worker. The `/assets/*` immutable half is pending (dev server has no `/assets`) |
+| VOICE-06 | FAIL (known, unchanged) | see below |
+
+Not automated in Sprint 3 (reason): `MON-11` (now automated, see "Seeded-data cases"); `SYNC-22` / `SYNC-23` (need the per-browser "has synced" flag whose storage key is an
+app internal, plus a real successful Google sync); `SYNC-16/21/24..28` (real Google OAuth/Sheets/Drive);
+`PWA-05` / `PWA-12` (need a new deployed service-worker version / update signal); `HIST-03`, `MON-08` (now automated via seeding;
+data); `MON-05` (not attempted this sprint; BUG-006 no longer blocks it).
+Run commands: add `@MON-11 or @PWA-12` to the exclusion list (see below); `@SYNC-15 or @SYNC-19 or @SYNC-20`
+run in the main group. Evidence: `automation/dump/s3/` (DOM dumps incl. `13-offline-delete-overlay.html`).
+
+## Seeded-data cases (2026-10-04): HIST-03, HIST-05 (boundary), MON-08, MON-11 - automated
+
+`SeededDataSteps.java` + `FirestoreSeeder.java` (+ HIST-05 rewritten in `HistoryEditSteps.java`, `PendingException` removed).
+Method (no source read): one real transaction is created through the UI, then the Firestore emulator REST API
+(`Authorization: Bearer owner`) is READ to learn exactly how the app stored it, and back-dated data is written back
+with the same field names/types for the same `user_id`. Observed layout (stringValue unless noted):
+`transactions/{autoId}`: kategori, platform, detail, payment_method, confidence, raw_transcript, user_id, `harga` and
+`created_at` = **integerValue** (epoch milliseconds, not a timestampValue/ISO string); `daily_summaries/{uid}_{yyyyMMdd}`
+(local date): user_id, day, `total` integerValue, `by_category` mapValue of integerValue. Back-dated rows are stamped
+12:00 local and each seeded day also gets a consistent daily summary (what the app would have written).
+Run: `mvn test -Dcucumber.filter.tags="@HIST-03 or @HIST-05"` - 4 of 4 pass.
+- HIST-05 seeds 0/5/8/25/31/89/91/150 days ago (prices 1.000..8.000): 7 Hari = 0,5d; 30 Hari = +8d,25d; 3 Bulan = +31d,89d
+  (91d absent); Semua Waktu = all 8.
+- MON-11 corrupts today's summary (total 99999, by_category Makan 5000 + Hiburan 1000), checks it stays corrupt on Catat
+  (control), opens Ringkasan, and asserts the document is repaired in the background (no toast/dialog/notice), the display
+  matches Riwayat, a second consistent day is not rewritten (its `updateTime` unchanged), and with the browser offline
+  (CDP) a re-corrupted day is NOT repaired within 10 s. After reconnect it stays unrepaired (observation only; the spec
+  does not define it).
+- Finding for the harness: with `VITE_USE_FIREBASE_EMULATOR=true` the app writes under its OWN Firebase project id
+  (`big-elysium-496003-j7`, config property `emulator.app.project.id`), not `demo-qicau-test`. `Hooks` clear-data and
+  `FirestoreInspector` still use `emulator.project.id`, so (a) data is not wiped between scenarios (isolation relies on a
+  fresh user per scenario) and (b) `FirestoreInspector` reads (LOWC-04 log-write check) look at the wrong project - this may
+  be the real reason that check "sometimes comes back empty". Not changed here.
+
+## Status (2026-09-29, historical - superseded by the Sprint 3 table above where they differ) — both tiers run for real: 40/44 @smoke, 43/55 @regression
 
 Every wired scenario across both the `@smoke` and `@regression` tiers has been run for real
 against local dev + the Firebase emulator (and, where needed, the Gemini fetch-mock). Each
@@ -178,7 +234,7 @@ automation/
     │   │                   # GoogleAuthEmulatorWidget, NetworkSimulator, FirestoreInspector
     │   └── runners/        # CucumberTestRunner (the real suite), ExplorerTest (DOM-capture tool, not a deliverable)
     └── resources/
-        ├── features/       # 99 scenarios, generated
+        ├── features/       # 114 scenarios, generated
         ├── audio/          # 5 fake-microphone .wav fixtures
         ├── testdata/       # not yet needed
         └── config/         # local.properties (base URL, emulator ports, headless flag)
@@ -200,10 +256,10 @@ cd automation
 mvn test -Dcucumber.filter.tags="@smoke and not (@MAN-03 or @MAN-05 or @LOWC-04 or @VOICE-08 or @VOICE-09)"
 
 # @regression, no mock needed (the bulk of it):
-mvn test -Dcucumber.filter.tags="@regression and not (@manual-only or @AUTH-02 or @AUTH-05 or @MON-05 or @MON-08 or @PWA-05 or @PWA-06 or @PWA-07 or @TOAST-01 or @MAN-07 or @VOICE-10)"
+mvn test -Dcucumber.filter.tags="@regression and not (@manual-only or @AUTH-02 or @AUTH-05 or @MON-05 or @PWA-12 or @PWA-05 or @PWA-06 or @PWA-07 or @TOAST-01 or @MAN-07 or @VOICE-10)"
 
 # Both tiers together, no mock needed:
-mvn test -Dcucumber.filter.tags="(@smoke or @regression) and not (@manual-only or @MAN-03 or @MAN-05 or @LOWC-04 or @VOICE-08 or @VOICE-09 or @AUTH-02 or @AUTH-05 or @MON-05 or @MON-08 or @PWA-05 or @PWA-06 or @PWA-07 or @TOAST-01 or @MAN-07 or @VOICE-10)"
+mvn test -Dcucumber.filter.tags="(@smoke or @regression) and not (@manual-only or @MAN-03 or @MAN-05 or @LOWC-04 or @VOICE-08 or @VOICE-09 or @AUTH-02 or @AUTH-05 or @MON-05 or @PWA-12 or @PWA-05 or @PWA-06 or @PWA-07 or @TOAST-01 or @MAN-07 or @VOICE-10)"
 
 # Then, from the Qicau app repo, restart dev with the mock for the "high" group
 # (use tsx directly, not `npm run dev` - see the NODE_OPTIONS caveat above):

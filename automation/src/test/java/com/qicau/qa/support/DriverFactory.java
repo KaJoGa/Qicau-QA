@@ -32,6 +32,11 @@ public final class DriverFactory {
     if (fakeAudioFile != null) {
       options.addArguments("--use-file-for-fake-audio-capture=" + fakeAudioFile.toAbsolutePath());
     }
+    // Browser console capture for MON-09 (no permission-denied errors in the console).
+    java.util.logging.Level all = java.util.logging.Level.ALL;
+    org.openqa.selenium.logging.LoggingPreferences logPrefs = new org.openqa.selenium.logging.LoggingPreferences();
+    logPrefs.enable(org.openqa.selenium.logging.LogType.BROWSER, all);
+    options.setCapability("goog:loggingPrefs", logPrefs);
     if (Config.headless()) {
       options.addArguments("--headless=new");
     }

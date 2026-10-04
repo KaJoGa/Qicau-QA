@@ -22,14 +22,21 @@ public class MonthlySteps {
     return DriverContext.get();
   }
 
-  @When("^Open Bulanan tab$")
+  @When("^Open Ringkasan tab$")
   public void openBulananTab() {
     new MonthlyPage(driver()).openViaNav();
   }
 
   @Then("^Title \"Ringkasan Bulan Ini\"$")
   public void titleRingkasanBulanIni() {
-    Assertions.assertTrue(new MonthlyPage(driver()).isDisplayed(), "Expected the Ringkasan Bulan Ini title");
+    MonthlyPage page = new MonthlyPage(driver());
+    Assertions.assertTrue(page.isDisplayed(), "Expected the Ringkasan Bulan Ini title");
+    // Spec update 2026-10-03: the title is followed by the current month name and year ("Oktober 2026").
+    java.time.LocalDate today = java.time.LocalDate.now();
+    String expected = today.getMonth().getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.forLanguageTag("id-ID"))
+        + " " + today.getYear();
+    Assertions.assertEquals(expected.toLowerCase(), page.monthYearLabel().toLowerCase(),
+        "Expected the title to show the current month and year next to 'Ringkasan Bulan Ini'");
   }
 
   @And("^\"Total Pengeluaran\" card$")
@@ -86,7 +93,7 @@ public class MonthlySteps {
 
   // ---- MON-03: weekly view starts from Monday, includes the current Sunday ----
 
-  @Given("^On Bulanan tab$")
+  @Given("^On Ringkasan tab$")
   public void onBulananTab() {
     driver().get(Config.baseUrl());
     SignInHelper.signIn(driver());
@@ -129,7 +136,7 @@ public class MonthlySteps {
 
   // ---- MON-07: summary updates live when data changes ----
 
-  @Given("^Bulanan tab open$")
+  @Given("^Ringkasan tab open$")
   public void bulananTabOpen() {
     driver().get(Config.baseUrl());
     SignInHelper.signIn(driver());
@@ -164,7 +171,7 @@ public class MonthlySteps {
   @Then("^Only categories with transactions shown$")
   public void onlyCategoriesWithTransactionsShown() {
     int rows = new MonthlyPage(driver()).categoryRowCount();
-    Assertions.assertTrue(rows > 0, "Expected at least one per-category row when transactions exist - see BUG-006 (Kategori list always shows its own empty state)");
+    Assertions.assertTrue(rows > 0, "Expected at least one per-category row when transactions exist - the per-category list must render rows (BUG-006 was reported against this)");
   }
 
   @And("^sorted largest amount first$")
@@ -186,7 +193,7 @@ public class MonthlySteps {
     SignInHelper.signIn(driver());
   }
 
-  @When("^View Bulanan with no transactions this month$")
+  @When("^View Ringkasan with no transactions this month$")
   public void viewBulananWithNoTransactionsThisMonth() {
     new MonthlyPage(driver()).openViaNav();
   }

@@ -129,4 +129,21 @@ public class EditTransactionModal {
   public void closeWithX() {
     wait.until(ExpectedConditions.elementToBeClickable(CLOSE_X_BUTTON)).click();
   }
+  /** True if any date/time-like input or a date/time label exists in the modal (HIST-16 says none may). */
+  public boolean hasDateOrTimeField() {
+    var scope = driver.findElement(By.xpath("//h3[contains(text(), 'Edit Transaksi')]/ancestor::div[contains(@class,'fixed')][1]"));
+    boolean typed = !scope.findElements(By.xpath(".//input[@type='date' or @type='time' or @type='datetime-local' or @type='month']")).isEmpty();
+    boolean labelled = !scope.findElements(By.xpath(
+        ".//label[contains(translate(., 'TANGALWKU', 'tangalwku'), 'tanggal') or contains(translate(., 'TANGALWKU', 'tangalwku'), 'waktu')]")).isEmpty();
+    return typed || labelled;
+  }
+
+  /** Names of every labelled field in the modal, for the HIST-16 / HIST-15 evidence. */
+  public java.util.List<String> labelTexts() {
+    java.util.List<String> out = new java.util.ArrayList<>();
+    for (var el : driver.findElements(By.xpath("//h3[contains(text(), 'Edit Transaksi')]/ancestor::div[contains(@class,'fixed')][1]//label"))) {
+      out.add(el.getText().trim());
+    }
+    return out;
+  }
 }

@@ -67,12 +67,12 @@ Feature: Post-Save: Toast, Edit, Undo (SAVE)
     And input capped at 200 chars with an "n/200" counter
 
   @SAVE-10 @smoke
-  Scenario: Saving edits updates Home Riwayat and Bulanan
+  Scenario: Saving edits updates Home Riwayat and Ringkasan
     Given Edit modal open with changes made
     When Change one or more fields
     And Click "Simpan Perubahan"
     Then Modal closes
-    And the change is reflected on Home, Riwayat, and Bulanan
+    And the change is reflected on Home, Riwayat, and Ringkasan
 
   @SAVE-11 @regression
   Scenario: Closing edit modal without saving discards changes

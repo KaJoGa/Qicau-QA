@@ -37,11 +37,56 @@ public class PwaSteps {
     NetworkSimulator.goOffline(driver());
   }
 
-  @Then("^Banner \"Mode Offline: Data tersimpan lokal & siap sync\\.\" appears at top$")
+  @Then("^Banner \"Mode Offline: Data tersimpan lokal & siap sync\\.\" appears below the header and pushes content down, not covering Reset Ekspor / Sync ke Sheets buttons or the page title, on both desktop and mobile widths$")
   public void bannerModeOfflineAppears() {
     boolean shown = new WebDriverWait(driver(), Duration.ofSeconds(5))
         .until((d) -> !d.findElements(By.xpath("//*[contains(text(), 'Mode Offline')]")).isEmpty());
     Assertions.assertTrue(shown, "Expected the offline banner to appear");
+    Assertions.assertTrue(driver().findElement(By.xpath("//aside[@aria-label='Status koneksi offline']")).getText()
+        .replace("\n", "").contains("Mode Offline: Data tersimpan lokal & siap sync."), "Expected the exact banner text");
+    new com.qicau.qa.pages.HistoryPage(driver()).openViaNav();
+    new WebDriverWait(driver(), Duration.ofSeconds(5)).until((d) -> new com.qicau.qa.pages.HistoryPage(d).isSyncButtonDisplayed());
+    java.util.List<String> problems = new java.util.ArrayList<>();
+    try {
+      // desktop-ish width (the suite default) and a mobile width, both on Riwayat where Reset/Sync/title live
+      for (int[] size : new int[][] {{800, 1000}, {1280, 900}, {390, 844}}) {
+        driver().manage().window().setSize(new org.openqa.selenium.Dimension(size[0], size[1]));
+        Thread.sleep(500);
+        problems.addAll(bannerOverlapProblems(size[0] + "x" + size[1]));
+      }
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    } finally {
+      driver().manage().window().setSize(new org.openqa.selenium.Dimension(800, 1000));
+    }
+    Assertions.assertTrue(problems.isEmpty(), "Offline banner layout problems: " + problems);
+  }
+
+  private java.util.List<String> bannerOverlapProblems(String label) {
+    java.util.List<String> out = new java.util.ArrayList<>();
+    var header = driver().findElement(By.tagName("header")).getRect();
+    var banner = driver().findElement(By.xpath("//aside[@aria-label='Status koneksi offline']")).getRect();
+    var main = driver().findElement(By.tagName("main")).getRect();
+    var title = driver().findElement(By.xpath("//main//h2")).getRect();
+    var sync = driver().findElement(By.xpath("//button[contains(normalize-space(.), 'Sync ke Sheets')]")).getRect();
+    var reset = driver().findElement(By.xpath("//button[contains(normalize-space(.), 'Reset Ekspor')]")).getRect();
+    int bannerBottom = banner.getY() + banner.getHeight();
+    if (banner.getY() < header.getY() + header.getHeight() - 1) {
+      out.add(label + ": banner (top " + banner.getY() + ") is not below the header (bottom " + (header.getY() + header.getHeight()) + ")");
+    }
+    if (main.getY() < bannerBottom - 1) {
+      out.add(label + ": content (main top " + main.getY() + ") is not pushed below the banner (bottom " + bannerBottom + ")");
+    }
+    if (title.getY() < bannerBottom - 1) {
+      out.add(label + ": page title top " + title.getY() + " is covered by banner bottom " + bannerBottom);
+    }
+    if (sync.getY() < bannerBottom - 1) {
+      out.add(label + ": Sync ke Sheets top " + sync.getY() + " is covered by banner bottom " + bannerBottom);
+    }
+    if (reset.getY() < bannerBottom - 1) {
+      out.add(label + ": Reset Ekspor top " + reset.getY() + " is covered by banner bottom " + bannerBottom);
+    }
+    return out;
   }
 
   // ---- PWA-03: direct-form entries made offline sync automatically on reconnect ----
@@ -235,7 +280,7 @@ public class PwaSteps {
 
   private boolean lastTabAfterHistoryShortcut;
 
-  @Then("^Opens Riwayat tab \\(\\?tab=history\\) / Bulanan tab \\(\\?tab=monthly\\) respectively$")
+  @Then("^Opens Riwayat tab \\(\\?tab=history\\) / Ringkasan tab \\(\\?tab=monthly\\) respectively$")
   public void opensRiwayatThenBulananRespectively() {
     Assertions.assertTrue(lastTabAfterHistoryShortcut, "Expected the Riwayat shortcut (?tab=history) to open Riwayat");
     Assertions.assertTrue(new com.qicau.qa.pages.MonthlyPage(driver()).isDisplayed(), "Expected the Ringkasan shortcut (?tab=monthly) to open Bulanan/Ringkasan");
@@ -257,13 +302,42 @@ public class PwaSteps {
     var req = java.net.http.HttpRequest.newBuilder(java.net.URI.create(Config.baseUrl() + "/")).build();
     lastCacheControl = http.send(req, java.net.http.HttpResponse.BodyHandlers.discarding())
         .headers().firstValue("cache-control").orElse("");
+    var unknownReq = java.net.http.HttpRequest.newBuilder(java.net.URI.create(Config.baseUrl() + "/no-such-route-xyz")).build();
+    var unknownResp = http.send(unknownReq, java.net.http.HttpResponse.BodyHandlers.ofString());
+    lastUnknownRouteStatus = unknownResp.statusCode();
+    lastUnknownRouteCacheControl = unknownResp.headers().firstValue("cache-control").orElse("");
+    var htmlResp = http.send(req, java.net.http.HttpResponse.BodyHandlers.ofString());
+    lastHtmlBody = htmlResp.body();
   }
 
   private String lastCacheControl;
+  private String lastUnknownRouteCacheControl;
+  private int lastUnknownRouteStatus;
+  private String lastHtmlBody = "";
 
-  @Then("^Cache-Control: no-store on the HTML response$")
+  // KNOWN / EXPECTED on local dev: the spec itself notes the local Vite dev server sends
+  // "no-cache" instead of "no-store" and says to test against a production build or the Worker.
+  // This assertion is intentionally kept as-is and therefore FAILS against local dev (BUG-001
+  // history); it is not a new finding.
+  @Then("^Cache-Control: no-store on the HTML response for every route including unknown SPA routes$")
   public void cacheControlNoStoreOnTheHtmlResponse() {
     Assertions.assertTrue(lastCacheControl.contains("no-store"),
-        "Expected Cache-Control: no-store, got: [" + lastCacheControl + "] - see BUG-001");
+        "Expected Cache-Control: no-store on /, got: [" + lastCacheControl + "] (known: local dev server sends no-cache; spec says test a production build)");
+    Assertions.assertTrue(lastUnknownRouteCacheControl.contains("no-store"),
+        "Expected Cache-Control: no-store on an unknown SPA route (HTTP " + lastUnknownRouteStatus + "), got: [" + lastUnknownRouteCacheControl + "]");
+  }
+
+  @And("^hashed /assets/\\* files are long-cached \\(immutable\\)\\. Test against a production build or the Worker - the local Vite dev server sends no-cache instead$")
+  public void hashedAssetsAreLongCached() throws Exception {
+    java.util.regex.Matcher m = java.util.regex.Pattern.compile("(/assets/[^\"']+)").matcher(lastHtmlBody);
+    if (!m.find()) {
+      throw new io.cucumber.java.PendingException("The local dev server serves un-bundled sources (no /assets/* in the HTML): "
+          + "the immutable-asset half of PWA-11 needs a production build or the Worker.");
+    }
+    var http = java.net.http.HttpClient.newHttpClient();
+    var resp = http.send(java.net.http.HttpRequest.newBuilder(java.net.URI.create(Config.baseUrl() + m.group(1))).build(),
+        java.net.http.HttpResponse.BodyHandlers.discarding());
+    String cc = resp.headers().firstValue("cache-control").orElse("");
+    Assertions.assertTrue(cc.contains("immutable"), "Expected /assets/* to be Cache-Control immutable, got: [" + cc + "]");
   }
 }

@@ -75,7 +75,7 @@ public class AuthSteps {
     Assertions.assertTrue(new HomePage(driver()).isDisplayed(), "Expected to land on the Catat tab after sign-in");
   }
 
-  @And("^header and bottom nav \\(Catat/Riwayat/Bulanan\\) shown$")
+  @And("^header and bottom nav \\(Catat/Riwayat/Ringkasan\\) shown$")
   public void headerAndBottomNavShown() {
     Assertions.assertTrue(new HomePage(driver()).hasBottomNav(), "Expected the Catat/Riwayat/Bulanan bottom nav");
   }

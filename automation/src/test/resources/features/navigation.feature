@@ -12,7 +12,7 @@ Feature: Navigation & Settings (NAV)
     When Navigate to "/?tab=history"
     And Navigate to "/?tab=monthly"
     And Navigate to "/?tab=home"
-    Then The corresponding tab (Riwayat / Bulanan / Catat) is active in each case
+    Then The corresponding tab (Riwayat / Ringkasan / Catat) is active in each case
 
   @NAV-03 @regression
   Scenario: Unknown tab query value falls back to Catat without error
@@ -24,7 +24,7 @@ Feature: Navigation & Settings (NAV)
   Scenario: Clicking a tab switches content and highlights it
     Given Signed in
     When Click Riwayat tab
-    And Click Bulanan tab
+    And Click Ringkasan tab
     And Click Catat tab
     Then Content changes accordingly each time
     And active tab is visually marked

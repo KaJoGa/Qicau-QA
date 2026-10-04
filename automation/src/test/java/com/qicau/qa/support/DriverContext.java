@@ -28,5 +28,20 @@ public final class DriverContext {
 
   public static void clear() {
     DRIVER.remove();
+    TAGS.remove();
+  }
+
+  // Tags of the running scenario (set by Hooks) - lets a step shared by several scenarios with
+  // identical generated Gherkin text (e.g. SAVE-10's and HIST-18's "Edit modal open with changes
+  // made") pick the right setup path without changing the generated .feature files.
+  private static final ThreadLocal<java.util.Collection<String>> TAGS = new ThreadLocal<>();
+
+  public static void setTags(java.util.Collection<String> tags) {
+    TAGS.set(tags);
+  }
+
+  public static boolean hasTag(String tag) {
+    java.util.Collection<String> t = TAGS.get();
+    return t != null && t.contains(tag);
   }
 }

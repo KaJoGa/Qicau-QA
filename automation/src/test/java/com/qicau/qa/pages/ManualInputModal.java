@@ -204,4 +204,25 @@ public class ManualInputModal {
       // fine - the modal was already gone by the time we checked
     }
   }
+
+  // ---- Sprint 3: MAN-19 counters in the direct form ----
+
+  public WebElement counterFor(String labelContains) {
+    return driver.findElement(By.xpath("//label[contains(text(), '" + labelContains + "')]/following-sibling::span[1]"));
+  }
+
+  public WebElement platformInputElement() {
+    return driver.findElement(PLATFORM_INPUT);
+  }
+
+  public WebElement noteInputElement() {
+    return driver.findElement(NOTE_INPUT);
+  }
+
+  /** True if the Formulir Langsung <form> carries the novalidate attribute (no browser-native validation bubbles). */
+  public boolean directFormIsNoValidate() {
+    Object v = ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+        "var i = arguments[0]; var f = i.closest('form'); return f ? f.noValidate : null;", driver.findElement(PRICE_INPUT));
+    return Boolean.TRUE.equals(v);
+  }
 }
