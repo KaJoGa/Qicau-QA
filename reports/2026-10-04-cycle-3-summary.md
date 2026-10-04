@@ -20,7 +20,7 @@ are **not** part of the numbers below.
 | L1 API (`API-01..13`) | All pass in their proper environment. 15 new Postman requests, 8 new mock scenarios. Production: `no-store` on HTML, `immutable` on `/assets/*`, no raw Google errors, `raw_transcript` equals input. |
 | L2 parse | `PARSE-21` retest on production: "gocap" returns 50 (2 of 2 runs). |
 | L3 rules (`SEC-01..15`) | 34 of 34 pass, including the new `daily_summaries` tests. |
-| L4 UI | Final full run (mock-free group): 114 scenarios in the suite, 16 excluded by tag, 98 run: **92 pass, 6 do not**. Mock groups (high/low/all-fail): 7 of 7 passed in the earlier run. Seeded-data cases `HIST-03`, `HIST-05`, `MON-08`, `MON-11` pass (back-dated data written to the emulator). |
+| L4 UI | Final full run (mock-free group): 114 scenarios in the suite, 16 excluded by tag, 98 run: **92 pass, 6 do not**. Mock groups (high/low/all-fail): 7 of 7 pass, re-run after the harness fix. Seeded-data cases `HIST-03`, `HIST-05`, `MON-08`, `MON-11` pass (back-dated data written to the emulator). |
 | L5 Sheets | **Not run** (manual, see §5). |
 
 L4 not passing in the final run: `HIST-08` (`BUG-023`), `HIST-11`, `HIST-17`, `MON-10` (all `BUG-020`),
