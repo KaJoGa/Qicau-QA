@@ -14,7 +14,7 @@ MAN-13 (no native validation), MAN-19 (limits + counters), MON-01 (month/year in
 (bounding-box check), PWA-11, SYNC-15/19/20 (in-app dialogs only).
 
 Result of the full run against local dev + emulator (`@smoke or @regression`, mock-free group, 95 scenarios):
-**87 pass, 8 not passing** (first run). Final full re-run after the harness fix and the seeded cases (98 scenarios run, 16 excluded by tag): **92 pass, 6 not passing** (HIST-08, HIST-11, HIST-17, MON-10, PWA-11 on dev, VOICE-06); mock groups (high/low/all-fail): 7 of 7 pass (earlier run).
+**87 pass, 8 not passing** (first run). Final full re-run after the harness fix and the seeded cases (98 scenarios run, 16 excluded by tag): **92 pass, 6 not passing** (HIST-08, HIST-11, HIST-17, MON-10, PWA-11 on dev, VOICE-06); mock groups (high/low/all-fail): 7 of 7 pass, re-run after the harness fix on 2026-10-04.
 
 | Spec ID | Result | Note |
 |---|---|---|
