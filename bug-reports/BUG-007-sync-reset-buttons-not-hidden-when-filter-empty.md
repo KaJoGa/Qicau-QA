@@ -7,6 +7,7 @@
 | **Severity** | Low |
 | **Found in** | local dev + Firebase emulator (`http://localhost:3000/`) |
 | **Found during** | L4 UI automation run, 2026-09-29 |
+| **Status** | Closed - not a defect (spec changed, 2026-10-04). `HIST-02` now says Sync ke Sheets / Reset Ekspor always stay visible, which is what the app did. The test expectation was outdated, not the app. |
 
 ## Summary
 When a Riwayat filter narrows the list down to zero matching transactions, the empty-state

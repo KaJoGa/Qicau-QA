@@ -7,6 +7,7 @@
 | **Severity** | Low (proposed — needs a deliberately absurd amount, but it breaks the stated limit and flows into the totals) |
 | **Found in** | Production — https://qicau.kajoga.workers.dev/ |
 | **Found during** | Exploratory session CH-01, 2026-10-03 |
+| **Status** | **Fixed** - Fixed (retest 2026-10-04, API-11): over-limit amount rejected with a friendly 500 on parse-text and parse-audio; 999999999 still accepted. |
 
 ## Summary
 A transaction with a price of 1.999.999.999 (above the 999.999.999 maximum) was accepted and saved

@@ -7,6 +7,7 @@
 | **Severity** | Medium (proposed — feature impaired, workaround exists: hard refresh; but it undermines the documented reason for `no-store`, which is making new releases take effect immediately) |
 | **Found in** | Production — https://qicau.kajoga.workers.dev/, 2026-09-27 |
 | **Found during** | L1 API contract (Postman/Newman), automated |
+| **Status** | **Fixed** - Fixed on production (retest 2026-10-04): HTML no-store on all routes, /assets immutable. Local Vite dev still no-cache - expected, not a defect per the updated PWA-11. |
 
 ## Summary
 The SPA fallback route returns `Cache-Control: public, max-age=0, must-revalidate` instead of

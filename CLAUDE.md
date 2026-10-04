@@ -76,7 +76,7 @@ Blackbox test cases exist for every spec ID (`test-cases/`, greenlit 2026-09-28)
 **First test cycle complete: 177 of 180 spec IDs executed (98%).** The summary report is
 `reports/2026-09-29-cycle-1-summary.md`.
 
-**19 bugs filed** (`bug-reports/`), all in Jira (`BUG-001`..`BUG-019` → `QAP-17`..`QAP-35`) with
+**19 bugs filed in cycle 1** (`bug-reports/`), all in Jira (`BUG-001`..`BUG-019` → `QAP-17`..`QAP-35`) with
 priorities set (`BUG-002` is fixed and closed). Real app bugs found: `BUG-001`/`BUG-002` (L1),
 `BUG-003`/`BUG-004` (L2), `BUG-005`/`BUG-006`/`BUG-007` (L4), `BUG-008`/`BUG-009` (L5, manual),
 `BUG-010`..`BUG-019` (manual use and exploratory sessions — offline-banner overlap,
@@ -85,6 +85,6 @@ popup is blocked, missing install-success toast, wrong page-indicator total, unl
 length in the direct form, AI input accepting a price above the maximum, formula injection in the
 Sheets export, iOS install guide wording). `BUG-001` was re-confirmed at L4 on local dev too.
 
-Next (Jira Sprint 2): triage of the open Medium bugs, fixes and retests, and testing new features.
+Jira Sprint 2 was bug fixing only (done by the app author). **Sprint 3 (2026-10-04)** retested the fixes and covered the Part 2/3 spec changes (`test/UPDATE_NOTES_PART2.md`): L1 `API-01..13` pass, L3 34/34 rules tests pass (`SEC-12..15`), L4 final run 92 of 98 pass (the rest are `BUG-020`, `BUG-023`, and two known/dev-only items). Four more bugs are drafted (`BUG-020..023`, not yet in Jira); 23 stubs in total. Summary: `reports/2026-10-04-cycle-3-summary.md`. Still manual and not run: L5 Sheets cases `SYNC-16/21..28`, `PWA-05/06/08/12`, the Android smoke pass, exploratory `CH-06` (`test-cases/sprint3-manual-run-guide.md`).
 Not done in cycle 1: formal P1 scoring, full iOS coverage (one manual check on a borrowed iPhone
 only), and three spec IDs that cannot be executed (see the report).

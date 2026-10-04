@@ -7,6 +7,7 @@
 | **Severity** | Trivial / cosmetic (proposed — the empty file is the same `Qicau_Export_<year>` file the next sync reuses and populates, so no duplicates and no data loss; could rise if the export-marking check below shows transactions wrongly marked as exported) |
 | **Found in** | Production — https://qicau.kajoga.workers.dev/, my own account |
 | **Found during** | L5 manual Sheets-sync testing, 2026-09-30 |
+| **Status** | Closed - deferred by the app author, 2026-10-04 (trivial impact: the next sync reuses the empty file). Not retested. |
 
 ## Summary
 Turning off internet partway through a sync does correctly show an error toast and cancel the

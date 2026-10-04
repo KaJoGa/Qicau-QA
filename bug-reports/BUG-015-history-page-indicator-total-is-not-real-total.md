@@ -7,6 +7,7 @@
 | **Severity** | Low (proposed — pagination itself works; only the indicator text is misleading) |
 | **Found in** | Production — https://qicau.kajoga.workers.dev/ |
 | **Found during** | Exploratory session CH-05, 2026-10-03 |
+| **Status** | **Fixed** for "Semua Kategori" (L4 local dev, 2026-10-04: fixed total 1/3..3/3). With a category filter the app shows an exact total where the spec says `n+` - see `BUG-023`. |
 
 ## Summary
 The Riwayat page indicator should read `halaman / total`, but the "total" part only ever shows one

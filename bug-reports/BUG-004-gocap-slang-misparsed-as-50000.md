@@ -7,6 +7,7 @@
 | **Severity** | Low |
 | **Found in** | production (https://qicau.kajoga.workers.dev/) |
 | **Found during** | L2 parse-quality run, 2026-09-28 |
+| **Status** | **Fixed** - retest 2026-10-04 on production: "Bayar parkir gocap" returns harga 50 (Transport, high), 2 of 2 runs. |
 
 ## Summary
 The money-slang term "gocap" is parsed as `harga: 50000` instead of `50`. This is a genuine

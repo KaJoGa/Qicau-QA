@@ -7,6 +7,7 @@
 | **Severity** | Low (proposed — same class as `BUG-005`: no data loss, save is correctly rejected, but a raw/technical message leaks through where the spec requires a friendly one) |
 | **Found in** | Production — https://qicau.kajoga.workers.dev/ |
 | **Found during** | Manual exploration, 2026-09-30 |
+| **Status** | **Fixed** - Fixed (retest 2026-10-04, API-08): friendly Indonesian message, raw Google text no longer reaches the client (text and audio). |
 
 ## Summary
 When every Gemini model in the fallback chain fails, the app shows a raw, partly-English API

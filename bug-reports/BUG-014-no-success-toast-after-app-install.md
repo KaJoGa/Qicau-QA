@@ -7,6 +7,7 @@
 | **Severity** | Low (proposed — install works; only the in-app confirmation is missing) |
 | **Found in** | Production — https://qicau.kajoga.workers.dev/, desktop Chromium (Windows) |
 | **Found during** | Exploratory session CH-04, 2026-10-03 |
+| **Status** | Closed - accepted by the app author, 2026-10-04. `PWA-06` now says the install confirmation comes from the browser notification and an in-app toast is not guaranteed. |
 
 ## Summary
 After installing the app from the in-app install button, the success toast the spec calls for does

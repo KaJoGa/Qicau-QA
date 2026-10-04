@@ -7,6 +7,7 @@
 | **Severity** | Low |
 | **Found in** | local dev + Firebase emulator (`http://localhost:3000/`) |
 | **Found during** | L4 UI automation run, 2026-09-29 |
+| **Status** | **Fixed** (local dev) - MAN-13 retest passed at L4 (local dev), 2026-10-04. Production retest pending (see `test-cases/sprint3-manual-run-guide.md`). |
 
 ## Summary
 Trying to save a transaction via the "Formulir Langsung" (direct form) with the price field left

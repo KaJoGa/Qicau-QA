@@ -7,6 +7,7 @@
 | **Severity** | Medium |
 | **Found in** | production (https://qicau.kajoga.workers.dev/) |
 | **Found during** | L2 parse-quality run, 2026-09-28 |
+| **Status** | **Fixed** - Fixed (retest 2026-10-04, API-13): raw_transcript equals the input exactly on local dev and production, including no-transaction input. |
 
 ## Summary
 For input with no transaction signal (a greeting), `raw_transcript` in the parsed result is not
