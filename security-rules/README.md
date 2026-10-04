@@ -5,7 +5,7 @@
 enforced for client-SDK/REST traffic — the Java Admin SDK bypasses them entirely, so a Java
 approach can't actually test them.
 
-Written **blind from `test/Qicau.md` §10** (`SEC-01`..`SEC-12`, cross-linked to `AUTH-07`) — this
+Written **blind from `test/Qicau.md` §10** (`SEC-01`..`SEC-15`, cross-linked to `AUTH-07`) — this
 test file never reads `firestore.rules` itself. It just connects to whatever ruleset the running
 emulator already has loaded (from the app repo's own `firebase.json` config), the same way a real
 client app would, and observes allow/deny behavior.
@@ -14,6 +14,7 @@ Collection and field names (not given in `Qicau.md`'s conceptual description of 
 provided directly by the app author rather than read from source:
 - `transactions`: `confidence, created_at, detail, harga, is_exported, kategori, payment_method, platform, raw_transcript, user_id`
 - `users`: `displayName, email, last_login, photoURL`
+- `daily_summaries` (added Sprint 3): doc id `{uid}_{YYYYMMDD}`; fields `user_id, day, total, by_category` (map of category name to amount)
 - `low_confidence_logs`: `user_id, attempted_at, source, input_text, raw_transcript, gemini_output`
   (this collection has never actually been triggered in production — the app author confirmed it's fine
   to seed dummy documents directly via the emulator for rules validation, since that only
@@ -41,4 +42,7 @@ See `test-cases/traceability.csv` for the per-spec-ID breakdown. **L3 is complet
 | SEC-08 | Update own low-confidence log — denied (append-only) |
 | SEC-09 | Create-on-behalf-of/read/delete another user's low-confidence log — denied |
 | SEC-10, SEC-11, AUTH-07 | Own profile create/update/read allowed; another user's profile read/write denied |
-| SEC-12 | Undefined collection — denied |
+| SEC-12 | Own daily summary: create / get / update / date-range list with `user_id` filter allowed; list without the filter rejected |
+| SEC-13 | Daily summary delete — denied even for the owner |
+| SEC-14 | Another user's daily summary create / read / update — denied |
+| SEC-15 | Undefined collection — denied |

@@ -1,4 +1,4 @@
-// L3 — Firestore security rules, tested blind from test/Qicau.md §10 (SEC-01..12, AUTH-07)
+// L3 — Firestore security rules, tested blind from test/Qicau.md §10 (SEC-01..15, AUTH-07)
 // against the REAL firestore.rules already loaded by the running emulator (npm run emulators
 // in the app repo). This test client never reads the rules file itself — it only connects to
 // whatever ruleset the emulator already has loaded, and observes allow/deny behavior.
@@ -212,8 +212,89 @@ test("SEC-10 / AUTH-07 — user cannot write another user's profile", async () =
   await assertFails(db.collection("users").doc(BOB).set(sampleUserProfile()));
 });
 
-// SEC-12: any collection not defined in the rules -> denied entirely
-test("SEC-12 — an undefined collection is denied even for an authenticated user", async () => {
+// SEC-12..14: daily_summaries/{uid}_{YYYYMMDD} {user_id, day, total, by_category} (collection and fields
+// provided by the app author, not read from source).
+function sampleDailySummary(uid = ALICE, day = "20261004", overrides = {}) {
+  return { user_id: uid, day, total: 15000, by_category: { Makan: 15000 }, ...overrides };
+}
+const dsId = (uid, day = "20261004") => `${uid}_${day}`;
+const seedSummary = (uid = ALICE, day = "20261004") =>
+  seed((db) => db.collection("daily_summaries").doc(dsId(uid, day)).set(sampleDailySummary(uid, day)));
+
+// SEC-12: own daily summary -> create / get / list (user_id filter + documentId range) / update allowed
+test("SEC-12 — owner can create their own daily summary", async () => {
+  const db = testEnv.authenticatedContext(ALICE).firestore();
+  await assertSucceeds(db.collection("daily_summaries").doc(dsId(ALICE)).set(sampleDailySummary()));
+});
+
+test("SEC-12 — owner can read their own daily summary (get)", async () => {
+  await seedSummary();
+  const db = testEnv.authenticatedContext(ALICE).firestore();
+  await assertSucceeds(db.collection("daily_summaries").doc(dsId(ALICE)).get());
+});
+
+test("SEC-12 — owner can update their own daily summary", async () => {
+  await seedSummary();
+  const db = testEnv.authenticatedContext(ALICE).firestore();
+  await assertSucceeds(db.collection("daily_summaries").doc(dsId(ALICE)).update({ total: 40000, by_category: { Makan: 40000 } }));
+});
+
+test("SEC-12 — date-range query WITH a user_id filter (as the Ringkasan tab does) is allowed", async () => {
+  await seedSummary(ALICE, "20261003");
+  await seedSummary(ALICE, "20261004");
+  await seedSummary(BOB, "20261004");
+  const db = testEnv.authenticatedContext(ALICE).firestore();
+  const q = db.collection("daily_summaries")
+    .where("user_id", "==", ALICE)
+    .where("__name__", ">=", dsId(ALICE, "20261001"))
+    .where("__name__", "<=", dsId(ALICE, "20261031"));
+  const snap = await assertSucceeds(q.get());
+  assert.strictEqual(snap.size, 2);
+});
+
+test("SEC-12 — date-range query WITHOUT the user_id filter is rejected as a whole", async () => {
+  await seedSummary(ALICE, "20261004");
+  const db = testEnv.authenticatedContext(ALICE).firestore();
+  const q = db.collection("daily_summaries")
+    .where("__name__", ">=", dsId(ALICE, "20261001"))
+    .where("__name__", "<=", dsId(ALICE, "20261031"));
+  await assertFails(q.get());
+});
+
+// SEC-13: no delete rule at all -> denied even for the owner
+test("SEC-13 — owner cannot delete their own daily summary", async () => {
+  await seedSummary();
+  const db = testEnv.authenticatedContext(ALICE).firestore();
+  await assertFails(db.collection("daily_summaries").doc(dsId(ALICE)).delete());
+});
+
+// SEC-14: another user's daily summary -> create / read / update denied
+test("SEC-14 — cannot create a daily summary owned by another user", async () => {
+  const db = testEnv.authenticatedContext(ALICE).firestore();
+  await assertFails(db.collection("daily_summaries").doc(dsId(BOB)).set(sampleDailySummary(BOB)));
+  await assertFails(db.collection("daily_summaries").doc(dsId(ALICE, "20261005")).set(sampleDailySummary(BOB, "20261005")));
+});
+
+test("SEC-14 — cannot read another user's daily summary", async () => {
+  await seedSummary(BOB);
+  const db = testEnv.authenticatedContext(ALICE).firestore();
+  await assertFails(db.collection("daily_summaries").doc(dsId(BOB)).get());
+});
+
+test("SEC-14 — cannot update another user's daily summary", async () => {
+  await seedSummary(BOB);
+  const db = testEnv.authenticatedContext(ALICE).firestore();
+  await assertFails(db.collection("daily_summaries").doc(dsId(BOB)).update({ total: 1 }));
+});
+
+test("SEC-14 — unauthenticated access to a daily summary is denied", async () => {
+  await seedSummary();
+  const db = testEnv.unauthenticatedContext().firestore();
+  await assertFails(db.collection("daily_summaries").doc(dsId(ALICE)).get());
+});
+
+// SEC-15: any collection not defined in the rules -> denied entirely
+test("SEC-15 — an undefined collection is denied even for an authenticated user", async () => {
   const db = testEnv.authenticatedContext(ALICE).firestore();
   await assertFails(db.collection("some_undefined_collection").doc("x").set({ foo: "bar" }));
 });
