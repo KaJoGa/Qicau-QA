@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Jira issue** | _to be filed in Jira_ (next numbers likely QAP-36...) |
+| **Jira issue** | _not filed yet - after filing, paste the QAP link here and in `INDEX.md`_ |
 | **Spec ID(s)** | `MON-04`, `MON-06`, `MON-10`, `HIST-11`, `HIST-17` |
 | **Severity** | Medium (proposed — wrong figures shown, no data loss) |
 | **Found in** | local dev + Firebase emulator (`http://localhost:3000/`) |

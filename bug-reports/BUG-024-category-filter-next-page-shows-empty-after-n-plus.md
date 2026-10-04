@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Jira issue** | _to be filed in Jira_ |
+| **Jira issue** | _not filed yet - after filing, paste the QAP link here and in `INDEX.md`_ |
 | **Spec ID(s)** | `HIST-08` |
 | **Severity** | Medium (proposed — older transactions of that category cannot be reached by paging; data is intact) |
 | **Found in** | local dev + Firebase emulator (`http://localhost:3000/`) |

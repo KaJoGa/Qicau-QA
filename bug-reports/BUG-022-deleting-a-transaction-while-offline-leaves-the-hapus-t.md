@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Jira issue** | _to be filed in Jira_ (next numbers likely QAP-36...) |
+| **Jira issue** | _not filed yet - after filing, paste the QAP link here and in `INDEX.md`_ |
 | **Spec ID(s)** | `HIST-20` (new 2026-10-04: offline delete closes the dialog at once), `HIST-11`, `PWA-04` |
 | **Severity** | Low (proposed — recovers when back online) |
 | **Found in** | local dev + Firebase emulator (`http://localhost:3000/`) |

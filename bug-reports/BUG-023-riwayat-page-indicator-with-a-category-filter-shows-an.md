@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Jira issue** | _to be filed in Jira_ (next numbers likely QAP-36...) |
+| **Jira issue** | _none - withdrawn, do not file (see `BUG-024`)_ |
 | **Spec ID(s)** | `HIST-08` |
 | **Severity** | Low (proposed — may be an outdated spec rather than an app defect) |
 | **Found in** | local dev + Firebase emulator (`http://localhost:3000/`) |
