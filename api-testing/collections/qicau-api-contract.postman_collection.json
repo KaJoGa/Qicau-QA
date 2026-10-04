@@ -5,7 +5,10 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:3000" }
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    }
   ],
   "item": [
     {
@@ -30,8 +33,21 @@
           ],
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{}", "options": { "raw": { "language": "json" } } },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": "{{baseUrl}}/api/parse-text"
           }
         },
@@ -50,8 +66,21 @@
           ],
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{\"textInput\": \"\"}", "options": { "raw": { "language": "json" } } },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"textInput\": \"\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": "{{baseUrl}}/api/parse-text"
           }
         },
@@ -74,8 +103,21 @@
           ],
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{}", "options": { "raw": { "language": "json" } } },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": "{{baseUrl}}/api/parse-audio"
           }
         }
@@ -109,8 +151,21 @@
           ],
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{\"textInput\": \"   \"}", "options": { "raw": { "language": "json" } } },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"textInput\": \"   \"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": "{{baseUrl}}/api/parse-text"
           }
         }
@@ -161,11 +216,20 @@
           ],
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\"textInput\": \"Beli kopi goceng di Starbucks pakai gopay\"}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": "{{baseUrl}}/api/parse-text"
           }
@@ -213,11 +277,20 @@
           ],
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\"audioBase64\": \"{{audioBase64}}\"}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": "{{baseUrl}}/api/parse-audio"
           }
@@ -264,11 +337,20 @@
           ],
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\"audioBase64\": \"{{bigAudioBase64}}\", \"mimeType\": \"audio/webm\"}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": "{{baseUrl}}/api/parse-audio"
           }
@@ -297,11 +379,20 @@
           ],
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\"textInput\": \"Beli kopi goceng di Starbucks pakai gopay\"}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": "{{baseUrl}}/api/parse-text"
           }
@@ -326,11 +417,20 @@
           ],
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\"textInput\": \"Beli kopi goceng di Starbucks pakai gopay\"}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": "{{baseUrl}}/api/parse-text"
           }
@@ -356,11 +456,20 @@
           ],
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\"textInput\": \"Beli kopi goceng\"}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": "{{baseUrl}}/api/parse-text"
           }
@@ -385,6 +494,655 @@
                   "pm.test('Cache-Control is no-store', () => {",
                   "  pm.expect(pm.response.headers.get('Cache-Control') || '').to.include('no-store');",
                   "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/this-route-does-not-exist"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mock scenario: over-limit-amount (API-11)",
+      "description": "",
+      "item": [
+        {
+          "name": "API-11 - parse-text amount > 999.999.999 -> friendly 500 (MOCK_SCENARIO=over-limit-amount)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 500', () => pm.response.to.have.status(500));",
+                  "const body = pm.response.json();",
+                  "pm.test('error is a non-empty string', () => { pm.expect(body.error).to.be.a('string'); pm.expect(body.error.length).to.be.greaterThan(0); });",
+                  "pm.test('no raw Google text / raw status code leaked (API-08)', () => {",
+                  "  const e = body.error.toLowerCase();",
+                  "  pm.expect(e).to.not.include('user location'); pm.expect(e).to.not.include('not supported for the api');",
+                  "  pm.expect(e).to.not.include('failed_precondition'); pm.expect(e).to.not.include('resource_exhausted');",
+                  "  pm.expect(e).to.not.include('generativelanguage'); pm.expect(e).to.not.match(/(^|\\s)[1-5][0-9]{2}\\s/);",
+                  "});",
+                  "pm.test('message mentions the Rp 999.999.999 limit', () => pm.expect(body.error).to.match(/999\\.999\\.999/));",
+                  "pm.test('no result returned', () => pm.expect(body).to.not.have.property('result'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/parse-text",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"textInput\": \"Beli kopi goceng di Starbucks pakai gopay\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "API-11 - parse-audio amount > 999.999.999 -> friendly 500 (MOCK_SCENARIO=over-limit-amount)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 500', () => pm.response.to.have.status(500));",
+                  "const body = pm.response.json();",
+                  "pm.test('error is a non-empty string', () => { pm.expect(body.error).to.be.a('string'); pm.expect(body.error.length).to.be.greaterThan(0); });",
+                  "pm.test('no raw Google text / raw status code leaked (API-08)', () => {",
+                  "  const e = body.error.toLowerCase();",
+                  "  pm.expect(e).to.not.include('user location'); pm.expect(e).to.not.include('not supported for the api');",
+                  "  pm.expect(e).to.not.include('failed_precondition'); pm.expect(e).to.not.include('resource_exhausted');",
+                  "  pm.expect(e).to.not.include('generativelanguage'); pm.expect(e).to.not.match(/(^|\\s)[1-5][0-9]{2}\\s/);",
+                  "});",
+                  "pm.test('message mentions the Rp 999.999.999 limit', () => pm.expect(body.error).to.match(/999\\.999\\.999/));",
+                  "pm.test('no result returned', () => pm.expect(body).to.not.have.property('result'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/parse-audio",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"audioBase64\": \"UklGRg==\", \"mimeType\": \"audio/webm\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mock scenario: max-amount (API-11 boundary)",
+      "description": "",
+      "item": [
+        {
+          "name": "API-11 - amount exactly 999.999.999 is still accepted (MOCK_SCENARIO=max-amount)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "const r = () => JSON.parse(pm.response.json().result);",
+                  "pm.test('harga === 999999999', () => pm.expect(r().harga).to.eql(999999999));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/parse-text",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"textInput\": \"Beli kopi goceng di Starbucks pakai gopay\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mock scenario: out-of-list-enums (API-12)",
+      "description": "",
+      "item": [
+        {
+          "name": "API-12 - out-of-list kategori/payment_method normalised, harga rounded (MOCK_SCENARIO=out-of-list-enums)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "const r = () => JSON.parse(pm.response.json().result);",
+                  "pm.test('kategori -> Lainnya', () => pm.expect(r().kategori).to.eql('Lainnya'));",
+                  "pm.test('payment_method -> QRIS', () => pm.expect(r().payment_method).to.eql('QRIS'));",
+                  "pm.test('harga 12345.6 rounded to integer (12346)', () => { const h=r().harga; pm.expect(Number.isInteger(h)).to.be.true; pm.expect(h).to.eql(12346); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/parse-text",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"textInput\": \"Beli kopi goceng di Starbucks pakai gopay\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "API-12 - same normalisation on parse-audio (MOCK_SCENARIO=out-of-list-enums)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "const r = () => JSON.parse(pm.response.json().result);",
+                  "pm.test('kategori -> Lainnya', () => pm.expect(r().kategori).to.eql('Lainnya'));",
+                  "pm.test('payment_method -> QRIS', () => pm.expect(r().payment_method).to.eql('QRIS'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/parse-audio",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"audioBase64\": \"UklGRg==\", \"mimeType\": \"audio/webm\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mock scenario: long-fields (API-12)",
+      "description": "",
+      "item": [
+        {
+          "name": "API-12 - platform cut to 50 chars, detail to 200 (MOCK_SCENARIO=long-fields)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "const r = () => JSON.parse(pm.response.json().result);",
+                  "pm.test('platform length === 50', () => pm.expect(r().platform.length).to.eql(50));",
+                  "pm.test('detail length === 200', () => pm.expect(r().detail.length).to.eql(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/parse-text",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"textInput\": \"Beli kopi goceng di Starbucks pakai gopay\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mock scenario: negative-harga (API-12)",
+      "description": "",
+      "item": [
+        {
+          "name": "API-12 - negative harga -> 0 (MOCK_SCENARIO=negative-harga)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "const r = () => JSON.parse(pm.response.json().result);",
+                  "pm.test('harga === 0', () => pm.expect(r().harga).to.eql(0));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/parse-text",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"textInput\": \"Beli kopi goceng di Starbucks pakai gopay\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mock scenario: non-number-harga (API-12)",
+      "description": "",
+      "item": [
+        {
+          "name": "API-12 - non-number harga -> 0 (MOCK_SCENARIO=non-number-harga)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "const r = () => JSON.parse(pm.response.json().result);",
+                  "pm.test('harga === 0', () => pm.expect(r().harga).to.eql(0));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/parse-text",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"textInput\": \"Beli kopi goceng di Starbucks pakai gopay\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mock scenario: invalid-json (API-12)",
+      "description": "",
+      "item": [
+        {
+          "name": "API-12 - AI returns invalid JSON -> friendly 500 (MOCK_SCENARIO=invalid-json)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 500', () => pm.response.to.have.status(500));",
+                  "const body = pm.response.json();",
+                  "pm.test('error is a non-empty string', () => { pm.expect(body.error).to.be.a('string'); pm.expect(body.error.length).to.be.greaterThan(0); });",
+                  "pm.test('no raw Google text / raw status code leaked (API-08)', () => {",
+                  "  const e = body.error.toLowerCase();",
+                  "  pm.expect(e).to.not.include('user location'); pm.expect(e).to.not.include('not supported for the api');",
+                  "  pm.expect(e).to.not.include('failed_precondition'); pm.expect(e).to.not.include('resource_exhausted');",
+                  "  pm.expect(e).to.not.include('generativelanguage'); pm.expect(e).to.not.match(/(^|\\s)[1-5][0-9]{2}\\s/);",
+                  "});",
+                  "pm.test('message is Indonesian (contains common Indonesian words)', () => { pm.expect(pm.response.json().error.toLowerCase()).to.match(/(gagal|tidak|coba|silakan|kembali|sedang|ulang|mohon)/); });",
+                  "pm.test('no result returned', () => pm.expect(body).to.not.have.property('result'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/parse-text",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"textInput\": \"Beli kopi goceng di Starbucks pakai gopay\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mock scenario: google-raw-error (API-08 strengthened)",
+      "description": "",
+      "item": [
+        {
+          "name": "API-08 - Google raw error (location not supported) is NOT leaked; Indonesian message (MOCK_SCENARIO=google-raw-error)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 500', () => pm.response.to.have.status(500));",
+                  "const body = pm.response.json();",
+                  "pm.test('error is a non-empty string', () => { pm.expect(body.error).to.be.a('string'); pm.expect(body.error.length).to.be.greaterThan(0); });",
+                  "pm.test('no raw Google text / raw status code leaked (API-08)', () => {",
+                  "  const e = body.error.toLowerCase();",
+                  "  pm.expect(e).to.not.include('user location'); pm.expect(e).to.not.include('not supported for the api');",
+                  "  pm.expect(e).to.not.include('failed_precondition'); pm.expect(e).to.not.include('resource_exhausted');",
+                  "  pm.expect(e).to.not.include('generativelanguage'); pm.expect(e).to.not.match(/(^|\\s)[1-5][0-9]{2}\\s/);",
+                  "});",
+                  "pm.test('message is Indonesian (contains common Indonesian words)', () => { pm.expect(pm.response.json().error.toLowerCase()).to.match(/(gagal|tidak|coba|silakan|kembali|sedang|ulang|mohon)/); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/parse-text",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"textInput\": \"Beli kopi goceng di Starbucks pakai gopay\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "API-08 - same on parse-audio (MOCK_SCENARIO=google-raw-error)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 500', () => pm.response.to.have.status(500));",
+                  "const body = pm.response.json();",
+                  "pm.test('error is a non-empty string', () => { pm.expect(body.error).to.be.a('string'); pm.expect(body.error.length).to.be.greaterThan(0); });",
+                  "pm.test('no raw Google text / raw status code leaked (API-08)', () => {",
+                  "  const e = body.error.toLowerCase();",
+                  "  pm.expect(e).to.not.include('user location'); pm.expect(e).to.not.include('not supported for the api');",
+                  "  pm.expect(e).to.not.include('failed_precondition'); pm.expect(e).to.not.include('resource_exhausted');",
+                  "  pm.expect(e).to.not.include('generativelanguage'); pm.expect(e).to.not.match(/(^|\\s)[1-5][0-9]{2}\\s/);",
+                  "});",
+                  "pm.test('message is Indonesian (contains common Indonesian words)', () => { pm.expect(pm.response.json().error.toLowerCase()).to.match(/(gagal|tidak|coba|silakan|kembali|sedang|ulang|mohon)/); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/parse-audio",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"audioBase64\": \"UklGRg==\", \"mimeType\": \"audio/webm\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Contract - raw_transcript equality - API-13 (parse-text)",
+      "description": "Production: only the first request is allowed by the Sprint 3 brief (budget of AI calls).",
+      "item": [
+        {
+          "name": "API-13 - raw_transcript equals input (transaction text)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "const out = JSON.parse(pm.response.json().result);",
+                  "const input = \"beli kopi 15000 pakai gopay\";",
+                  "pm.test('raw_transcript === exact input text (API-13)', () => pm.expect(out.raw_transcript).to.eql(input));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/parse-text",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"textInput\": \"beli kopi 15000 pakai gopay\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "API-13 - raw_transcript equals input (no transaction in text; local: run with MOCK_SCENARIO=low)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200', () => pm.response.to.have.status(200));",
+                  "const out = JSON.parse(pm.response.json().result);",
+                  "const input = \"halo apa kabar hari ini cerah ya\";",
+                  "pm.test('raw_transcript === exact input text (API-13)', () => pm.expect(out.raw_transcript).to.eql(input));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/parse-text",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"textInput\": \"halo apa kabar hari ini cerah ya\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Non-API routes - API-10 / PWA-11 cache headers (Sprint 3)",
+      "description": "",
+      "item": [
+        {
+          "name": "API-10 - root / HTML has Cache-Control no-store (production/build; BUG-001 retest)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200 (SPA fallback)', () => pm.response.to.have.status(200));",
+                  "pm.test('content-type is HTML', () => pm.expect(pm.response.headers.get('Content-Type')||'').to.include('text/html'));",
+                  "const cc = pm.response.headers.get('Cache-Control')||'';",
+                  "console.log('Cache-Control: ' + cc);",
+                  "pm.test('Cache-Control includes no-store (API-10/PWA-11)', () => pm.expect(cc).to.include('no-store'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/"
+          }
+        },
+        {
+          "name": "API-10 - nested unknown SPA route HTML has no-store (production/build)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200 (SPA fallback)', () => pm.response.to.have.status(200));",
+                  "pm.test('content-type is HTML', () => pm.expect(pm.response.headers.get('Content-Type')||'').to.include('text/html'));",
+                  "const cc = pm.response.headers.get('Cache-Control')||'';",
+                  "console.log('Cache-Control: ' + cc);",
+                  "pm.test('Cache-Control includes no-store (API-10/PWA-11)', () => pm.expect(cc).to.include('no-store'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/riwayat/xyz/abc"
+          }
+        },
+        {
+          "name": "PWA-11 - /assets/* immutable (NOT meaningful on local Vite dev; production/build only)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('index.html references an /assets/ file', () => { pm.expect(pm.response.text()).to.match(/\\/assets\\/[^\"']+\\.(js|css)/); });",
+                  "const m = pm.response.text().match(/\\/assets\\/[^\"']+\\.js/);",
+                  "if (m) { pm.sendRequest(pm.variables.replaceIn('{{baseUrl}}') + m[0], (err, res) => { pm.test('asset Cache-Control is immutable', () => { pm.expect(err).to.be.null; pm.expect(res.headers.get('Cache-Control')||'').to.include('immutable'); }); }); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/"
+          }
+        },
+        {
+          "name": "API-10 - LOCAL VITE DEV ONLY: records current dev-server behaviour (expected: no immutable / no max-age)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is 200 (SPA fallback)', () => pm.response.to.have.status(200));",
+                  "pm.test('content-type is HTML', () => pm.expect(pm.response.headers.get('Content-Type')||'').to.include('text/html'));",
+                  "const cc = pm.response.headers.get('Cache-Control')||'';",
+                  "console.log('Cache-Control: ' + cc);",
+                  "pm.test('[local dev record] Cache-Control is not immutable/max-age>0', () => pm.expect(cc).to.not.match(/immutable|max-age=[1-9]/));"
                 ]
               }
             }

@@ -73,3 +73,11 @@ never touching the `npm run dev` already running on port 3000. See
 | `primary-fail-fallback-success` | First `MOCK_FAIL_COUNT` (default 1) attempts fail, then succeeds | API-07 — fallback chain |
 | `all-fail` | Every attempt fails | API-08 — all models exhausted |
 
+| `google-raw-error` | Every attempt returns HTTP 400 with Google's raw "User location is not supported for the API use." | API-08 (Sprint 3) — raw text must not reach the client |
+| `over-limit-amount` | Succeeds, `harga: 1000000000` | API-11 |
+| `max-amount` | Succeeds, `harga: 999999999` (the limit itself) | API-11 boundary |
+| `out-of-list-enums` | `kategori: "Hiburan"`, `payment_method: "Bitcoin"`, `harga: 12345.6` | API-12 |
+| `long-fields` | `platform` 80 chars, `detail` 300 chars | API-12 |
+| `negative-harga` | `harga: -500` | API-12 |
+| `non-number-harga` | `harga: "abc"` | API-12 |
+| `invalid-json` | Model text is not JSON | API-12 |

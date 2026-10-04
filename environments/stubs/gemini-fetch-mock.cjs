@@ -26,6 +26,19 @@
  *                                   later attempts succeed (tests the fallback chain, API-07).
  *   all-fail                     — every model attempt returns an error (tests API-08).
  *
+ * Sprint 3 scenarios (API-08 / API-11 / API-12):
+ *   over-limit-amount            — harga 1000000000 (> Rp 999.999.999) -> API-11.
+ *   max-amount                   — harga 999999999 (exactly the limit) -> must still be accepted.
+ *   out-of-list-enums            — kategori "Hiburan", payment_method "Bitcoin", harga 12345.6
+ *                                   -> API-12 (-> Lainnya / QRIS / rounded).
+ *   long-fields                  — platform 80 chars, detail 300 chars -> API-12 (cut to 50/200).
+ *   negative-harga               — harga -500 -> API-12 (-> 0).
+ *   non-number-harga             — harga "abc" -> API-12 (-> 0).
+ *   invalid-json                 — model text is not JSON at all -> API-12 (HTTP 500, friendly).
+ *   google-raw-error             — every attempt returns HTTP 400 with Google's raw
+ *                                   "User location is not supported for the API use." text
+ *                                   -> API-08 (raw text must not reach the client).
+ *
  * MOCK_FAIL_COUNT (default 1) — how many leading attempts fail, for
  * "primary-fail-fallback-success".
  */
@@ -52,7 +65,25 @@ function structuredResult({ kategori, platform, harga, detail, payment_method, c
 }
 
 function scenarioPayload() {
+  const base = {
+    kategori: 'Jajan', platform: 'Starbucks', harga: 5000, detail: 'kopi',
+    payment_method: 'GoPay', confidence: 'high', raw_transcript: '(mocked input)',
+  };
   switch (SCENARIO) {
+    case 'over-limit-amount':
+      return structuredResult({ ...base, harga: 1000000000 });
+    case 'max-amount':
+      return structuredResult({ ...base, harga: 999999999 });
+    case 'out-of-list-enums':
+      return structuredResult({ ...base, kategori: 'Hiburan', payment_method: 'Bitcoin', harga: 12345.6 });
+    case 'long-fields':
+      return structuredResult({ ...base, platform: 'P'.repeat(80), detail: 'D'.repeat(300) });
+    case 'negative-harga':
+      return structuredResult({ ...base, harga: -500 });
+    case 'non-number-harga':
+      return structuredResult({ ...base, harga: 'abc' });
+    case 'invalid-json':
+      return 'this is not json {{{ sorry';
     case 'medium-zero':
       return structuredResult({
         kategori: 'Lainnya',
@@ -118,6 +149,17 @@ function errorResponse() {
   });
 }
 
+/** Raw Google-style error (location block) for API-08 leak check. */
+function googleRawErrorResponse() {
+  const body = {
+    error: { code: 400, message: 'User location is not supported for the API use.', status: 'FAILED_PRECONDITION' },
+  };
+  return new Response(JSON.stringify(body), {
+    status: 400,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
 globalThis.fetch = async function mockedFetch(input, init) {
   const url = typeof input === 'string' ? input : input?.url || '';
 
@@ -129,6 +171,10 @@ globalThis.fetch = async function mockedFetch(input, init) {
 
   if (SCENARIO === 'all-fail') {
     return errorResponse();
+  }
+
+  if (SCENARIO === 'google-raw-error') {
+    return googleRawErrorResponse();
   }
 
   if (SCENARIO === 'primary-fail-fallback-success' && attemptCount <= FAIL_COUNT) {

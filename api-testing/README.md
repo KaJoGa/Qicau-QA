@@ -37,6 +37,29 @@ newman run collections/qicau-api-contract.postman_collection.json \
 `test-cases/traceability.csv` has the full per-spec-ID status. **L1 (API contract testing) is
 now fully automated and fully executed — no items pending.**
 
+## Sprint 3 status (2026-10-04)
+Contract collection extended with `API-08` (strengthened), `API-10`/`PWA-11` (cache headers),
+`API-11`, `API-12`, `API-13`. New Gemini-mock scenarios (`over-limit-amount`, `max-amount`,
+`out-of-list-enums`, `long-fields`, `negative-harga`, `non-number-harga`, `invalid-json`,
+`google-raw-error`) are documented in `environments/stubs/README.md`. Each new folder is named
+"Mock scenario: <name> ..." and must be run against a server started with that `MOCK_SCENARIO`
+(port 3001, `--folder "<name>"`).
+
+Results (Newman, local dev on :3001 + mock, one server restart per scenario; production for headers):
+- `API-01..09` regression: pass (each fallback/error request passes in its own scenario).
+- `API-08`: pass - 500 with Indonesian message, raw Google text ("User location is not supported...")
+  only appears in the server log, not in the response (BUG-012 retest: fixed).
+- `API-11`: pass for parse-text and parse-audio; limit value itself (999999999) still accepted (BUG-017 retest: fixed).
+- `API-12`: pass for all six normalisation cases + invalid JSON -> friendly 500.
+- `API-13`: pass locally (mock returns a different transcript, server still returns the exact input,
+  also for MOCK_SCENARIO=low) and on production (2 calls: coffee text, and "halo apa kabar hari ini cerah ya"
+  -> confidence low, raw_transcript equal to input) (BUG-003 retest: fixed).
+- `API-10`/`PWA-11`: production passes (`/`, nested unknown route, unknown route: `no-store`;
+  `/assets/*.js`: `public, max-age=31536000, immutable`) (BUG-001 retest: fixed on production).
+  Local dev (Vite middleware) still sends `Cache-Control: no-cache` for HTML and the `/assets`
+  check is not applicable there: these 3-4 assertions fail on local dev by design, only the
+  request marked "LOCAL VITE DEV ONLY" records that behaviour. Meaningful only on production/build.
+
 ## L2 status (2026-09-28)
 `collections/qicau-parse-quality.postman_collection.json` + `data/parse-quality-sentences.json`
 (28 sentences covering `PARSE-01..10, 20-32, 40-45, 50-57`, written blind from `Qicau.md` §11).
