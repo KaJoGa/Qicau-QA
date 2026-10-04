@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Jira issue** | _not filed yet - after filing, paste the QAP link here and in `INDEX.md`_ |
+| **Jira issue** | https://kalev.atlassian.net/jira/software/projects/QAP/boards/2/backlog?selectedIssue=QAP-56 |
 | **Spec ID(s)** | `HIST-08` |
 | **Severity** | Medium (proposed — older transactions of that category cannot be reached by paging; data is intact) |
 | **Found in** | local dev + Firebase emulator (`http://localhost:3000/`) |

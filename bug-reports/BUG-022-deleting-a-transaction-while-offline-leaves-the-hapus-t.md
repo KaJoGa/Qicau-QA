@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Jira issue** | _not filed yet - after filing, paste the QAP link here and in `INDEX.md`_ |
+| **Jira issue** | https://kalev.atlassian.net/jira/software/projects/QAP/boards/2/backlog?selectedIssue=QAP-55 |
 | **Spec ID(s)** | `HIST-20` (new 2026-10-04: offline delete closes the dialog at once), `HIST-11`, `PWA-04` |
 | **Severity** | Low (proposed — recovers when back online) |
 | **Found in** | local dev + Firebase emulator (`http://localhost:3000/`) |

@@ -13,4 +13,4 @@ Each stub has a spec ID, a proposed severity, reproduction steps, expected vs. a
 and the link to its Jira issue.
 
 ## Linking a stub to Jira
-Stubs for bugs that are not filed yet say "not filed yet". After filing the issue in Jira, paste its link (`https://kalev.atlassian.net/browse/QAP-NN`) into the stub's **Jira issue** row and into the `INDEX.md` row, then change the status there. For an old bug that was fixed and retested, do not create a new Jira issue: comment on the existing one (reopen it only if the retest fails). Still not filed (2026-10-04): `BUG-020`, `BUG-021` (confirm by hand first), `BUG-022` (already fixed, comment only), `BUG-024`.
+Stubs for bugs that are not filed yet say "not filed yet". After filing the issue in Jira, paste its link (`https://kalev.atlassian.net/browse/QAP-NN`) into the stub's **Jira issue** row and into the `INDEX.md` row, then change the status there. For an old bug that was fixed and retested, do not create a new Jira issue: comment on the existing one (reopen it only if the retest fails). All of `BUG-020`, `021`, `022`, `024` were filed on 2026-10-05 as `QAP-53`, `QAP-54`, `QAP-55`, `QAP-56`.
