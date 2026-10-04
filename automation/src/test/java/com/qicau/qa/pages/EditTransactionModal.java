@@ -123,6 +123,16 @@ public class EditTransactionModal {
   }
 
   public void save() {
+    if (com.qicau.qa.support.Config.android()) {
+      // Real phone: the first tap after typing only dismisses the soft keyboard (see ManualInputModal.saveDirectForm).
+      ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+          "if (document.activeElement) { document.activeElement.blur(); }");
+      try {
+        Thread.sleep(700);
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+      }
+    }
     wait.until(ExpectedConditions.elementToBeClickable(SAVE_BUTTON)).click();
   }
 

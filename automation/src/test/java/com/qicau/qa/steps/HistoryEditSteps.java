@@ -50,7 +50,7 @@ public class HistoryEditSteps {
     modal.setPrice("20000");
     modal.setNote(FIXTURE_NOTE);
     modal.saveDirectForm();
-    new WebDriverWait(d, Duration.ofSeconds(5)).until((x) -> !new ManualInputModal(x).isFormulirLangsungModeActive());
+    new WebDriverWait(d, Duration.ofSeconds(15)).until((x) -> !new ManualInputModal(x).isFormulirLangsungModeActive()); // 15s: saving to a real phone over USB can exceed 5s
     dismissSaveToast(d);
   }
 

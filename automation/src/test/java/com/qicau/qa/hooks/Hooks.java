@@ -63,6 +63,13 @@ public class Hooks {
     if (scenario.isFailed() && driver instanceof TakesScreenshot) {
       byte[] png = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
       scenario.attach(png, "image/png", scenario.getName());
+      try {
+        java.nio.file.Path dir = java.nio.file.Path.of("target", "fail-shots");
+        java.nio.file.Files.createDirectories(dir);
+        java.nio.file.Files.write(dir.resolve(scenario.getName().replaceAll("[^A-Za-z0-9]+", "-") + ".png"), png);
+      } catch (java.io.IOException ignored) {
+        // screenshot file is a debugging aid only
+      }
     }
     driver.quit();
     DriverContext.clear();

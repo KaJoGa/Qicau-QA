@@ -35,6 +35,22 @@ public final class Config {
     return get("base.url");
   }
 
+  /** True when scenarios should run in Chrome on a real Android phone through Appium
+   * ({@code -Dbrowser.target=android}). */
+  public static boolean android() {
+    return "android".equalsIgnoreCase(get("browser.target"));
+  }
+
+  public static String appiumUrl() {
+    String v = get("appium.url");
+    return v != null ? v : "http://127.0.0.1:4723";
+  }
+
+  /** adb serial of the phone; optional (Appium picks the only connected device if unset). */
+  public static String androidUdid() {
+    return get("android.udid");
+  }
+
   public static boolean headless() {
     return Boolean.parseBoolean(get("browser.headless"));
   }

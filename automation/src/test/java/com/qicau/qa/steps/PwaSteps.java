@@ -49,15 +49,22 @@ public class PwaSteps {
     java.util.List<String> problems = new java.util.ArrayList<>();
     try {
       // desktop-ish width (the suite default) and a mobile width, both on Riwayat where Reset/Sync/title live
-      for (int[] size : new int[][] {{800, 1000}, {1280, 900}, {390, 844}}) {
-        driver().manage().window().setSize(new org.openqa.selenium.Dimension(size[0], size[1]));
+      int[][] sizes = com.qicau.qa.support.Config.android()
+          ? new int[][] {{0, 0}} // real phone: keep the device's own viewport
+          : new int[][] {{800, 1000}, {1280, 900}, {390, 844}};
+      for (int[] size : sizes) {
+        if (!com.qicau.qa.support.Config.android()) {
+          driver().manage().window().setSize(new org.openqa.selenium.Dimension(size[0], size[1]));
+        }
         Thread.sleep(500);
         problems.addAll(bannerOverlapProblems(size[0] + "x" + size[1]));
       }
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
     } finally {
-      driver().manage().window().setSize(new org.openqa.selenium.Dimension(800, 1000));
+      if (!com.qicau.qa.support.Config.android()) {
+        driver().manage().window().setSize(new org.openqa.selenium.Dimension(800, 1000));
+      }
     }
     Assertions.assertTrue(problems.isEmpty(), "Offline banner layout problems: " + problems);
   }

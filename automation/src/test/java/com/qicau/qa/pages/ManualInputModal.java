@@ -189,6 +189,17 @@ public class ManualInputModal {
   }
 
   public void saveDirectForm() {
+    if (com.qicau.qa.support.Config.android()) {
+      // On a real phone the first tap after typing only dismisses the soft keyboard and the layout shifts,
+      // so the tap misses the button. Blur the focused input first, then give the layout a moment.
+      ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+          "if (document.activeElement) { document.activeElement.blur(); }");
+      try {
+        Thread.sleep(700);
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+      }
+    }
     wait.until(ExpectedConditions.elementToBeClickable(SAVE_TRANSACTION_BUTTON)).click();
   }
 

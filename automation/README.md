@@ -287,3 +287,10 @@ fake-device-for-media-stream flag so `VOICE-*` can use fixture `.wav` files inst
 
 ## HIST-20 (offline delete), 2026-10-04
 PASS locally (`@HIST-20`): the confirmation dialog closes within ~100 ms offline, the row disappears at once, the delete persists after reconnect, and the Ringkasan total equals the Riwayat sum. The "server rejects -> error toast" clause is not automatable (offline writes are queued, a rejection cannot be forced from the UI). The scenario was added by hand to `history.feature` with step definitions in `HistoryOfflineDeleteSteps.java`; re-running `generate-features.cjs` rewrites that feature from `test-cases/history.csv` and would drop its hand-written steps, so re-add them after regenerating.
+
+## Android (real phone), 2026-10-05
+`-Dbrowser.target=android` (+ `-Dandroid.udid=<adb serial>`, optional `-Dappium.url`) runs the same scenarios in Chrome on a USB-connected
+phone through Appium instead of desktop Chrome. Needs: USB debugging, `adb reverse tcp:3000 tcp:3000` (+ 8080, 9099), emulators + dev server running,
+and `appium --allow-insecure uiautomator2:chromedriver_autodownload`. Offline uses CDP through Appium (`goog/cdp/execute`). Not supported on the phone:
+VOICE-* (no fake microphone), scenarios that open a second browser session (one phone). Results: `test-cases/android-run-2026-10-05.md`.
+
