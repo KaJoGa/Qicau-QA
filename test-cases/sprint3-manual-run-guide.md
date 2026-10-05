@@ -55,3 +55,21 @@ account. Write notes in `test-cases/exploratory/CH-06-*.md` like the other chart
 ## F. Retests still open after Sprint 3 automation
 Not exercised yet: `BUG-004` (gocap, `PARSE-21`, run `api-testing` parse-quality on production),
 `BUG-016` (`MAN-19`, passed at L4 locally), `BUG-018` (A5 above), `BUG-019` (B above).
+
+## G. Manual checks of bugs found by automation (production)
+- `BUG-020` (`HIST-11`/`HIST-17`/`MON-10`): delete or re-categorise a category's last transaction; check Ringkasan for a `Rp 0` row and the empty state.
+- `BUG-021` (`MON-12`): offline create/edit/delete, reconnect, compare Ringkasan with Riwayat. Repeat 3 times (intermittent).
+- `BUG-022` (`HIST-20`): offline delete closes the dialog at once.
+- `BUG-024` (`HIST-08`): 31+ mixed-category transactions, category filter: `1 / n+` on page 1, next must load older rows.
+
+## H. Real Google login on the phone (production, own Gmail account, not a work account)
+`AUTH-01..06` (popup login, closing the popup, failure alert, sign out). The local emulator uses a fake account picker, so the real Google
+popup flow is only covered here.
+
+## I. Already done by automation (not manual)
+Real Android phone, Appium, local dev: 14 scenarios pass, 3 fail with `BUG-020` (`test-cases/android-run-2026-10-05.md`).
+Everything else automated is in `traceability.csv`.
+
+## Done when
+Every row above is PASS/FAIL recorded in `traceability.csv` (or noted "not testable" with a reason), the bug stubs/Jira are updated, and
+`reports/2026-10-04-cycle-3-summary.md` has the final numbers. Sprint 3 can be completed in Jira after that.
