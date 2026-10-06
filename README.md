@@ -5,6 +5,9 @@ expense-tracking PWA (Firebase Auth + Firestore, Gemini API, Google Sheets API).
 internship portfolio piece — see `test-plan.md` for the plan this repo executes and `CLAUDE.md`
 for the project context and working rules.
 
+> **Start here:** [`reports/final-summary.md`](reports/final-summary.md) is a one-page wrap-up of the whole project: what was tested,
+> how, the results, the bugs worth reading first, the limits, and which skills each part of the repo shows.
+
 This repo holds **QA artifacts only** — it never contains or modifies Qicau's application code.
 Tests were written **blind**: only from the functional spec (`test/Qicau.md`), never from the app's
 source code.
