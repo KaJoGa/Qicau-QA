@@ -33,7 +33,11 @@ TC-SYNC-023,SYNC-23,"""Has synced"" status is per browser, not per Google accoun
 2. In browser B (never synced) click Sync","A: short dialog only, even when Google asks to log in again; B: educational dialog",P3,functional,production,N
 TC-SYNC-024,SYNC-24,Reset with no/expired token asks for Google login first; closing the popup changes nothing,Online; no valid Google token,"1. Click ""Reset Ekspor"" and confirm
 2. Close the Google popup without signing in","Google login popup appears before anything is moved; after closing it nothing changes (transactions still exported, files not trashed)",P2,negative,production,N
-TC-SYNC-025,SYNC-25,"Reset failure shows an error toast, discards the token and leaves status unchanged",Online; Drive/Sheets API made to fail (e.g. revoke access or block the request),"1. Click ""Reset Ekspor"" and confirm","Error toast ""Gagal reset sinkronisasi: ...""; stored token discarded; transaction export status unchanged",P2,negative,production,N
+TC-SYNC-025,SYNC-25,Reset or Sync failure shows an error toast; a dropped connection stops the process with a connection-lost toast,"Online, Google token valid; a way to cut the network mid-process; a way to make the Drive/Sheets API fail","1. Click ""Reset Ekspor"" (and later ""Sync ke Sheets"") and confirm
+2. Cut the internet while it runs
+3. Observe the toast and the buttons
+4. Go back online and run it again
+5. (separately) make the Drive/Sheets API fail","API error: toast ""Gagal reset sinkronisasi: ..."" and the stored token is discarded; transaction export status unchanged. Connection lost: the process stops with a connection-lost toast (does not hang), status unchanged, and Sync/Reset can be run again after reconnecting",P2,negative,production,N
 TC-SYNC-026,SYNC-26,Text starting with = + - @ or tab is exported as plain text,"Transactions whose Platform/Catatan start with =, +, -, @ and a tab; plus normal text; production, own account","1. Save such transactions via the direct form
 2. Sync to Sheets
 3. Open the sheet and inspect those cells","Cells show as plain text exactly as typed (no formula evaluated, no hyperlink); no visible guard character; normal text unchanged",P1,security,production,N

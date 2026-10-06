@@ -187,7 +187,7 @@ SYNC-21,TC-SYNC-021,L5,N,"PASS - manual on production (tester's own account), re
 SYNC-22,TC-SYNC-022,L5,N,"PASS - manual on production (tester's own account), reported 2026-10-06: short dialog on repeat sync"
 SYNC-23,TC-SYNC-023,L5,N,"PASS - manual on production (tester's own account), reported 2026-10-06: second browser (never synced) shows the educational dialog again"
 SYNC-24,TC-SYNC-024,L5,N,"PASS - manual on production (tester's own account), reported 2026-10-06: closing the Google popup during Reset changes nothing"
-SYNC-25,TC-SYNC-025,L5,N,"DEVIATION - manual on production (tester's own account), reported 2026-10-06: network cut mid-Reset shows NO ""Gagal reset sinkronisasi"" toast; the app keeps retrying and, once online, finishes the Reset (toast success, files in Trash). Spec expects an error toast on failure. Needs an author decision: spec or app"
+SYNC-25,TC-SYNC-025,L5,N,"RETEST NEEDED - spec updated 2026-10-07: the author handled it (a dropped connection now stops Reset/Sync with a connection-lost toast; Sync can be resumed). Previous result: DEVIATION (no toast, kept retrying) on 2026-10-05. Needs a manual run on production with the exact toast text; API-error half not forceable"
 SEC-12,TC-SEC-013,L3,Y,"PASS - 5 rules tests, emulator, 2026-10-04"
 SEC-13,TC-SEC-014,L3,Y,PASS - emulator 2026-10-04
 SEC-14,TC-SEC-015,L3,Y,"PASS - 4 rules tests (create/read/update/unauthenticated), emulator 2026-10-04"
