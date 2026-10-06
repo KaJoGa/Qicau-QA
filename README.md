@@ -41,6 +41,7 @@ Two test cycles, both written up in [`reports/`](reports/):
 | [`test/Qicau.md`](test/Qicau.md) | The functional spec — single source of truth for every test |
 | [`test-cases/`](test-cases/) | Test cases (CSV), traceability matrix with results, manual run guides, Android run, exploratory charters |
 | [`bug-reports/`](bug-reports/) | One report per bug with steps, expected vs actual and status; start at `INDEX.md` |
+| [`reports/final-summary.md`](reports/final-summary.md) | One-page wrap-up of the whole project (start here) |
 | [`reports/`](reports/) | Test summary reports (cycle 1 and Sprint 3) |
 | [`automation/`](automation/) | Java/Selenium/Cucumber UI automation (L4) |
 | [`api-testing/`](api-testing/) | Postman collections (L1, L2) |
