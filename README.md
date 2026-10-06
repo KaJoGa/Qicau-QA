@@ -9,21 +9,29 @@ This repo holds **QA artifacts only** — it never contains or modifies Qicau's 
 Tests were written **blind**: only from the functional spec (`test/Qicau.md`), never from the app's
 source code.
 
-## Result of the first test cycle (2026-09-27 to 2026-10-03)
+## Results
 
-180 spec IDs, all with at least one test case; **177 executed (98%)**. **19 bugs** found
-(1 critical, fixed the same day; 18 open — 5 medium, 12 low, 1 trivial), all filed in Jira. Full report:
-[`reports/2026-09-29-cycle-1-summary.md`](reports/2026-09-29-cycle-1-summary.md).
+Two test cycles, both written up in [`reports/`](reports/):
+
+- **Cycle 1 (2026-09-27 to 2026-10-03):** 180 spec IDs, **177 executed (98%)**, **19 bugs** found.
+  Report: [`reports/2026-09-29-cycle-1-summary.md`](reports/2026-09-29-cycle-1-summary.md).
+- **Cycle 3 / Sprint 3 (2026-10-04 to 2026-10-06):** the spec grew to **207 spec IDs**; **203 executed (98%)**. Retested the
+  author's fixes, covered the new features (edit from Riwayat, Ringkasan consistency, Sheets dialogs, `API-11..13`, daily-summary rules),
+  and added a real Android phone run (Appium) and a manual production pass. Report:
+  [`reports/2026-10-04-cycle-3-summary.md`](reports/2026-10-04-cycle-3-summary.md).
+- **Bugs overall:** 23 real bugs (`bug-reports/`; `BUG-023` was withdrawn as a false alarm). 17 fixed and verified, 3 closed without a
+  fix (spec changed, deferred, accepted), 2 not reproducible on production, 1 open (`BUG-019`, needs an iPhone).
 
 | Layer | What | Tooling | Result |
 |---|---|---|---|
-| L1 API contract | `API-*` | Postman / Newman | 13/13 executed |
-| L2 Parse quality (real Gemini) | `PARSE-*` | Postman data-driven run | 26/28 sentences clean |
-| L3 Firestore rules | `SEC-*` | `@firebase/rules-unit-testing` (Node) | 24/24 tests pass |
-| L4 UI end-to-end | 98 spec IDs | Selenium + Cucumber + Java 17 + Maven | 40/44 `@smoke`, 43/55 `@regression` pass; every other result is an explained bug or a documented gap |
-| L5 Sheets sync | `SYNC-*` | Manual (real Google OAuth) | 16/18 pass |
+| L1 API contract | `API-*` | Postman / Newman | 13/13 pass (Sprint 3) |
+| L2 Parse quality (real Gemini) | `PARSE-*` | Postman data-driven run | 26/28 sentences clean in cycle 1; `PARSE-21` fixed |
+| L3 Firestore rules | `SEC-*` | `@firebase/rules-unit-testing` (Node) | 34/34 tests pass |
+| L4 UI end-to-end | `AUTH NAV HOME VOICE SAVE LOWC MAN HIST MON PWA TOAST` | Selenium + Cucumber + Java 17 + Maven | 96 of 99 run scenarios pass (desktop); the rest are known or documented gaps |
+| L4 on a real Android phone | same suite | Appium (UiAutomator2) over USB | the layout, offline and Ringkasan checks pass |
+| L5 Sheets sync | `SYNC-*` | Manual (real Google OAuth, own account) | all pass except one spec deviation (`SYNC-25`) |
 | Stress | `/api/parse-*` | k6 | small baseline, 0 failures |
-| Exploratory | 5 charters | Session-based, manual | `test-cases/exploratory/` |
+| Exploratory | 6 charters | Session-based, manual | `test-cases/exploratory/` |
 
 ## Key documents
 
@@ -31,9 +39,9 @@ source code.
 |---|---|
 | [`test-plan.md`](test-plan.md) | Scope, approach, risk areas, environments, exit criteria |
 | [`test/Qicau.md`](test/Qicau.md) | The functional spec — single source of truth for every test |
-| [`test-cases/`](test-cases/) | Test cases (CSV), traceability matrix with results, L5 run guide, exploratory charters |
-| [`bug-reports/`](bug-reports/) | One stub per bug, linking to Jira; start at `INDEX.md` |
-| [`reports/`](reports/) | Test summary report |
+| [`test-cases/`](test-cases/) | Test cases (CSV), traceability matrix with results, manual run guides, Android run, exploratory charters |
+| [`bug-reports/`](bug-reports/) | One report per bug with steps, expected vs actual and status; start at `INDEX.md` |
+| [`reports/`](reports/) | Test summary reports (cycle 1 and Sprint 3) |
 | [`automation/`](automation/) | Java/Selenium/Cucumber UI automation (L4) |
 | [`api-testing/`](api-testing/) | Postman collections (L1, L2) |
 | [`security-rules/`](security-rules/) | Firestore rules tests (L3) |
@@ -42,10 +50,11 @@ source code.
 | [`CLAUDE.md`](CLAUDE.md) | Project context, conventions and working rules for the AI assistant used on this repo |
 
 ## Not covered (on purpose)
-Full iOS coverage (only one manual check on a borrowed iPhone), real-microphone quality, and three
-UI scenarios that cannot be executed (`AUTH-02`, `AUTH-05`, `MON-05`); all are listed with reasons
-in the cycle report.
+Full iOS coverage (no device, so `BUG-019` stays open), real-microphone quality, the app-update banner (`PWA-05`, `PWA-12`: they need a
+new deployment while the app is open), and two UI scenarios that cannot be executed reliably (`AUTH-02`, `MON-05`). All are listed with
+reasons in the reports.
 
 ## Tracking
 
-- **Jira project:** [Qicau QA (QAP)](https://kalev.atlassian.net/jira/software/projects/QAP/boards/2/backlog) — backlog, sprints, and defect tracking (`QAP-17` to `QAP-35` are the bugs). The project is private (Jira Free plan), so the links ask for a login; every bug is therefore also written out in full in [`bug-reports/`](bug-reports/), and the project can be shown live on request. Sprint 1 (28 Sep – 5 Oct 2026) covered this test cycle; Sprint 2 is planned for bug fixes, retests and new features.
+Defects were also tracked in Jira (backlog, sprints and a board; Sprint 1 and 3 covered the test cycles and Sprint 2 was the author's bug
+fixing). The project is private, so every bug is written out in full in [`bug-reports/`](bug-reports/).
