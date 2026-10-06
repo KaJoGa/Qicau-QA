@@ -171,7 +171,7 @@ PWA-01,TC-PWA-001,L4,Y,"PASS on production - manual on production (tester's own 
 PWA-02,TC-PWA-002,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (PwaSteps.java)"
 PWA-03,TC-PWA-003,L4,Y,"PASS - confirmed 2026-09-29; the sync-to-server half is best-effort (reload check, not a direct Firestore query) (PwaSteps.java)"
 PWA-04,TC-PWA-004,L4,Y,"PASS - confirmed 2026-09-29 for the Input Manual path; Sync/Reset are out of L4 scope (L5), Voice path (VOICE-07) not yet wired (PwaSteps.java)"
-PWA-05,TC-PWA-005,L4,N,NOT RUN - needs a new deployment (no result reported; checklist box ticked without a result)
+PWA-05,TC-PWA-005,L4,N,"PASS - manual on production, reported 2026-10-07 (the author deployed new versions during Sprint 3, so the update flow could be observed): the ""Pembaruan Tersedia"" banner shows at the very top and cannot be closed"
 PWA-06,TC-PWA-006,L4,N,"PASS (best effort) - manual on production (tester's own account), reported 2026-10-06: install button opens the browser dialog; in a normal tab it reappears after refresh (accepted, not a defect); hidden in the installed app"
 PWA-07,TC-PWA-007,L4,N,"Not automated - same native-install-flow limitation as PWA-06 (no reliable way to launch Chrome ""as an installed PWA"" from Selenium). PASS manually 2026-10-03 on production (CH-04): install button hidden in the installed app"
 PWA-08,TC-PWA-008,L4,N,"PASS on Android - manual on production (tester's own account), reported 2026-10-06: guide complete and centered from header and Settings (BUG-011 retest: fixed on Android). iPhone not tested (BUG-019 not retested)"
@@ -180,7 +180,7 @@ PWA-10,TC-PWA-010,L4,Y,PASS - 2026-10-04 L4
 TOAST-01,TC-TOAST-001,L4,N,"Not automated - ""Sync Reset install success/failure from different tabs including the login page"" spans L5 (out of L4 scope entirely) and the native install-prompt flow (see PWA-06); no reliable trigger reachable from here without guessing. PASS manually 2026-10-03 on production: toasts are green for success and red for error/warning and disappear after about 5 seconds; a toast from an action in one tab also showed in another tab"
 TOAST-02,TC-TOAST-002,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (ToastSteps.java, new)"
 MON-09,TC-MON-009,L4,N,PASS - 2026-10-04 L4: no permission-denied in the browser console
-PWA-12,TC-PWA-012,L4,N,NOT RUN - needs a new deployment (no result reported; checklist box ticked without a result)
+PWA-12,TC-PWA-012,L4,N,"PASS (main behaviour) - manual on production, reported 2026-10-07: leaving the tab and coming back installs the update automatically. The author sets it to update only while the user is idle, so typing is not interrupted. The clause ""not while a Sync/Reset is running"" was not reported as tested"
 SYNC-19,TC-SYNC-019,L5,N,"PASS - 2026-10-04 L4: ""Ya, Reset"" disabled for ~1s then enabled"
 SYNC-20,TC-SYNC-020,L5,N,"PASS - manual on production (tester's own account), reported 2026-10-06: educational dialog on first sync, Batal opens no popup"
 SYNC-21,TC-SYNC-021,L5,N,"PASS - manual on production (tester's own account), reported 2026-10-06: confirm continues to the Google popup and export"

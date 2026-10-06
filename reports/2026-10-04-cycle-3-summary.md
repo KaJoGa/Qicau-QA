@@ -65,15 +65,15 @@ Totals: 24 bug stubs (`BUG-001..024`). Open: `BUG-019` (needs an iPhone). Sugges
 ## 5. Manual results (production and devices, 2026-10-05/06)
 - **L5 Sheets:** `SYNC-16`, `20`, `21`, `22`, `23`, `24`, `26`, `28` pass; `SYNC-27` fails (`BUG-013`); `SYNC-25` deviates from the spec (see §3).
 - **Real Google login on the phone:** `AUTH-01`, `03`, `04`, `05`, `06` pass.
-- **PWA:** `PWA-06` pass (best effort), `PWA-08` pass on Android. `PWA-05` and `PWA-12` not run: they need a new deployment.
+- **PWA:** `PWA-06` pass (best effort), `PWA-08` pass on Android. `PWA-05` (banner at the very top, cannot be closed) and `PWA-12` (auto-update after leaving the tab and coming back, applied while the user is idle) pass: the author deployed new versions during the sprint (reported 2026-10-07). The "not during Sync/Reset" clause of `PWA-12` was not reported as tested.
 - **Exploratory `CH-06`:** done; confirmed `BUG-020`; `BUG-021` and `BUG-022` not reproduced. One observation: editing a transaction deleted on the other device shows a raw Firebase message (not filed).
-- **Not done:** iOS (no device), `PWA-05`/`PWA-12` (deploy).
+- **Not done:** iOS (no device).
 
 ## 6. Risks and open questions
 - **Ringkasan correctness** remains the main risk: `BUG-020` is confirmed on production in every environment tested. The totals are right, but stale `Rp 0` rows show.
 - **Production may be behind local dev:** `BUG-005` passes on local dev but still fails on production. Check whether the latest build is deployed.
 - **Author decisions:** `SYNC-25` (error toast or keep retrying), and whether the raw Firebase message on a conflicting edit is acceptable.
-- **Coverage gaps:** iOS, and the update flow (`PWA-05`, `PWA-12`).
+- **Coverage gaps:** iOS only (plus `AUTH-02`, `MON-05`, which cannot be executed reliably).
 
 ## 7. Retest after the author's fixes (2026-10-06)
 The author fixed `BUG-005`, `BUG-013` and `BUG-020`, deployed to production and checked them there.
@@ -82,4 +82,4 @@ The author fixed `BUG-005`, `BUG-013` and `BUG-020`, deployed to production and 
   The author updated spec `MAN-13` (alert -> inline error); the case now passes on local dev and a real phone.
 - **`BUG-013` fixed per the tester** (manual `SYNC-27` on production). Not retested by automation (real Google login).
 - **Regression run (L4, local dev, 99 scenarios run):** 97 pass, 2 not passing: `PWA-11` (dev server `no-cache`, known) and `VOICE-06` (known). `HIST-08` was red because of `BUG-024`; the author fixed it (and changed the design: pagination with exact totals also under a category filter), the spec was updated and `HIST-08` passes on local dev and on the real phone (2026-10-07). The first run also had `MAN-13` (spec wording, now updated and passing) and `AUTH-03` (flaky once, passed 2 of 2 on rerun). On the real phone: `HIST-11`, `HIST-17`, `MON-10`, `HIST-15`, `HIST-18`, `PWA-01` and `MAN-13` pass.
-- **Still open:** `BUG-019` (no iPhone), `SYNC-25` decision, `PWA-05`/`PWA-12` (need a deploy).
+- **Still open:** `BUG-019` (no iPhone) and the `SYNC-25` decision.

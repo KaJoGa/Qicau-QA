@@ -15,7 +15,7 @@ Two test cycles, both written up in [`reports/`](reports/):
 
 - **Cycle 1 (2026-09-27 to 2026-10-03):** 180 spec IDs, **177 executed (98%)**, **19 bugs** found.
   Report: [`reports/2026-09-29-cycle-1-summary.md`](reports/2026-09-29-cycle-1-summary.md).
-- **Cycle 3 / Sprint 3 (2026-10-04 to 2026-10-06):** the spec grew to **207 spec IDs**; **203 executed (98%)**. Retested the
+- **Cycle 3 / Sprint 3 (2026-10-04 to 2026-10-06):** the spec grew to **207 spec IDs**; **205 executed (99%)**. Retested the
   author's fixes, covered the new features (edit from Riwayat, Ringkasan consistency, Sheets dialogs, `API-11..13`, daily-summary rules),
   and added a real Android phone run (Appium) and a manual production pass. Report:
   [`reports/2026-10-04-cycle-3-summary.md`](reports/2026-10-04-cycle-3-summary.md).
@@ -50,8 +50,7 @@ Two test cycles, both written up in [`reports/`](reports/):
 | [`CLAUDE.md`](CLAUDE.md) | Project context, conventions and working rules for the AI assistant used on this repo |
 
 ## Not covered (on purpose)
-Full iOS coverage (no device, so `BUG-019` stays open), real-microphone quality, the app-update banner (`PWA-05`, `PWA-12`: they need a
-new deployment while the app is open), and two UI scenarios that cannot be executed reliably (`AUTH-02`, `MON-05`). All are listed with
+Full iOS coverage (no device, so `BUG-019` stays open), real-microphone quality, and two UI scenarios that cannot be executed reliably (`AUTH-02`, `MON-05`). All are listed with
 reasons in the reports.
 
 ## Tracking
