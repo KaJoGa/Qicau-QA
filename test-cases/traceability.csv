@@ -152,7 +152,7 @@ MON-08,TC-MON-008,L4,N,"PASS - 2026-10-04 L4 seeded previous-month rows (Rp 100.
 SYNC-01,TC-SYNC-001,L5,N,PASS - executed manually on production 2026-09-30; error toast shown when offline; no request to Google
 SYNC-02,TC-SYNC-002,L5,N,PASS - executed manually 2026-09-30; Drive permission can be skipped at login but is re-requested on next Sync click
 SYNC-03,TC-SYNC-003,L5,N,PASS - executed manually 2026-09-30; closing the auth popup shows no toast; button returns to normal
-SYNC-04,TC-SYNC-004,L5,N,FAIL (BUG-008) - executed manually 2026-09-30; Sync/Reset buttons re-enable after switching tabs and back during an active sync
+SYNC-04,TC-SYNC-004,L5,N,"PASS (retest, BUG-008) - manual on production, reported 2026-10-06: buttons stay disabled while a sync runs, also across tabs (checked together with SYNC-28) | Earlier: FAIL (BUG-008) - executed manually 2026-09-30; Sync/Reset buttons re-enable after switching tabs and back during an active sync"
 SYNC-05,TC-SYNC-005,L5,N,PASS - executed manually 2026-09-30; Qicau_Export_<year> spreadsheet created with Summary + monthly tabs
 SYNC-06,TC-SYNC-006,L5,N,PASS - executed manually 2026-09-30; frozen header and correct row order confirmed
 SYNC-07,TC-SYNC-007,L5,N,PASS - executed manually 2026-09-30; Statistik/Kategori tables match the data rows
