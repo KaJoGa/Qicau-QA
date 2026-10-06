@@ -293,7 +293,7 @@ public class HistorySteps {
     Assertions.assertEquals(HIST08_TOTAL, new java.util.HashSet<>(allRowAmounts).size(), "Expected no duplicate rows across pages");
   }
 
-  @And("^indicator shows the REAL total pages and stays fixed \\(e\\.g\\. 1/5, 2/5 \\.\\.\\. 5/5, not growing\\) with \"Semua Kategori\"$")
+  @And("^indicator shows the REAL total pages and stays fixed \\(e\\.g\\. 1/5, 2/5 \\.\\.\\. 5/5, not growing\\) also with a specific category filter active$")
   public void indicatorShowsRealFixedTotal() {
     Assertions.assertEquals(java.util.List.of("1 / 4", "2 / 4", "3 / 4", "4 / 4"), pageIndicatorsSeen,
         "Expected the indicator to show the real, fixed total (100 rows / 30 = 4 pages) on every page");
@@ -303,7 +303,8 @@ public class HistorySteps {
   private java.util.List<String> walkMakan(String tag, java.util.List<Integer> rows) {
     HistoryPage history = new HistoryPage(driver());
     history.selectCategory("Makan");
-    new WebDriverWait(driver(), Duration.ofSeconds(10)).until((d) -> history.isPrevPageDisabled() && history.transactionRowCount() > 0);
+    new WebDriverWait(driver(), Duration.ofSeconds(10)).ignoring(org.openqa.selenium.StaleElementReferenceException.class)
+        .until((d) -> history.isPrevPageDisabled() && history.transactionRowCount() > 0);
     java.util.List<String> seen = new java.util.ArrayList<>();
     seen.add(history.pageIndicator().replaceAll("\\s+", " "));
     rows.add(history.transactionRowCount());
@@ -335,15 +336,16 @@ public class HistorySteps {
     return seen;
   }
 
-  @And("^with a specific category filter the total shows as a lower bound \"n\\+\" until the last page is reached$")
-  public void categoryFilterShowsLowerBoundTotal() {
-    // (A) Same session: every page of "Semua Kategori" was already visited, so all 100 rows are loaded and an
-    // exact total is the correct reading here (control, not the n+ precondition).
+  @And("^with a category filter every page is full \\(30 rows, the last one the remainder\\), the total is exact \\(e\\.g\\. 1/2, 2/2\\) and no page is empty$")
+  public void categoryFilterPagesFullAndTotalExact() {
+    // Spec 2026-10-07: with a category filter active the pages are full (30 rows, last = remainder), the total is exact
+    // and no page is empty. 100 seeded rows in 4 categories, 40 of them Makan spread over 100 days.
+    // (A) Same session: every page of "Semua Kategori" was already visited.
     java.util.List<Integer> rowsA = new java.util.ArrayList<>();
     java.util.List<String> seenA = walkMakan("makan-all-loaded", rowsA);
-    Assertions.assertEquals(java.util.List.of("1 / 2", "2 / 2"), seenA, "Control (all data loaded): expected the exact total 1 / 2, 2 / 2, rows=" + rowsA);
+    assertFullPagesExactTotal("all loaded", seenA, rowsA);
 
-    // (B) Fresh load: filter Makan WITHOUT first paging through Semua Kategori, so older rows are not loaded yet.
+    // (B) Fresh load: filter Makan WITHOUT first paging through Semua Kategori (the case that used to show "1 / 1+" and an empty page 2).
     SeededDataSteps.reload(driver());
     HistoryPage history = new HistoryPage(driver());
     history.openViaNav();
@@ -351,14 +353,14 @@ public class HistorySteps {
     waitForPage(1, null);
     java.util.List<Integer> rows = new java.util.ArrayList<>();
     java.util.List<String> seen = walkMakan("makan-fresh", rows);
-    Assertions.assertTrue(seen.size() >= 2, "Expected more than one page with the Makan filter (40 rows), got " + seen + " rows=" + rows);
-    Assertions.assertTrue(rows.stream().allMatch((r) -> r > 0), "Expected every reachable page after clicking next to show rows (older Makan data exists), got indicators=" + seen + " rows=" + rows);
-    for (int i = 0; i < seen.size() - 1; i++) {
-      Assertions.assertTrue(seen.get(i).endsWith("+"), "Expected a lower-bound 'n+' total before the last page while older data is not loaded, got: " + seen + " rows=" + rows);
-    }
-    String last = seen.get(seen.size() - 1);
-    Assertions.assertFalse(last.endsWith("+"), "Expected the total to become exact on the last page, got: " + seen);
-    Assertions.assertEquals(seen.size() + " / " + seen.size(), last, "Expected the last page to read n / n, got: " + seen);
+    assertFullPagesExactTotal("fresh load", seen, rows);
+  }
+
+  private static void assertFullPagesExactTotal(String label, java.util.List<String> seen, java.util.List<Integer> rows) {
+    Assertions.assertEquals(java.util.List.of("1 / 2", "2 / 2"), seen,
+        label + ": expected the exact total 1 / 2, 2 / 2 (no 'n+'), got indicators=" + seen + " rows=" + rows);
+    Assertions.assertEquals(java.util.List.of(30, 10), rows,
+        label + ": expected full pages (30 rows, then the 10 remaining) and no empty page, got rows=" + rows);
   }
   // ---- HIST-02: empty state for the active filter hides Sync/Reset ----
 

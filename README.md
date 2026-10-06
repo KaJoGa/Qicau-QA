@@ -19,15 +19,15 @@ Two test cycles, both written up in [`reports/`](reports/):
   author's fixes, covered the new features (edit from Riwayat, Ringkasan consistency, Sheets dialogs, `API-11..13`, daily-summary rules),
   and added a real Android phone run (Appium) and a manual production pass. Report:
   [`reports/2026-10-04-cycle-3-summary.md`](reports/2026-10-04-cycle-3-summary.md).
-- **Bugs overall:** 23 real bugs (`bug-reports/`; `BUG-023` was withdrawn as a false alarm). 17 fixed and verified, 3 closed without a
-  fix (spec changed, deferred, accepted), 2 not reproducible on production, 1 open (`BUG-019`, needs an iPhone).
+- **Bugs overall:** 23 real bugs (`bug-reports/`; `BUG-023` was withdrawn as a false alarm). 18 fixed and verified, 3 closed without a
+  fix (spec changed, deferred, accepted), 1 not reproducible on production, 1 open (`BUG-019`, needs an iPhone).
 
 | Layer | What | Tooling | Result |
 |---|---|---|---|
 | L1 API contract | `API-*` | Postman / Newman | 13/13 pass (Sprint 3) |
 | L2 Parse quality (real Gemini) | `PARSE-*` | Postman data-driven run | 26/28 sentences clean in cycle 1; `PARSE-21` fixed |
 | L3 Firestore rules | `SEC-*` | `@firebase/rules-unit-testing` (Node) | 34/34 tests pass |
-| L4 UI end-to-end | `AUTH NAV HOME VOICE SAVE LOWC MAN HIST MON PWA TOAST` | Selenium + Cucumber + Java 17 + Maven | 96 of 99 run scenarios pass (desktop); the rest are known or documented gaps |
+| L4 UI end-to-end | `AUTH NAV HOME VOICE SAVE LOWC MAN HIST MON PWA TOAST` | Selenium + Cucumber + Java 17 + Maven | 97 of 99 run scenarios pass (desktop); the rest are known or documented gaps |
 | L4 on a real Android phone | same suite | Appium (UiAutomator2) over USB | the layout, offline and Ringkasan checks pass |
 | L5 Sheets sync | `SYNC-*` | Manual (real Google OAuth, own account) | all pass except one spec deviation (`SYNC-25`) |
 | Stress | `/api/parse-*` | k6 | small baseline, 0 failures |

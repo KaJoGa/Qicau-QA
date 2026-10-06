@@ -7,7 +7,7 @@
 | **Severity** | Low (proposed — pagination itself works; only the indicator text is misleading) |
 | **Found in** | Production — https://qicau.kajoga.workers.dev/ |
 | **Found during** | Exploratory session CH-05, 2026-10-03 |
-| **Status** | **Fixed** on production (manual, 2026-10-05): fixed total with "Semua Kategori"; with a category filter the indicator reads `n+`. |
+| **Status** | **Fixed** (production 2026-10-05; L4 2026-10-07): fixed total with and without a category filter. |
 
 ## Summary
 The Riwayat page indicator should read `halaman / total`, but the "total" part only ever shows one

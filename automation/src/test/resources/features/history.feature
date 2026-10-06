@@ -61,8 +61,8 @@ Feature: History / Riwayat (HIST)
     And previous disabled on page 1
     And next disabled when no more data
     And next loads older data with no duplicate/missing rows
-    And indicator shows the REAL total pages and stays fixed (e.g. 1/5, 2/5 ... 5/5, not growing) with "Semua Kategori"
-    And with a specific category filter the total shows as a lower bound "n+" until the last page is reached
+    And indicator shows the REAL total pages and stays fixed (e.g. 1/5, 2/5 ... 5/5, not growing) also with a specific category filter active
+    And with a category filter every page is full (30 rows, the last one the remainder), the total is exact (e.g. 1/2, 2/2) and no page is empty
 
   @HIST-09 @smoke
   Scenario: Clicking a row opens the transaction detail modal

@@ -46,9 +46,9 @@ Retests on production (manual, 2026-10-05/06) are included below.
 | `BUG-021` (`QAP-54`) | Offline create/edit/delete: Ringkasan can differ from Riwayat | Medium | Not reproduced on production; failed once on local dev. Suggest closing |
 | `BUG-022` (`QAP-55`) | Offline delete left the dialog stuck | Low | Fixed, verified on production |
 | `BUG-023` | Withdrawn (invalid test data) | - | - |
-| `BUG-024` (`QAP-56`) | Category filter: empty page after `1 / 1+` | Medium | Not reproduced on production; local dev with seeded data only. Suggest closing |
+| `BUG-024` (`QAP-56`) | Category filter: empty page after `1 / 1+` | Medium | **Fixed** (2026-10-07): full pages and exact total with a category filter, verified on local dev and a real phone |
 
-Totals: 24 bug stubs (`BUG-001..024`). Open: `BUG-005`, `011` (iOS only), `013`, `019`, `020`. Suggested close as cannot-reproduce: `BUG-021`, `BUG-024`.
+Totals: 24 bug stubs (`BUG-001..024`). Open: `BUG-019` (needs an iPhone). Suggested close as cannot-reproduce: `BUG-021`.
 
 **Spec deviation needing an author decision:** `SYNC-25`. With the network cut during Reset the app shows no error toast; it keeps retrying and finishes the Reset after reconnect (success toast, files in Trash). The spec expects "Gagal reset sinkronisasi". Either the spec or the app should change.
 
@@ -81,5 +81,5 @@ The author fixed `BUG-005`, `BUG-013` and `BUG-020`, deployed to production and 
 - **`BUG-005` fixed.** The browser's native message is gone; the app shows an inline error "Jumlah pengeluaran wajib diisi.".
   The author updated spec `MAN-13` (alert -> inline error); the case now passes on local dev and a real phone.
 - **`BUG-013` fixed per the tester** (manual `SYNC-27` on production). Not retested by automation (real Google login).
-- **Regression run (L4, local dev, 99 scenarios run):** 96 pass, 3 not passing: `HIST-08` (category-filter paging with seeded data on local dev, `BUG-024`, passes on production), `PWA-11` (dev server `no-cache`, known) and `VOICE-06` (known). The first run also had `MAN-13` (spec wording, now updated and passing) and `AUTH-03` (flaky once, passed 2 of 2 on rerun). On the real phone: `HIST-11`, `HIST-17`, `MON-10`, `HIST-15`, `HIST-18`, `PWA-01` and `MAN-13` pass.
+- **Regression run (L4, local dev, 99 scenarios run):** 97 pass, 2 not passing: `PWA-11` (dev server `no-cache`, known) and `VOICE-06` (known). `HIST-08` was red because of `BUG-024`; the author fixed it (and changed the design: pagination with exact totals also under a category filter), the spec was updated and `HIST-08` passes on local dev and on the real phone (2026-10-07). The first run also had `MAN-13` (spec wording, now updated and passing) and `AUTH-03` (flaky once, passed 2 of 2 on rerun). On the real phone: `HIST-11`, `HIST-17`, `MON-10`, `HIST-15`, `HIST-18`, `PWA-01` and `MAN-13` pass.
 - **Still open:** `BUG-019` (no iPhone), `SYNC-25` decision, `PWA-05`/`PWA-12` (need a deploy).

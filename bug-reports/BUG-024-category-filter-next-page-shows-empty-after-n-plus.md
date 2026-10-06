@@ -7,7 +7,7 @@
 | **Severity** | Medium (proposed — older transactions of that category cannot be reached by paging; data is intact) |
 | **Found in** | local dev + Firebase emulator (`http://localhost:3000/`) |
 | **Found during** | Sprint 3 L4 retest of `HIST-08` with mixed-category data, 2026-10-04 |
-| **Status** | Not reproduced on production (manual, 2026-10-05): with a category filter page 1 reads `1 / n+`, next loads older rows, the last page has no `+`. The empty page was seen only on local dev with seeded data. Suggest closing as cannot-reproduce. |
+| **Status** | **Fixed** (retest 2026-10-07): with a category filter every page is full and the total is exact (1/2, 2/2 for 40 rows); the empty page after `1 / 1+` is gone. Verified on local dev and a real phone. The spec `HIST-08` was updated to the new design. |
 
 ## Summary
 With a category filter active, the first page shows `1 / 1+` and only the few matching rows of the first 30 loaded transactions (5 rows). Clicking next shows an empty list with "Belum ada riwayat transaksi." and no page indicator, although 35 older rows of that category exist. Spec `HIST-08` says next loads the next page of older data without missing rows.
