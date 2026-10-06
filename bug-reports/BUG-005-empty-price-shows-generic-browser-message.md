@@ -7,7 +7,7 @@
 | **Severity** | Low |
 | **Found in** | local dev + Firebase emulator (`http://localhost:3000/`) |
 | **Found during** | L4 UI automation run, 2026-09-29 |
-| **Status** | **Fixed** (local dev) - MAN-13 retest passed at L4 (local dev), 2026-10-04. Production retest pending (see `test-cases/sprint3-manual-run-guide.md`). |
+| **Status** | Open - still reproduces on production (manual, 2026-10-05): the browser native message is shown. The L4 retest on local dev passes, so production may not have the fix deployed. Reopen QAP-21. |
 
 ## Summary
 Trying to save a transaction via the "Formulir Langsung" (direct form) with the price field left

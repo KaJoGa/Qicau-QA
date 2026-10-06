@@ -7,7 +7,7 @@
 | **Severity** | Low (proposed — cosmetic/layout, no data or functional loss, but genuinely obscures controls) |
 | **Found in** | Production — https://qicau.kajoga.workers.dev/, desktop and narrow/mobile widths |
 | **Found during** | Manual exploration, 2026-09-30 |
-| **Status** | **Fixed** (local dev) - PWA-01 retest passed at L4 (bounding boxes at 800/1280/390 px, local dev), 2026-10-04. Production retest pending (see `test-cases/sprint3-manual-run-guide.md`). |
+| **Status** | **Fixed** - verified on production (manual, 2026-10-05) and on a real phone (L4): the banner pushes content down. |
 
 ## Summary
 When the connection drops, the "Mode Offline: Data tersimpan lokal & siap sync." banner

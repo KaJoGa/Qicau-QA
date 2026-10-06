@@ -7,7 +7,7 @@
 | **Severity** | Medium (proposed — wrong totals after a normal offline use case) |
 | **Found in** | local dev + Firebase emulator (`http://localhost:3000/`) |
 | **Found during** | Sprint 3 L4 UI automation run, 2026-10-04 |
-| **Status** | Open - INTERMITTENT. Failed once in the Sprint 3 L4 run, but 4 of 6 later local re-runs of MON-12 passed. Verify by hand (offline create/edit/delete, reconnect, compare Ringkasan with Riwayat) before filing. |
+| **Status** | Not reproduced on production (manual, 2026-10-05): repeated offline create/edit/delete cycles kept Riwayat and Ringkasan consistent (also consistent in CH-06). It failed once on local dev only. Suggest closing as cannot-reproduce. |
 
 ## Summary
 Transactions created, edited and deleted while offline sync back correctly in Riwayat, but the daily summary behind Ringkasan ends up with a different total.

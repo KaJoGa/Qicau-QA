@@ -7,6 +7,7 @@
 | **Severity** | Medium (proposed — classic spreadsheet formula injection; limited because users export their own data, but formulas such as `=HYPERLINK` or `=IMPORTDATA` should never be created from free text) |
 | **Found in** | Production — https://qicau.kajoga.workers.dev/, own Google account |
 | **Found during** | Exploratory session CH-01, 2026-10-03 |
+| **Status** | **Fixed** - `SYNC-26` passed on production (2026-10-05): text starting with = + - @ is plain text in the sheet. |
 
 ## Summary
 When a transaction's platform or note contains text starting with `=`, the Sheets export writes it as

@@ -7,7 +7,7 @@
 | **Severity** | Low (proposed — needs deliberately huge input, nothing is saved or corrupted, but the failure is raw and unfriendly) |
 | **Found in** | Production — https://qicau.kajoga.workers.dev/ |
 | **Found during** | Exploratory session CH-05 ("testing jahil"), 2026-10-03 |
-| **Status** | **Fixed** (local dev) - MAN-19 retest passed at L4 (limits + counters, local dev), 2026-10-04. Production retest pending (see `test-cases/sprint3-manual-run-guide.md`). |
+| **Status** | **Fixed** on production (manual, 2026-10-05): 50/200 limits and the n/50, n/200 counters. |
 
 ## Summary
 The Platform field in the direct/manual form has no input length limit. A very large paste is

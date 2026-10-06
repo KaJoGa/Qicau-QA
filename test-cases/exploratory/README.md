@@ -18,7 +18,7 @@ section at the bottom of each file (coverage, bugs, open questions).
 | [CH-03](CH-03-sheets-export-resilience.md) | R5 | Try to break Sheets export idempotency and time-boundary correctness | 45 min | `BUG-013` (and `BUG-009`) |
 | [CH-04](CH-04-pwa-offline-real-devices.md) | R8 | Explore PWA/offline resilience under real flaky-network conditions | 45 min | `BUG-014` (and `BUG-010`, `BUG-011` earlier) |
 | [CH-05](CH-05-cross-device-and-ui-polish.md) | R6, R7, R12 | Judge cross-device consistency, time-boundary edge cases, and UI polish that automation can't judge | 45 min | `BUG-015`, `BUG-016` |
-| [CH-06](CH-06-ringkasan-and-edit-from-riwayat.md) | R6, R7, R8 | Hunt drift between Ringkasan and real transactions; judge edit-from-Riwayat | 45 min | not run yet (`BUG-020..022` came from automation) |
+| [CH-06](CH-06-ringkasan-and-edit-from-riwayat.md) | R6, R7, R8 | Hunt drift between Ringkasan and real transactions; judge edit-from-Riwayat | 45 min | `BUG-020` confirmed on production (`BUG-021`, `022` not reproduced) |
 
 Each spec ID these charters touch already has automated and/or scripted manual coverage
 elsewhere (`automation/`, `test-cases/*.csv`) — these sessions are deliberately about what's

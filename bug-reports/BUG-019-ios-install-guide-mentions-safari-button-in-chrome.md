@@ -7,6 +7,7 @@
 | **Severity** | Low (proposed — the guide still appears and the install works, but the wording can confuse users) |
 | **Found in** | Production — https://qicau.kajoga.workers.dev/, Chrome on iPhone (iOS) |
 | **Found during** | Manual iOS check of `PWA-08`, 2026-10-03 |
+| **Status** | Open - not retested: no iPhone available (2026-10-05). |
 
 ## Summary
 On an iPhone, in Chrome (not Safari), the install button shows the manual guide as the spec asks,

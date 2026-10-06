@@ -7,7 +7,7 @@
 | **Severity** | Low (proposed — recovers when back online) |
 | **Found in** | local dev + Firebase emulator (`http://localhost:3000/`) |
 | **Found during** | Sprint 3 L4 UI automation run, 2026-10-04 |
-| **Status** | **Fixed** on local dev (retest 2026-10-04, `HIST-20`): the dialog closed after 105 ms, the row vanished at once, the delete persisted after reconnect. Production retest pending. |
+| **Status** | **Fixed** - verified on production (manual, 2026-10-05): the offline delete dialog closes at once; also passes L4 and on a real phone. |
 
 ## Summary
 Confirming a delete while offline keeps the confirmation dialog on screen with a spinner. The overlay blocks the whole app until the connection returns.

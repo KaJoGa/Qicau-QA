@@ -2,8 +2,8 @@
 
 Follow-up to `2026-09-29-cycle-1-summary.md`. Sprint 2 was bug fixing only (the app author fixing the
 bugs from cycle 1). Sprint 3 retested those fixes and tested the spec changes of 2026-10-03/04
-(`test/UPDATE_NOTES_PART2.md`: Parts 2 and 3). Written 2026-10-04. Manual items are listed in §5 and
-are **not** part of the numbers below.
+(`test/UPDATE_NOTES_PART2.md`: Parts 2 and 3). Written 2026-10-04, updated 2026-10-06 with the manual production results (§3, §5). The L5 and
+manual rows in §2 reflect that update.
 
 ## 1. What changed in scope
 - **New/changed spec IDs:** edit from Riwayat (`HIST-14..19`), Ringkasan consistency and repair
@@ -29,22 +29,28 @@ L4 not passing in the final run: `HIST-08` (`BUG-024`), `HIST-11`, `HIST-17`, `M
 
 ## 3. Defects
 
-**Fixed and verified (production):** `BUG-001`, `BUG-003`, `BUG-004`, `BUG-012`, `BUG-017`; `BUG-002` earlier.
-**Fixed, verified on local dev only (production retest pending):** `BUG-005`, `BUG-006`, `BUG-010`, `BUG-015` (for "Semua Kategori"), `BUG-016`.
-**Closed without a fix:** `BUG-007` (spec changed), `BUG-009` (deferred by the author), `BUG-014` (accepted).
-**Not yet retested (need production, Google account or a device):** `BUG-008`, `BUG-011`, `BUG-013`, `BUG-018`, `BUG-019`.
+Retests on production (manual, 2026-10-05/06) are included below.
 
-**New this sprint (stubs, to file in Jira):**
+**Fixed and verified on production:** `BUG-001`, `003`, `004`, `006` (the list itself), `008`, `010`, `011` (Android), `012`, `015`, `016`, `017`, `018`, `022`; `BUG-002` earlier.
+**Still open after retest:**
+- `BUG-005` still shows the browser's native message on production (local dev passes, so the fix may not be deployed). Reopen `QAP-21`.
+- `BUG-013` no toast when the Google popup is blocked (`SYNC-27`). Reopen `QAP-29`.
+- `BUG-019` not retested (no iPhone).
+**Closed without a fix:** `BUG-007` (spec changed), `BUG-009` (deferred), `BUG-014` (accepted).
 
-| Bug | Summary | Severity (proposed) | Confidence |
+**New this sprint:**
+
+| Bug | Summary | Severity (proposed) | Status |
 |---|---|---|---|
-| `BUG-020` | Ringkasan keeps `Rp 0` category rows and no empty state after delete/edit/undo | Medium | Reproduced twice on local dev |
-| `BUG-021` | Offline create/edit/delete: Ringkasan can end up different from Riwayat (35.000 vs 45.000) | Medium | **Intermittent**: failed once, passed in the final run and most re-runs; verify by hand |
-| `BUG-022` | Offline delete left the confirmation dialog stuck with a spinner | Low | The author then specified `HIST-20`; retest PASS on local dev (dialog closes in ~100 ms) |
-| `BUG-023` | Withdrawn: first HIST-08 seed (all one category) was not an `n+` case | - | Retest with mixed data showed `n+` works |
-| `BUG-024` | With a category filter, next after `1 / 1+` shows an empty page although 35 older rows exist | Medium | Reproduced on local dev; confirm on production |
+| `BUG-020` (`QAP-53`) | Ringkasan keeps `Rp 0` category rows after delete/edit; after deleting a whole month every category stays at `Rp 0` | Medium | **Confirmed on production**, local dev and a real phone |
+| `BUG-021` (`QAP-54`) | Offline create/edit/delete: Ringkasan can differ from Riwayat | Medium | Not reproduced on production; failed once on local dev. Suggest closing |
+| `BUG-022` (`QAP-55`) | Offline delete left the dialog stuck | Low | Fixed, verified on production |
+| `BUG-023` | Withdrawn (invalid test data) | - | - |
+| `BUG-024` (`QAP-56`) | Category filter: empty page after `1 / 1+` | Medium | Not reproduced on production; local dev with seeded data only. Suggest closing |
 
-Totals: 24 bug stubs to date (`BUG-001..024`). Open: `BUG-008`, `011`, `013`, `018`, `019`, `020`, `021`, `024` (`BUG-023` withdrawn; `BUG-022` fixed on local dev, production retest pending).
+Totals: 24 bug stubs (`BUG-001..024`). Open: `BUG-005`, `011` (iOS only), `013`, `019`, `020`. Suggested close as cannot-reproduce: `BUG-021`, `BUG-024`.
+
+**Spec deviation needing an author decision:** `SYNC-25`. With the network cut during Reset the app shows no error toast; it keeps retrying and finishes the Reset after reconnect (success toast, files in Trash). The spec expects "Gagal reset sinkronisasi". Either the spec or the app should change.
 
 ## 4. Test harness findings (not app bugs)
 - With the emulator, the app writes under its own Firebase project id (`big-elysium-496003-j7`), not
@@ -53,18 +59,18 @@ Totals: 24 bug stubs to date (`BUG-001..024`). Open: `BUG-008`, `011`, `013`, `0
   This may explain why the `LOWC-04` log-write check sometimes came back empty.
 - Seeding back-dated data: the app stores `created_at` as epoch milliseconds (integer) and keeps
   `daily_summaries/{uid}_{yyyyMMdd}`; field types were observed, not read from source.
+- Real Android phone through Appium works (`test-cases/android-run-2026-10-05.md`): 14 scenarios pass, 3 fail with `BUG-020`.
+  On a phone the first tap after typing only closes the keyboard, so the tests blur the input before tapping Save.
 
-## 5. Not done in this sprint (manual / needs your account or device)
-Guide: `test-cases/sprint3-manual-run-guide.md`.
-- L5: `SYNC-16`, `SYNC-21..28` (real Google OAuth, Sheets, Drive).
-- `PWA-05`, `PWA-12` (need a new deployment), `PWA-06` (native install dialog), `PWA-08` (real iOS devices).
-- Android smoke pass of the new features; exploratory charter `CH-06` (written, not run).
-- Production retests of the local-only fixes; manual check of `BUG-021`.
-- Jira: file `BUG-020..023`, close the fixed and closed bugs.
+## 5. Manual results (production and devices, 2026-10-05/06)
+- **L5 Sheets:** `SYNC-16`, `20`, `21`, `22`, `23`, `24`, `26`, `28` pass; `SYNC-27` fails (`BUG-013`); `SYNC-25` deviates from the spec (see §3).
+- **Real Google login on the phone:** `AUTH-01`, `03`, `04`, `05`, `06` pass.
+- **PWA:** `PWA-06` pass (best effort), `PWA-08` pass on Android. `PWA-05` and `PWA-12` not run: they need a new deployment.
+- **Exploratory `CH-06`:** done; confirmed `BUG-020`; `BUG-021` and `BUG-022` not reproduced. One observation: editing a transaction deleted on the other device shows a raw Firebase message (not filed).
+- **Not done:** iOS (no device), `PWA-05`/`PWA-12` (deploy).
 
 ## 6. Risks and open questions
-- **Ringkasan correctness** is the main open risk: `BUG-020` is confirmed and `BUG-021` is unresolved.
-  Every number on that tab depends on the daily summary staying in step with transactions.
-- **Spec question for the author:** (none open).
-- **Production is not covered by the L4 results.** The UI suite runs on local dev; production
-  confirmation of `BUG-005/006/010/015/016` is pending.
+- **Ringkasan correctness** remains the main risk: `BUG-020` is confirmed on production in every environment tested. The totals are right, but stale `Rp 0` rows show.
+- **Production may be behind local dev:** `BUG-005` passes on local dev but still fails on production. Check whether the latest build is deployed.
+- **Author decisions:** `SYNC-25` (error toast or keep retrying), and whether the raw Firebase message on a conflicting edit is acceptable.
+- **Coverage gaps:** iOS, and the update flow (`PWA-05`, `PWA-12`).

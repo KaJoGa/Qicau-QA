@@ -7,6 +7,7 @@
 | **Severity** | Medium (proposed — could let a user trigger a second, overlapping sync/reset while one is already in flight) |
 | **Found in** | Production — https://qicau.kajoga.workers.dev/, my own account |
 | **Found during** | L5 manual Sheets-sync testing, 2026-09-30 |
+| **Status** | **Fixed** - `SYNC-28` passed manually on production (2026-10-05): the second tab is refused with a toast and the buttons stay disabled across tabs. |
 
 ## Summary
 While a sync is running, the Sync and Reset buttons correctly switch to "Menyinkronkan..." with a

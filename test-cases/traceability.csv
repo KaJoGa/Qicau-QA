@@ -64,12 +64,12 @@ PARSE-50,PM-PARSE-45,L2,Y,"PASS - ""Lainnya"" category mapping (obat) confirmed 
 PARSE-53,PM-PARSE-53,L2,Y,"PASS - filler words (""eh"", ""anu"") ignored in structured result"
 PARSE-54,PM-PARSE-54,L2,Y,"PASS - 2-of-3 signal (harga+item, no platform) correctly avoided ""low"" confidence"
 PARSE-56,PM-PARSE-ALL,L2,Y,PASS in 27/28 rows; FAILED for the no-signal-greeting case - see BUG-003
-AUTH-01,TC-AUTH-001,L4,Y,PASS - confirmed 2026-09-28 via automation/src/test/java/.../steps/AuthSteps.java against local dev + emulator
+AUTH-01,TC-AUTH-001,L4,Y,"PASS - confirmed 2026-09-28 via automation/src/test/java/.../steps/AuthSteps.java against local dev + emulator | Also PASS on production with a real Google login on the phone (manual, reported 2026-10-06)"
 AUTH-02,TC-AUTH-002,L4,N,Not automated - the loading-skeleton window (before auth state resolves) is a sub-second race that can't be reliably caught/frozen without a slow/mocked auth response; not worth guessing at a timing hook
-AUTH-03,TC-AUTH-003,L4,Y,PASS - 2026-10-04 L4 (nav label Ringkasan)
-AUTH-04,TC-AUTH-004,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (AuthSteps.java)"
-AUTH-05,TC-AUTH-005,L4,N,"Attempted 2026-09-29: forced offline (CDP network conditions) right before the emulator widget's submit to induce a non-cancel sign-in error. Confirmed this does NOT reliably reproduce the ""Gagal login"" alert even waiting 25s - same class of architectural gap as VOICE-06 (the way the failure is forced from outside doesn't match how the real SDK fails). Left wired and documented, not silently dropped - see automation/README.md"
-AUTH-06,TC-AUTH-006,L4,Y,PASS - confirmed 2026-09-28 against local dev + emulator (AuthSteps.java)
+AUTH-03,TC-AUTH-003,L4,Y,"PASS - 2026-10-04 L4 (nav label Ringkasan) | Also PASS on production with a real Google login on the phone (manual, reported 2026-10-06)"
+AUTH-04,TC-AUTH-004,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (AuthSteps.java) | Also PASS on production with a real Google login on the phone (manual, reported 2026-10-06)"
+AUTH-05,TC-AUTH-005,L4,N,"Attempted 2026-09-29: forced offline (CDP network conditions) right before the emulator widget's submit to induce a non-cancel sign-in error. Confirmed this does NOT reliably reproduce the ""Gagal login"" alert even waiting 25s - same class of architectural gap as VOICE-06 (the way the failure is forced from outside doesn't match how the real SDK fails). Left wired and documented, not silently dropped - see automation/README.md | Also PASS on production with a real Google login on the phone (manual, reported 2026-10-06)"
+AUTH-06,TC-AUTH-006,L4,Y,"PASS - confirmed 2026-09-28 against local dev + emulator (AuthSteps.java) | Also PASS on production with a real Google login on the phone (manual, reported 2026-10-06)"
 NAV-01,TC-NAV-001,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (NavigationSteps.java)
 NAV-02,TC-NAV-002,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (NavigationSteps.java)"
 NAV-03,TC-NAV-003,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (NavigationSteps.java)"
@@ -122,7 +122,7 @@ MAN-08,TC-MAN-008,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator
 MAN-10,TC-MAN-009,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (ManualInputSteps.java)
 MAN-11,TC-MAN-010,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (ManualInputSteps.java)"
 MAN-12,TC-MAN-011,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (ManualInputSteps.java)"
-MAN-13,TC-MAN-012,L4,Y,"PASS (retest, BUG-005) - 2026-10-04 L4: no native browser message, the app alert text is shown"
+MAN-13,TC-MAN-012,L4,Y,"FAIL on production - manual on production (tester's own account), reported 2026-10-06: still the browser native message; local dev (L4) passes, so the fix may not be deployed (BUG-005 retest: still open)"
 MAN-14,TC-MAN-013,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (ManualInputSteps.java)
 MAN-15,TC-MAN-014,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (ManualInputSteps.java)
 MAN-16,TC-MAN-015,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (ManualInputSteps.java)"
@@ -135,16 +135,16 @@ HIST-04,TC-HIST-004,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulato
 HIST-05,TC-HIST-005,L4,N,"PASS - 2026-10-04 L4 seeded 5/8/25/31/89/91/150 days: 7 Hari, 30 Hari, 3 Bulan (89-day row in, 91-day row out), Semua Waktu all 8 (seeded via emulator REST; field types observed from app-written docs)"
 HIST-06,TC-HIST-006,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (HistorySteps.java)"
 HIST-07,TC-HIST-007,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (HistorySteps.java)"
-HIST-08,TC-HIST-008,L4,Y,"FAIL (category filter paging) - 2026-10-04 L4 retest, mixed data: Semua Kategori PASS (1/4..4/4 fixed, 30/30/30/10); Makan filter shows 1 / 1+ (n+ correct) but next shows an empty page though 35 older Makan rows exist - see BUG-024. Earlier BUG-023 withdrawn (invalid seed)"
+HIST-08,TC-HIST-008,L4,Y,"PASS on production - manual on production (tester's own account), reported 2026-10-06: Semua Kategori fixed total (BUG-015 fixed); with a category filter page 1 reads 1 / n+, next loads older rows, last page has no +. The empty page after 1 / 1+ seen on local dev (BUG-024) was not reproduced on production"
 HIST-09,TC-HIST-009,L4,Y,PASS - 2026-10-04 L4 (Edit Transaksi + Hapus Transaksi shown)
 HIST-10,TC-HIST-010,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (HistorySteps.java)"
-HIST-11,TC-HIST-011,L4,Y,"FAIL - 2026-10-04 L4: delete works in Riwayat/Home, but Ringkasan keeps a Rp 0 category row and no empty state - see BUG-020 | Reproduced independently 2026-10-04"
+HIST-11,TC-HIST-011,L4,Y,"FAIL on production - manual on production (tester's own account), reported 2026-10-06: delete works, but Ringkasan keeps Rp 0 category rows - BUG-020 confirmed on production"
 HIST-12,TC-HIST-012,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (HistorySteps.java)"
 HIST-13,TC-HIST-013,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (HistorySteps.java). Same two-session mechanism as HOME-07"
 MON-01,TC-MON-001,L4,Y,PASS - 2026-10-04 L4 (title shows month and year)
 MON-02,TC-MON-002,L4,Y,"PASS - current-month sum confirmed 2026-09-29; previous-months-excluded half is MON-08's job, not independently re-verified here (MonthlySteps.java)"
 MON-03,TC-MON-003,L4,Y,PASS - toggle/title/button-label confirmed 2026-09-29; exact Monday-cutoff boundary not independently re-derived (can't backdate via UI) (MonthlySteps.java)
-MON-04,TC-MON-004,L4,Y,"FAIL for Rp 0 rows - 2026-10-04 L4, see BUG-020 (BUG-006 itself no longer reproduces: the list shows data)"
+MON-04,TC-MON-004,L4,Y,"PASS for the list itself on production (BUG-006 fixed) - manual on production (tester's own account), reported 2026-10-06; FAIL for leftover Rp 0 rows after delete/edit, see BUG-020"
 MON-05,TC-MON-005,L4,N,"Not automated - blocked on the same root cause as MON-04 (BUG-006: the per-category section never renders real data), so the donut chart's per-category colors/tooltip can't be meaningfully exercised either; also inherently fragile to test via canvas/SVG chart internals"
 MON-06,TC-MON-006,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (MonthlySteps.java)"
 MON-07,TC-MON-007,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (MonthlySteps.java)
@@ -164,47 +164,47 @@ SYNC-12,TC-SYNC-012,L5,N,PASS - executed manually 2026-09-30; empty-account sync
 SYNC-13,TC-SYNC-013,L5,N,PASS - executed manually 2026-09-30; transactions in two years produced two separate spreadsheets
 SYNC-14,TC-SYNC-014,L5,N,PARTIAL/FAIL (BUG-009) - executed manually 2026-09-30 by disconnecting mid-sync; error toast shown and sync canceled but an empty Sheets file was left behind; export-marking not independently verified
 SYNC-15,TC-SYNC-015,L5,N,"PASS (in-app dialog part) - 2026-10-04 L4: custom dialog appears, Batal changes nothing; the Reset itself is covered by the L5 run"
-SYNC-16,TC-SYNC-016,L5,N,RETEST NEEDED - spec changed 2026-10-03: reset also moves Sheets files to Drive Trash | Previous result: PASS - executed manually 2026-09-30; Reset re-marks all transactions; full resync toast count matched
+SYNC-16,TC-SYNC-016,L5,N,"PASS - manual on production (tester's own account), reported 2026-10-06: Reset moved Qicau_Export files to Drive Trash; next sync created a new file"
 SYNC-17,TC-SYNC-017,L5,N,PASS - executed manually 2026-09-30; Reset while offline shows internet-required error; no changes
 SYNC-18,TC-SYNC-018,L5,N,PASS - executed manually 2026-09-30; deleting the Sheets file and re-syncing recreated it with all transactions
-PWA-01,TC-PWA-001,L4,Y,"PASS (retest, BUG-010) - 2026-10-04 L4 bounding boxes at 800/1280/390 px: the banner does not cover the buttons or the title"
+PWA-01,TC-PWA-001,L4,Y,"PASS on production - manual on production (tester's own account), reported 2026-10-06: banner pushes content, does not cover Riwayat buttons (BUG-010 retest: fixed). Also PASS on the real phone (local dev)"
 PWA-02,TC-PWA-002,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (PwaSteps.java)"
 PWA-03,TC-PWA-003,L4,Y,"PASS - confirmed 2026-09-29; the sync-to-server half is best-effort (reload check, not a direct Firestore query) (PwaSteps.java)"
 PWA-04,TC-PWA-004,L4,Y,"PASS - confirmed 2026-09-29 for the Input Manual path; Sync/Reset are out of L4 scope (L5), Voice path (VOICE-07) not yet wired (PwaSteps.java)"
-PWA-05,TC-PWA-005,L4,N,"RETEST NEEDED - spec changed 2026-10-03: banner slides from top, not dismissible | Previous result: Not automated - needs a real new deployment/service-worker version to be published while the test is running; not reproducible against a static local dev instance without faking the update-available signal, which risks guessing at internals. PASS manually 2026-10-03 on production (CH-04): update prompt appears and accepting it loses no offline-pending data"
-PWA-06,TC-PWA-006,L4,N,RETEST NEEDED - spec 2026-10-04: in-app toast no longer expected | Previous result: Not automated - the native browser install-prompt flow (beforeinstallprompt) isn't reliably triggerable from Selenium-launched Chrome (PWA install criteria and headless/automation flags interact unpredictably); the header/settings install buttons' mere presence is already covered by NAV-05. Executed manually 2026-10-03 on production (CH-04): FAIL - no in-app success toast after install (BUG-014)
+PWA-05,TC-PWA-005,L4,N,NOT RUN - needs a new deployment (no result reported; checklist box ticked without a result)
+PWA-06,TC-PWA-006,L4,N,"PASS (best effort) - manual on production (tester's own account), reported 2026-10-06: install button opens the browser dialog; in a normal tab it reappears after refresh (accepted, not a defect); hidden in the installed app"
 PWA-07,TC-PWA-007,L4,N,"Not automated - same native-install-flow limitation as PWA-06 (no reliable way to launch Chrome ""as an installed PWA"" from Selenium). PASS manually 2026-10-03 on production (CH-04): install button hidden in the installed app"
-PWA-08,TC-PWA-008,L4,N,"RETEST NEEDED - spec 2026-10-04: dialog from header/Settings, iOS wording per browser | Previous result: Not automated by design - requires iOS Safari (no device available) and is tagged @manual-only in automation/ so it's excluded from @regression runs. PASS manually 2026-10-03 on an iPhone in Chrome for iOS: the install button shows the manual guide; its wording refers to Safari's button (BUG-019)"
+PWA-08,TC-PWA-008,L4,N,"PASS on Android - manual on production (tester's own account), reported 2026-10-06: guide complete and centered from header and Settings (BUG-011 retest: fixed on Android). iPhone not tested (BUG-019 not retested)"
 PWA-09,TC-PWA-009,L4,Y,PASS - 2026-10-04 L4 (manifest shortcut Ringkasan)
 PWA-10,TC-PWA-010,L4,Y,PASS - 2026-10-04 L4
 TOAST-01,TC-TOAST-001,L4,N,"Not automated - ""Sync Reset install success/failure from different tabs including the login page"" spans L5 (out of L4 scope entirely) and the native install-prompt flow (see PWA-06); no reliable trigger reachable from here without guessing. PASS manually 2026-10-03 on production: toasts are green for success and red for error/warning and disappear after about 5 seconds; a toast from an action in one tab also showed in another tab"
 TOAST-02,TC-TOAST-002,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (ToastSteps.java, new)"
 MON-09,TC-MON-009,L4,N,PASS - 2026-10-04 L4: no permission-denied in the browser console
-PWA-12,TC-PWA-012,L4,N,NOT AUTOMATED - needs a new deployed service-worker version or an update signal; manual
+PWA-12,TC-PWA-012,L4,N,NOT RUN - needs a new deployment (no result reported; checklist box ticked without a result)
 SYNC-19,TC-SYNC-019,L5,N,"PASS - 2026-10-04 L4: ""Ya, Reset"" disabled for ~1s then enabled"
-SYNC-20,TC-SYNC-020,L5,N,"PASS - 2026-10-04 L4: educational dialog on first sync, Batal -> no process"
-SYNC-21,TC-SYNC-021,L5,N,"NOT RUN - new spec ID, case written 2026-10-03"
-SYNC-22,TC-SYNC-022,L5,N,"NOT RUN - new spec ID, case written 2026-10-03"
-SYNC-23,TC-SYNC-023,L5,N,"NOT RUN - new spec ID, case written 2026-10-03"
-SYNC-24,TC-SYNC-024,L5,N,"NOT RUN - new spec ID, case written 2026-10-03"
-SYNC-25,TC-SYNC-025,L5,N,"NOT RUN - new spec ID, case written 2026-10-03"
+SYNC-20,TC-SYNC-020,L5,N,"PASS - manual on production (tester's own account), reported 2026-10-06: educational dialog on first sync, Batal opens no popup"
+SYNC-21,TC-SYNC-021,L5,N,"PASS - manual on production (tester's own account), reported 2026-10-06: confirm continues to the Google popup and export"
+SYNC-22,TC-SYNC-022,L5,N,"PASS - manual on production (tester's own account), reported 2026-10-06: short dialog on repeat sync"
+SYNC-23,TC-SYNC-023,L5,N,"PASS - manual on production (tester's own account), reported 2026-10-06: second browser (never synced) shows the educational dialog again"
+SYNC-24,TC-SYNC-024,L5,N,"PASS - manual on production (tester's own account), reported 2026-10-06: closing the Google popup during Reset changes nothing"
+SYNC-25,TC-SYNC-025,L5,N,"DEVIATION - manual on production (tester's own account), reported 2026-10-06: network cut mid-Reset shows NO ""Gagal reset sinkronisasi"" toast; the app keeps retrying and, once online, finishes the Reset (toast success, files in Trash). Spec expects an error toast on failure. Needs an author decision: spec or app"
 SEC-12,TC-SEC-013,L3,Y,"PASS - 5 rules tests, emulator, 2026-10-04"
 SEC-13,TC-SEC-014,L3,Y,PASS - emulator 2026-10-04
 SEC-14,TC-SEC-015,L3,Y,"PASS - 4 rules tests (create/read/update/unauthenticated), emulator 2026-10-04"
 HIST-14,TC-HIST-014,L4,N,PASS - 2026-10-04 L4
 HIST-15,TC-HIST-015,L4,N,PASS - 2026-10-04 L4
 HIST-16,TC-HIST-016,L4,N,PASS - 2026-10-04 L4
-HIST-17,TC-HIST-017,L4,N,"FAIL - 2026-10-04 L4: Riwayat/Home/total correct, Ringkasan keeps the old category as a Rp 0 row - see BUG-020"
+HIST-17,TC-HIST-017,L4,N,"FAIL on production - manual on production (tester's own account), reported 2026-10-06: edit leaves the old category as a Rp 0 row - BUG-020 confirmed on production"
 HIST-18,TC-HIST-018,L4,N,PASS - 2026-10-04 L4
 HIST-19,TC-HIST-019,L4,N,"PASS - 2026-10-04 L4: failure induced by a second session deleting the transaction while the edit modal is open (offline writes are queued, never fail)"
-MON-10,TC-MON-010,L4,N,"FAIL - 2026-10-04 L4: totals/sums/donut agree and no rebuild control exists, but Rp 0 category rows persist after edit/delete - see BUG-020 | Reproduced independently 2026-10-04"
+MON-10,TC-MON-010,L4,N,"FAIL on production - manual on production (tester's own account), reported 2026-10-06: Rp 0 category rows persist after edit and delete (monthly and weekly) - BUG-020 confirmed"
 MON-11,TC-MON-011,L4,N,"PASS - 2026-10-04 L4: corrupted today daily summary repaired in the background after opening Ringkasan (total 25000), no toast/dialog/reload, other days untouched; not repaired offline (seeded via emulator REST; field types observed from app-written docs)"
-MON-12,TC-MON-012,L4,N,PASS in the final full run 2026-10-04 (also 4 of 6 earlier re-runs); failed once in the first Sprint 3 run (35.000 vs 45.000). Intermittent - needs a manual offline->online check before BUG-021 is filed
-MAN-19,TC-MAN-018,L4,N,PASS - 2026-10-04 L4
-SYNC-26,TC-SYNC-026,L5,N,"NOT RUN - new/changed spec ID, case written 2026-10-04"
-SYNC-27,TC-SYNC-027,L5,N,"NOT RUN - new/changed spec ID, case written 2026-10-04"
-SYNC-28,TC-SYNC-028,L5,N,"NOT RUN - new/changed spec ID, case written 2026-10-04"
+MON-12,TC-MON-012,L4,N,"PASS on production - manual on production (tester's own account), reported 2026-10-06: repeated offline create/edit/delete cycles, totals consistent in Riwayat and Ringkasan; also consistent in CH-06. BUG-021 not reproduced"
+MAN-19,TC-MAN-018,L4,N,"PASS on production - manual on production (tester's own account), reported 2026-10-06: 50/200 limits and n/50, n/200 counters (BUG-016 retest: fixed)"
+SYNC-26,TC-SYNC-026,L5,N,"PASS - manual on production (tester's own account), reported 2026-10-06: text starting with = + - @ is plain text in the sheet (BUG-018 retest: fixed)"
+SYNC-27,TC-SYNC-027,L5,N,"FAIL - manual on production (tester's own account), reported 2026-10-06: with the Google popup blocked no toast is visible (expected ""Jendela login Google diblokir browser...""). BUG-013 retest: NOT fixed"
+SYNC-28,TC-SYNC-028,L5,N,"PASS - manual on production (tester's own account), reported 2026-10-06: second tab refused with the toast, buttons stay disabled across tabs (BUG-008 retest: fixed)"
 API-11,"PM-API-11 (folders over-limit-amount, max-amount)",L1,Y,"PASS - 2026-10-04 local dev, mock over-limit-amount: parse-text and parse-audio 500 with friendly Rp 999.999.999 message, no result; 999999999 still 200. BUG-017 retest: fixed"
 API-12,PM-API-12 (7 mock-scenario folders),L1,Y,"PASS - 2026-10-04 local dev: unknown kategori->Lainnya, payment->QRIS, harga rounded, platform 50/detail 200, negative or non-number harga ->0, invalid JSON -> 500 friendly"
 API-13,PM-API-13 (2 requests) + 2 manual production calls,L1,Y,"PASS - 2026-10-04 local (mock high/low) and production (2 AI calls): raw_transcript equals input, also for a no-transaction (low) input. BUG-003 retest: fixed"
-HIST-20,TC-HIST-020,L4,Y,"PASS - 2026-10-04 L4 local+emulator: dialog closed after 105 ms offline, row removed at once, delete persisted after reconnect and reload, Ringkasan total = Riwayat sum (8.000). Server-rejects clause not automatable locally. BUG-022 retest: fixed. BUG-020 Rp 0 Makan row still seen (not asserted)"
+HIST-20,TC-HIST-020,L4,Y,"PASS on production - manual on production (tester's own account), reported 2026-10-06: offline delete closes the dialog at once, stays deleted, Ringkasan matches (BUG-022 retest: fixed). Also PASS L4 local and real phone"

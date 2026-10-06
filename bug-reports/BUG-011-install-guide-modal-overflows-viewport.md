@@ -7,6 +7,7 @@
 | **Severity** | Low (proposed — cosmetic/layout, content is still readable and "Mengerti" is reachable, but the container itself visibly clips past the screen edge) |
 | **Found in** | Production — https://qicau.kajoga.workers.dev/, both Android and desktop web |
 | **Found during** | Manual exploration, 2026-09-30 |
+| **Status** | **Fixed on Android** (manual `PWA-08`, 2026-10-05): the guide is complete and centered. iOS not tested. |
 
 ## Summary
 The manual install-instructions modal (`PWA-08` — shown when the browser has no native install

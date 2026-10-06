@@ -7,7 +7,7 @@
 | **Severity** | Medium (proposed — wrong figures shown, no data loss) |
 | **Found in** | local dev + Firebase emulator (`http://localhost:3000/`) |
 | **Found during** | Sprint 3 L4 UI automation run, 2026-10-04 |
-| **Status** | Open - reproduced independently on local dev (2026-10-04) and on a real Android phone, Chrome 154 (2026-10-05, HIST-11 / HIST-17 / MON-10). Re-check on production before closing. |
+| **Status** | Open - **confirmed on production** (manual, 2026-10-05) and on a real phone: `Rp 0` rows remain after a delete and after an edit, in the monthly and weekly views; after deleting everything of a month Ringkasan lists all categories with `Rp 0`; the empty state only shows when nothing was ever there (a new month). |
 
 ## Summary
 After a category's last transaction is deleted, or an edit moves its only amount to another category, the Ringkasan tab still lists that category with `Rp 0`. When the month has no transactions left, the "Belum ada riwayat transaksi." empty state is not shown.

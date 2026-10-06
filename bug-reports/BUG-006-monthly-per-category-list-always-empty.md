@@ -7,7 +7,7 @@
 | **Severity** | Medium |
 | **Found in** | local dev + Firebase emulator (`http://localhost:3000/`) |
 | **Found during** | L4 UI automation run, 2026-09-29 |
-| **Status** | **Fixed** (local dev) - MON-04 retest: the category list shows data at L4 (local dev); a separate Rp 0 row problem is BUG-020, 2026-10-04. Production retest pending (see `test-cases/sprint3-manual-run-guide.md`). |
+| **Status** | **Fixed** on production for the list itself (manual, 2026-10-05): the category list shows data. The leftover `Rp 0` rows after deletes are tracked in `BUG-020`. |
 
 ## Summary
 On the Bulanan (Ringkasan) tab, the "Total Pengeluaran" card correctly sums and displays the
