@@ -2,7 +2,7 @@
 
 Follow-up to `2026-09-29-cycle-1-summary.md`. Sprint 2 was bug fixing only (the app author fixing the
 bugs from cycle 1). Sprint 3 retested those fixes and tested the spec changes of 2026-10-03/04
-(`test/UPDATE_NOTES_PART2.md`: Parts 2 and 3). Written 2026-10-04, updated 2026-10-06 with the manual production results (§3, §5). The L5 and
+(`test/UPDATE_NOTES_PART2.md`: Parts 2 and 3). Written 2026-10-04, updated 2026-10-06 with the manual production results (§3, §5) and the retest after the author fixed `BUG-005`, `013` and `020` (§7). The L5 and
 manual rows in §2 reflect that update.
 
 ## 1. What changed in scope
@@ -74,3 +74,15 @@ Totals: 24 bug stubs (`BUG-001..024`). Open: `BUG-005`, `011` (iOS only), `013`,
 - **Production may be behind local dev:** `BUG-005` passes on local dev but still fails on production. Check whether the latest build is deployed.
 - **Author decisions:** `SYNC-25` (error toast or keep retrying), and whether the raw Firebase message on a conflicting edit is acceptable.
 - **Coverage gaps:** iOS, and the update flow (`PWA-05`, `PWA-12`).
+
+## 7. Retest after the author's fixes (2026-10-06)
+The author fixed `BUG-005`, `BUG-013` and `BUG-020`, deployed to production and checked them there.
+- **`BUG-020` fixed.** L4 `HIST-11`, `HIST-17`, `MON-10` pass on local dev and on a real phone (no `Rp 0` rows).
+- **`BUG-005` fixed in substance.** The browser's native message is gone; the app now shows an inline message
+  "Jumlah pengeluaran wajib diisi.". The spec `MAN-13` still describes an alert "Harap masukkan jumlah pengeluaran.", so the
+  case fails against the spec text until the author updates the spec (alert -> inline message).
+- **`BUG-013` fixed per the tester** (manual `SYNC-27` on production). Not retested by automation (real Google login).
+- **Regression run (L4, local dev, 99 scenarios run):** 94 pass, 5 not passing: `MAN-13` (spec wording, above), `HIST-08` (category-filter
+  paging with seeded data on local dev, `BUG-024`, passes on production), `PWA-11` (dev server `no-cache`, known), `VOICE-06` (known),
+  and `AUTH-03` (flaky once, passed 2 of 2 on rerun). On the real phone: 6 of 7 pass (`MAN-13` the same way).
+- **Still open:** `BUG-019` (no iPhone), `SYNC-25` decision, `PWA-05`/`PWA-12` (need a deploy).

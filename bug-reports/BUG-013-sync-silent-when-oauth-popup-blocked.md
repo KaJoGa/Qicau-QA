@@ -7,7 +7,7 @@
 | **Severity** | Low (proposed — no data loss, but the user gets no hint why Sync did nothing) |
 | **Found in** | Production — https://qicau.kajoga.workers.dev/ |
 | **Found during** | Exploratory session CH-03, 2026-10-03 |
-| **Status** | Open - **NOT fixed** (manual `SYNC-27`, 2026-10-05): with the Google popup blocked no toast is visible. Reopen QAP-29. |
+| **Status** | **Fixed** per the tester (manual `SYNC-27` on production, 2026-10-06). Not retested by automation (real Google login). |
 
 ## Summary
 When the browser blocks the Google OAuth popup that Sync opens, clicking "Sync ke Sheets" does
