@@ -236,4 +236,26 @@ public class ManualInputModal {
         "var i = arguments[0]; var f = i.closest('form'); return f ? f.noValidate : null;", driver.findElement(PRICE_INPUT));
     return Boolean.TRUE.equals(v);
   }
+
+  // ---- MAN-13 (spec 2026-10-06): inline price error instead of an alert ----
+
+  public WebElement priceInputElement() {
+    return driver.findElement(PRICE_INPUT);
+  }
+
+  public java.util.List<WebElement> priceErrorMessages() {
+    return driver.findElements(By.xpath(
+        "//p[contains(normalize-space(.), 'Jumlah pengeluaran wajib diisi.')]"
+            + " | //span[contains(normalize-space(.), 'Jumlah pengeluaran wajib diisi.')]"
+            + " | //div[not(.//div) and contains(normalize-space(.), 'Jumlah pengeluaran wajib diisi.')]"));
+  }
+
+  public boolean hasNativeAlertOpen() {
+    try {
+      driver.switchTo().alert();
+      return true;
+    } catch (org.openqa.selenium.NoAlertPresentException e) {
+      return false;
+    }
+  }
 }

@@ -86,7 +86,7 @@ Feature: Manual Input (MAN)
     When Leave price empty (or 0)
     And Try to save
     Then Rejected without any browser-native validation message
-    And alert "Harap masukkan jumlah pengeluaran."
+    And red inline error "Jumlah pengeluaran wajib diisi." shown under the price field and the price field gets a red border
     And no transaction saved
 
   @MAN-14 @smoke

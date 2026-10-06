@@ -7,7 +7,7 @@
 | **Severity** | Low |
 | **Found in** | local dev + Firebase emulator (`http://localhost:3000/`) |
 | **Found during** | L4 UI automation run, 2026-09-29 |
-| **Status** | **Fixed in substance** (retest 2026-10-06): the browser native message is gone; the app now shows an inline message "Jumlah pengeluaran wajib diisi." (L4 local dev and real phone). The spec still describes an alert with another wording, so `MAN-13` stays red until the spec is updated. Jira: close with a note. |
+| **Status** | **Fixed** (retest 2026-10-06): no native browser message; the app shows the inline error "Jumlah pengeluaran wajib diisi." (spec MAN-13 updated to match). Verified on local dev and a real phone; the tester also checked production. |
 
 ## Summary
 Trying to save a transaction via the "Formulir Langsung" (direct form) with the price field left

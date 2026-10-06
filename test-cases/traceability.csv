@@ -122,7 +122,7 @@ MAN-08,TC-MAN-008,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator
 MAN-10,TC-MAN-009,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (ManualInputSteps.java)
 MAN-11,TC-MAN-010,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (ManualInputSteps.java)"
 MAN-12,TC-MAN-011,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (ManualInputSteps.java)"
-MAN-13,TC-MAN-012,L4,Y,"FAIL against the spec text - 2026-10-06 L4 local dev and real phone: the native browser message is gone (BUG-005 fixed in substance) but the app now shows an inline red message ""Jumlah pengeluaran wajib diisi."" instead of the alert ""Harap masukkan jumlah pengeluaran."" the spec describes. Spec MAN-13 needs the author to update it (alert -> inline message), then the case is re-run"
+MAN-13,TC-MAN-012,L4,Y,"PASS (spec updated 2026-10-06: inline error) - L4 local dev and real phone: red inline error ""Jumlah pengeluaran wajib diisi."" under the price field, red border, no alert, no native bubble; price 0 rejected the same way. BUG-005 retest: fixed"
 MAN-14,TC-MAN-013,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (ManualInputSteps.java)
 MAN-15,TC-MAN-014,L4,Y,PASS - confirmed 2026-09-29 against local dev + emulator (ManualInputSteps.java)
 MAN-16,TC-MAN-015,L4,Y,"PASS - confirmed 2026-09-29 against local dev + emulator, regression tier (ManualInputSteps.java)"

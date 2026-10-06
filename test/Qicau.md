@@ -122,7 +122,7 @@ Modal "Input Manual" punya 2 mode: **Teks AI** dan **Formulir Langsung**.
 | MAN-10 | Buka saat offline | Langsung di mode "Formulir Langsung" (dengan label "(Offline)"); tersedia dan berfungsi. |
 | MAN-11 | Nilai awal | Kategori = `Makan`, Metode = `QRIS`, lainnya kosong. |
 | MAN-12 | Ketik harga | Hanya digit diterima; tampil berformat ribuan (`25000` → `25.000`); dibatasi maks 999.999.999. |
-| MAN-13 | Simpan dengan harga kosong / 0 | Ditolak (tanpa pesan bawaan browser); alert "Harap masukkan jumlah pengeluaran."; tidak ada transaksi. |
+| MAN-13 | Simpan dengan harga kosong / 0 | Ditolak (tanpa pesan bawaan browser); pesan error inline merah "Jumlah pengeluaran wajib diisi." di bawah kolom harga, kolom harga ber-border merah; tidak ada transaksi. |
 | MAN-14 | Simpan dengan harga valid saja | Tersimpan: kategori `Makan`, metode `QRIS`, platform kosong, detail = nama kategori; toast sukses. |
 | MAN-15 | Simpan dengan semua kolom terisi | Tersimpan persis sesuai isian; detail = catatan yang diisi. |
 | MAN-16 | Catatan kosong, platform terisi | Detail = nama platform. |

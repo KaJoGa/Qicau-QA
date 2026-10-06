@@ -183,17 +183,59 @@ public class ManualInputSteps {
 
   @Then("^Rejected without any browser-native validation message$")
   public void rejectedWithoutNativeValidationMessage() {
-    // A browser-native validation bubble blocks the form's submit event, so the app's own
-    // handler (which raises its own alert) would never run. Seeing the app's alert therefore
-    // proves no native bubble intercepted the submit; the form's novalidate attribute is the
-    // DOM-level confirmation. (Selenium cannot read the bubble itself: a behavioural proxy.)
-    org.openqa.selenium.Alert alert = new WebDriverWait(driver(), Duration.ofSeconds(10))
-        .until(org.openqa.selenium.support.ui.ExpectedConditions.alertIsPresent());
-    String text = alert.getText();
-    Assertions.assertFalse(text.toLowerCase().contains("please fill"),
-        "Expected the app's own message, not a browser-native one, got: " + text);
+    // Spec 2026-10-06: the app shows its own inline error (no alert any more). A browser-native validation
+    // bubble would block the submit event, so seeing the app's inline error proves no native bubble
+    // intercepted it; the form's novalidate attribute is the DOM-level confirmation (Selenium cannot read the
+    // bubble itself: a behavioural proxy). An alert() here would be a regression to the old behaviour.
+    ManualInputModal modal = new ManualInputModal(driver());
+    new WebDriverWait(driver(), Duration.ofSeconds(5)).until((d) -> !modal.priceErrorMessages().isEmpty());
+    Assertions.assertFalse(modal.hasNativeAlertOpen(), "Expected an inline error, not a native alert()");
     Assertions.assertTrue(formWasNoValidate,
         "Expected the direct form to opt out of browser-native validation (novalidate) - BUG-005 regression otherwise");
+  }
+
+  @And("^red inline error \"Jumlah pengeluaran wajib diisi\\.\" shown under the price field and the price field gets a red border$")
+  public void inlineErrorUnderPriceFieldWithRedBorder() {
+    ManualInputModal modal = new ManualInputModal(driver());
+    assertInlinePriceError(modal);
+    // 'empty or 0': a literal 0 must be rejected the same way
+    modal.setPrice("0");
+    modal.saveDirectForm();
+    new WebDriverWait(driver(), Duration.ofSeconds(5)).until((d) -> !modal.priceErrorMessages().isEmpty());
+    assertInlinePriceError(modal);
+    Assertions.assertTrue(modal.isFormulirLangsungModeActive(), "Expected the form to stay open after rejecting price 0");
+  }
+
+  private void assertInlinePriceError(ManualInputModal modal) {
+    var errors = modal.priceErrorMessages().stream().filter(org.openqa.selenium.WebElement::isDisplayed).toList();
+    Assertions.assertFalse(errors.isEmpty(), "Expected the inline error \"Jumlah pengeluaran wajib diisi.\" to be visible");
+    var error = errors.get(errors.size() - 1);
+    var input = modal.priceInputElement();
+    Assertions.assertTrue(error.getRect().getY() >= input.getRect().getY() + input.getRect().getHeight() - 2,
+        "Expected the error below the price field");
+    String color = input.getCssValue("border-color"); // rgb(...) or, with Tailwind v4, oklch(L C H)
+    Assertions.assertTrue(isRed(color), "Expected a red border on the price field, got " + color);
+  }
+
+  /** rgb(r,g,b): red dominant; oklch(L C H): visible chroma with a red hue (about 0-45 or 340-360 degrees). */
+  private static boolean isRed(String css) {
+    var nums = java.util.regex.Pattern.compile("-?\\d*\\.?\\d+").matcher(css);
+    java.util.List<Double> v = new java.util.ArrayList<>();
+    while (nums.find()) {
+      v.add(Double.parseDouble(nums.group()));
+    }
+    if (v.size() < 3) {
+      return false;
+    }
+    if (css.startsWith("oklab")) {
+      // oklab(L a b): a > 0 is the red side; require clearly more red than yellow/blue (mid-transition values included)
+      return v.get(1) > 0.1 && v.get(1) > Math.abs(v.get(2));
+    }
+    if (css.startsWith("oklch")) {
+      double chroma = v.get(1), hue = v.get(2);
+      return chroma > 0.1 && (hue < 45 || hue > 340);
+    }
+    return v.get(0) > 150 && v.get(1) < 120 && v.get(2) < 120;
   }
 
   // ---- MAN-19: Platform max 50 / Catatan max 200 with n/50, n/200 counters in the direct form ----
@@ -238,17 +280,6 @@ public class ManualInputSteps {
     Assertions.assertTrue(String.valueOf(c200.getAttribute("class")).contains("red"), "Expected the full Catatan counter to be red");
     Assertions.assertTrue(c50.getRect().getY() < modal.platformInputElement().getRect().getY(), "Expected the Platform counter above its field");
     Assertions.assertTrue(c200.getRect().getY() < modal.noteInputElement().getRect().getY(), "Expected the Catatan counter above its field");
-  }
-
-  @And("^alert \"Harap masukkan jumlah pengeluaran\\.\"$")
-  public void alertHarapMasukkanJumlah() {
-    assertAlertOrToastContains("Harap masukkan jumlah pengeluaran");
-    // 'empty or 0': a literal 0 must be rejected the same way
-    ManualInputModal modal = new ManualInputModal(driver());
-    modal.setPrice("0");
-    modal.saveDirectForm();
-    assertAlertOrToastContains("Harap masukkan jumlah pengeluaran");
-    Assertions.assertTrue(modal.isFormulirLangsungModeActive(), "Expected the form to stay open after rejecting price 0");
   }
 
   // ---- MAN-14 / MAN-15: saving via the direct form ----

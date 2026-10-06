@@ -15,7 +15,7 @@ TC-MAN-010,MAN-11,Direct form has correct default values,Formulir Langsung mode 
 TC-MAN-011,MAN-12,Price field accepts digits only thousands-formatted and capped,Formulir Langsung mode open,"1. Type ""25000"" into the price field
 2. Attempt to exceed 999999999","Only digits accepted; displays as ""25.000""; capped at 999.999.999",P2,boundary,local-emulator,N
 TC-MAN-012,MAN-13,Saving with empty or zero price is rejected,"Formulir Langsung mode open, price left empty or 0","1. Leave price empty (or 0)
-2. Try to save","Rejected without any browser-native validation message; alert ""Harap masukkan jumlah pengeluaran.""; no transaction saved",P1,negative,local-emulator,N
+2. Try to save","Rejected without any browser-native validation message; red inline error ""Jumlah pengeluaran wajib diisi."" shown under the price field and the price field gets a red border; no transaction saved",P1,negative,local-emulator,N
 TC-MAN-013,MAN-14,Saving with only a valid price uses defaults for the rest,Formulir Langsung mode open,"1. Enter only a valid price
 2. Save","Saved with kategori Makan, metode QRIS, empty platform, detail = category name; success toast",P1,functional,local-emulator,N
 TC-MAN-014,MAN-15,Saving with all fields filled saves exactly as entered,Formulir Langsung mode open,"1. Fill price, platform, category, method, and note
