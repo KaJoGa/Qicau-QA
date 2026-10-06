@@ -29,7 +29,7 @@ Two test cycles, both written up in [`reports/`](reports/):
 | L3 Firestore rules | `SEC-*` | `@firebase/rules-unit-testing` (Node) | 34/34 tests pass |
 | L4 UI end-to-end | `AUTH NAV HOME VOICE SAVE LOWC MAN HIST MON PWA TOAST` | Selenium + Cucumber + Java 17 + Maven | 97 of 99 run scenarios pass (desktop); the rest are known or documented gaps |
 | L4 on a real Android phone | same suite | Appium (UiAutomator2) over USB | the layout, offline and Ringkasan checks pass |
-| L5 Sheets sync | `SYNC-*` | Manual (real Google OAuth, own account) | all pass except one spec deviation (`SYNC-25`) |
+| L5 Sheets sync | `SYNC-*` | Manual (real Google OAuth, own account) | all pass (`SYNC-25` after the author's fix) |
 | Stress | `/api/parse-*` | k6 | small baseline, 0 failures |
 | Exploratory | 6 charters | Session-based, manual | `test-cases/exploratory/` |
 
